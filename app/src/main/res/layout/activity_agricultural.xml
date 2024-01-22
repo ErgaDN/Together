@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Agricultural"
+    android:orientation="vertical"
+    android:gravity="center"
+    >
+
+    <ImageButton
+        android:id="@+id/searchImageButton"
+        android:layout_width="42dp"
+        android:layout_height="40dp"
+
+        android:layout_marginStart="0sp"
+        android:layout_marginTop="0sp"
+        android:layout_marginEnd="160sp"
+        android:layout_marginBottom="500dp"
+
+        android:src="@android:drawable/ic_dialog_info" />
+
+    <Button
+        android:id="@+id/btn_editing_products"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/editing_products" />
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:id="@+id/btn_distribution_center"
+        android:text="@string/distribution_center"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_marginTop="20dp"
+        android:id="@+id/btn_order_summary"
+        android:text="@string/order_summary"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

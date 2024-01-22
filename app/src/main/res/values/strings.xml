@@ -7,5 +7,8 @@
     <string name="click_to_login">Click to login</string>
     <string name="click_to_register">click to register</string>
     <string name="logout">logout</string>
+    <string name="editing_products">עריכת מוצרים</string>
+    <string name="distribution_center">עריכת נקודות חלוקה</string>
+    <string name="order_summary">סיכום הזמנות</string>
 
 </resources>
