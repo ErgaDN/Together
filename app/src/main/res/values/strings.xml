@@ -10,5 +10,6 @@
     <string name="editing_products">עריכת מוצרים</string>
     <string name="distribution_center">עריכת נקודות חלוקה</string>
     <string name="order_summary">סיכום הזמנות</string>
+    <string name="adding_products">הוספת מוצר חדש</string>
 
 </resources>

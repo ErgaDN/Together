@@ -4,15 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
     tools:context=".EditingProducts">
 
+
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
         android:text="@string/editing_products"
         android:textSize="25sp"
-        android:layout_marginBottom="20dp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btn_adding_products"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/adding_products" />
 
 </LinearLayout>
