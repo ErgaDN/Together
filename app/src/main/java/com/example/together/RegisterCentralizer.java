@@ -123,7 +123,7 @@ public class RegisterCentralizer extends AppCompatActivity {
                                     Toast.makeText(RegisterCentralizer.this, "Account created.",
                                             Toast.LENGTH_SHORT).show();
                                     userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                                    DocumentReference documentReference = mStore.collection("user").document(userID);
+                                    DocumentReference documentReference = mStore.collection("centralizers").document(userID);
                                     Map<String, Object> user = new HashMap<>();
                                     user.put("First Name", firstName);
                                     user.put("Last Name", lastName);
