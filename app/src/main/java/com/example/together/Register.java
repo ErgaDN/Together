@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -33,13 +34,10 @@ import java.util.Objects;
 
 public class Register extends AppCompatActivity {
 
-    TextInputEditText editTextEmail, editTextPassword, editTextFirstName, editTextLastName, editTextPhone;
-    Button buttonReg;
+    Button btn_cl, btn_cen, btn_ag;
     FirebaseAuth mAuth;
-    FirebaseFirestore mStore;
-    ProgressBar progressBar;
     TextView textView;
-    String userID;
+
 
 
     @Override
@@ -59,15 +57,11 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         mAuth = FirebaseAuth.getInstance();
-        editTextEmail = findViewById(R.id.email);
-        editTextPassword = findViewById(R.id.password);
-        editTextFirstName = findViewById(R.id.firstName);
-        editTextLastName = findViewById(R.id.lastName);
-        editTextPhone = findViewById(R.id.phoneNumber);
-        buttonReg = findViewById(R.id.btn_register);
-        progressBar = findViewById(R.id.progressBar);
+        btn_cl = findViewById(R.id.btn_register_client);
+        btn_cen = findViewById(R.id.btn_register_centralizer);
+        btn_ag = findViewById(R.id.btn_register_agricultural);
         textView = findViewById(R.id.loginNow);
-        mStore = FirebaseFirestore.getInstance();
+
         textView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -77,72 +71,35 @@ public class Register extends AppCompatActivity {
             }
         });
 
-        buttonReg.setOnClickListener(new View.OnClickListener() {
+        btn_cl.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                String email, password, firstName, lastName, phoneNumber;
-                email = String.valueOf(editTextEmail.getText());
-                password = String.valueOf(editTextPassword.getText());
-                firstName = String.valueOf(editTextFirstName.getText());
-                lastName = String.valueOf(editTextLastName.getText());
-                phoneNumber = String.valueOf(editTextPhone.getText());
-
-                if(TextUtils.isEmpty(email)){
-                    Toast.makeText(Register.this, "Enter email", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(password)){
-                    Toast.makeText(Register.this, "Enter password", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(firstName)){
-                    Toast.makeText(Register.this, "Enter First Name", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(lastName)){
-                    Toast.makeText(Register.this, "Enter First Name", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(phoneNumber)){
-                    Toast.makeText(Register.this, "Enter First Name", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                progressBar.setVisibility(View.GONE);
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(Register.this, "Account created.",
-                                            Toast.LENGTH_SHORT).show();
-                                    userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                                    DocumentReference documentReference = mStore.collection("user").document(userID);
-                                    Map<String, Object> user = new HashMap<>();
-                                    user.put("First Name", firstName);
-                                    user.put("Last Name", lastName);
-                                    user.put("Phone Number", phoneNumber);
-                                    documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            Log.d(TAG, "user created" + userID);
-                                        }
-                                    });
-                                    Intent intent = new Intent(getApplicationContext(), Login.class);
-                                    startActivity(intent);
-                                    finish();
-
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(Register.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-
-
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RegisterClient.class);
+                startActivity(intent);
+                finish();
             }
         });
+
+        btn_cen.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RegisterCentralizer.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        btn_ag.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), RegisterAgricultural.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
+
+
     }
 }

@@ -17,4 +17,11 @@
     <string name="agricultural">agricultural</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="address">Address</string>
+    <string name="client">Client</string>
+    <string name="agricultural">Agricultural</string>
+    <string name="centralizer">Centralizer</string>
+    <string name="register_as">Register as</string>
+
+
 </resources>
