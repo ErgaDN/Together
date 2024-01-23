@@ -14,5 +14,11 @@
     <string name="distribution_center">עריכת נקודות חלוקה</string>
     <string name="order_summary">סיכום הזמנות</string>
     <string name="adding_products">הוספת מוצר חדש</string>
+    <string name="address">Address</string>
+    <string name="client">Client</string>
+    <string name="agricultural">Agricultural</string>
+    <string name="centralizer">Centralizer</string>
+    <string name="register_as">Register as</string>
+
 
 </resources>
