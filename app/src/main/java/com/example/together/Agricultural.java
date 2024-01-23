@@ -1,56 +1,33 @@
 package com.example.together;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.google.android.material.tabs.TabLayout;
 
 public class Agricultural extends AppCompatActivity {
-    Button btn_editing_products, btn_distribution_center, btn_order_summary;
-
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agricultural);
-        btn_editing_products = findViewById(R.id.btn_editing_products);
-        btn_distribution_center = findViewById(R.id.btn_distribution_center);
-        btn_order_summary = findViewById(R.id.btn_order_summary);
 
-        btn_editing_products.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view) {
-                Intent intent = new Intent(getApplicationContext(), EditingProducts.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        tabLayout = findViewById(R.id.tablayout);
+        viewPager = findViewById(R.id.viewpager);
 
-        btn_distribution_center.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view) {
-                Intent intent = new Intent(getApplicationContext(), DistributionCenter.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        tabLayout.setupWithViewPager(viewPager);
 
-        btn_order_summary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View view) {
-                Intent intent = new Intent(getApplicationContext(), OrderSummary.class);
-                startActivity(intent);
-                finish();
-            }
-        });
+        VPAdapter vpAdapter = new VPAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        vpAdapter.addFragment(new distribution_center(), "נקודת חלוקה");
+        vpAdapter.addFragment(new editing_products(), "עריכת מוצרים");
+        vpAdapter.addFragment(new order_summary(), "סיכום הזמנות");
+
+        viewPager.setAdapter(vpAdapter);
+
+
 
     }
 }

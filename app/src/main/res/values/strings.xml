@@ -14,5 +14,7 @@
     <string name="distribution_center">עריכת נקודות חלוקה</string>
     <string name="order_summary">סיכום הזמנות</string>
     <string name="adding_products">הוספת מוצר חדש</string>
-
+    <string name="agricultural">agricultural</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
