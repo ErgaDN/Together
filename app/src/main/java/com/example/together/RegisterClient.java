@@ -46,6 +46,7 @@ public class RegisterClient extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
+            // TODO: change the main activity to client activity
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
             finish();
@@ -132,8 +133,13 @@ public class RegisterClient extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(Void unused) {
                                             Log.d(TAG, "user created" + userID);
+                                            // TODO: change to client activity and uncomment
+//                                            Intent intent = new Intent(getApplicationContext(), Login.class);
+//                                            startActivity(intent);
+//                                            finish();
                                         }
                                     });
+                                    // TODO: delete
                                     Intent intent = new Intent(getApplicationContext(), Login.class);
                                     startActivity(intent);
                                     finish();

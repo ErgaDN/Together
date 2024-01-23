@@ -46,7 +46,7 @@ public class RegisterAgricultural extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), Agricultural.class);
             startActivity(intent);
             finish();
         }
@@ -132,11 +132,12 @@ public class RegisterAgricultural extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(Void unused) {
                                             Log.d(TAG, "user created" + userID);
+                                            Intent intent = new Intent(getApplicationContext(), Agricultural.class);
+                                            startActivity(intent);
+                                            finish();
                                         }
                                     });
-                                    Intent intent = new Intent(getApplicationContext(), Login.class);
-                                    startActivity(intent);
-                                    finish();
+
 
                                 } else {
                                     // If sign in fails, display a message to the user.
