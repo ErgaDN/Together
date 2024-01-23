@@ -1,19 +1,18 @@
 package com.example.together;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
-public class EditingProducts extends AppCompatActivity {
-    Button btn_adding_products;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editing_products);
-        btn_adding_products = findViewById(R.id.btn_adding_products);
-
-        //TODO: add onclick to btn_adding_products
-
+public class EditingProducts extends Fragment {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_editing_products, container, false);
     }
 }

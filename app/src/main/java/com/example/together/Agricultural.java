@@ -21,9 +21,9 @@ public class Agricultural extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         VPAdapter vpAdapter = new VPAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        vpAdapter.addFragment(new distribution_center(), "נקודת חלוקה");
-        vpAdapter.addFragment(new editing_products(), "עריכת מוצרים");
-        vpAdapter.addFragment(new order_summary(), "סיכום הזמנות");
+        vpAdapter.addFragment(new DistributionCenter(), "נקודת חלוקה");
+        vpAdapter.addFragment(new EditingProducts(), "עריכת מוצרים");
+        vpAdapter.addFragment(new OrderSummary(), "סיכום הזמנות");
 
         viewPager.setAdapter(vpAdapter);
 
