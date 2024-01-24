@@ -46,8 +46,7 @@ public class RegisterClient extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            // TODO: change the main activity to client activity
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), client.class);
             startActivity(intent);
             finish();
         }
@@ -123,7 +122,7 @@ public class RegisterClient extends AppCompatActivity {
                                     Toast.makeText(RegisterClient.this, "Account created.",
                                             Toast.LENGTH_SHORT).show();
                                     userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                                    DocumentReference documentReference = mStore.collection("clients").document(userID);
+                                    DocumentReference documentReference = mStore.collection("agriculturals").document(userID);
                                     Map<String, Object> user = new HashMap<>();
                                     user.put("First Name", firstName);
                                     user.put("Last Name", lastName);
@@ -133,16 +132,12 @@ public class RegisterClient extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(Void unused) {
                                             Log.d(TAG, "user created" + userID);
-                                            // TODO: change to client activity and uncomment
-//                                            Intent intent = new Intent(getApplicationContext(), Login.class);
-//                                            startActivity(intent);
-//                                            finish();
+                                            Intent intent = new Intent(getApplicationContext(), Agricultural.class);
+                                            startActivity(intent);
+                                            finish();
                                         }
                                     });
-                                    // TODO: delete
-                                    Intent intent = new Intent(getApplicationContext(), Login.class);
-                                    startActivity(intent);
-                                    finish();
+
 
                                 } else {
                                     // If sign in fails, display a message to the user.
