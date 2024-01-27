@@ -1,5 +1,6 @@
 package com.example.together;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,8 +14,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.ktx.Firebase;
+
+import java.util.HashMap;
 
 public class AddProduct extends AppCompatActivity {
 
@@ -75,11 +83,41 @@ public class AddProduct extends AppCompatActivity {
         addProduct();
     }
 
-    private void addProduct() {
-        //add data to db
-        //TODO: check how (55:30)
-    }
+private void addProduct() {
+    //add data to db
+    //TODO: check if it on the db (55:30)
+    String timestamp = "" + System.currentTimeMillis();
+    HashMap<String, Object> hashMap = new HashMap<>();
+    hashMap.put("productId", "" + timestamp);
+    hashMap.put("productTitle", "" + productTitle);
+    hashMap.put("productDescription", "" + productDescription);
+    hashMap.put("productCategory", "" + productCategory);
+    hashMap.put("productQuantity", "" + productQuantity);
+    hashMap.put("productPrice", "" + originalPrice);
+    hashMap.put("timestamp", "" + timestamp);
+    hashMap.put("uid", "" + firebaseAuth.getUid());
+    //add to DB
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
 
+    reference.child(firebaseAuth.getUid())
+            .child("Products")
+            .child(timestamp)
+            .setValue(hashMap)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    // Data added successfully
+                    Toast.makeText(AddProduct.this, "Product added to the database", Toast.LENGTH_SHORT).show();
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    // Failed to add data
+                    Toast.makeText(AddProduct.this, "Failed to add product to the database", Toast.LENGTH_SHORT).show();
+                }
+            });
+}
     private void categoryDialog() {
         //dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
