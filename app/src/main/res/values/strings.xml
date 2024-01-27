@@ -26,6 +26,7 @@
     <string name="category">קטגוריה</string>
     <string name="quantity">כמות</string>
     <string name="price">מחיר</string>
+    <string name="update_product">לחץ לעידכון מוצר קיים</string>
 
 
 </resources>

@@ -7,23 +7,36 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/editing_products"
-        android:textColor="@color/black"
-        android:textSize="40sp" />
-
-    <TextView
-        android:layout_width="match_parent"
         android:layout_height="41dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="20dp"
         android:text="@string/add_product"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="30sp" />
 
     <ImageButton
         android:id="@+id/btn_addproduct"
         android:layout_width="71dp"
         android:layout_height="54dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="70dp"
         android:src="@drawable/baseline_add_shopping_cart_24" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        android:text="@string/update_product"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="150dp" />
+
+    <ImageButton
+        android:id="@+id/btn_updateproduct"
+        android:layout_width="71dp"
+        android:layout_height="54dp"
+        android:src="@drawable/ic_update"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="200dp" />
 
 </FrameLayout>
