@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Material3.Light"
         tools:targetApi="31">
+        <activity
+            android:name=".AddProduct"
+            android:exported="false" />
         <activity
             android:name=".Agricultural"
             android:exported="true"
@@ -27,8 +31,6 @@
             android:name=".Register"
             android:exported="false"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
-            android:name=".RegisterClient"
-            android:exported="false" />
         <activity
             android:name=".RegisterAgricultural"
             android:exported="false" />
@@ -41,8 +43,8 @@
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity
             android:name=".Login"
-            android:theme="@style/Theme.Material3.Light.NoActionBar"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Material3.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,9 +53,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>

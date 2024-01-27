@@ -20,6 +20,12 @@
     <string name="client">Client</string>
     <string name="centralizer">Centralizer</string>
     <string name="register_as">Register as</string>
+    <string name="add_product">לחץ להוספת מוצר חדש</string>
+    <string name="product_name">שם מוצר</string>
+    <string name="description">תיאור מוצר</string>
+    <string name="category">קטגוריה</string>
+    <string name="quantity">כמות</string>
+    <string name="price">מחיר</string>
 
 
 </resources>

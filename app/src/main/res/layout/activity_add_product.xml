@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddProduct">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:padding = "10dp"
+        tools:ignore="UselessParent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:gravity="center"
+            android:text="@string/editing_products"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/titleEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/product_name"
+            android:drawableStart="@drawable/write"
+            android:drawablePadding="10dp"
+            android:inputType="text"
+            android:padding="10dp"
+            />
+
+        <EditText
+            android:id="@+id/descriptionEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/description"
+            android:drawableStart="@drawable/write"
+            android:drawablePadding="10dp"
+            android:inputType="textCapSentences|textImeMultiLine"
+            android:padding="10dp"
+            android:layout_below="@id/titleEt"
+            />
+
+        <TextView
+            android:id="@+id/category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/category"
+            android:drawableStart="@drawable/baseline_arrow_drop_down_24"
+            android:drawablePadding="10dp"
+            android:inputType="textCapSentences|textImeMultiLine"
+            android:padding="10dp"
+            android:layout_below="@+id/descriptionEt"
+            />
+
+        <EditText
+            android:id="@+id/quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/quantity"
+            android:drawableStart="@drawable/baseline_add_shopping_cart_24"
+            android:drawablePadding="10dp"
+            android:inputType="textCapWords"
+            android:padding="10dp"
+            android:layout_below="@+id/category"
+            />
+
+        <EditText
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:drawableStart="@drawable/baseline_attach_money_24"
+            android:drawablePadding="10dp"
+            android:hint="@string/price"
+            android:inputType="numberDecimal"
+            android:padding="10dp"
+            android:layout_below="@+id/quantity"/>
+
+        <Button
+            android:id="@+id/btn_addproduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Product"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/price"
+
+            />
+
+
+
+    </RelativeLayout>
+
+
+
+    <!--    TODO: 21:04-->
+
+</LinearLayout>

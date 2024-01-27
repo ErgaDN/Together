@@ -8,10 +8,22 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/editing_products"
         android:gravity="center"
+        android:text="@string/editing_products"
         android:textColor="@color/black"
-        android:textSize="40sp"
-        />
+        android:textSize="40sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        android:text="@string/add_product"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <ImageButton
+        android:id="@+id/btn_addproduct"
+        android:layout_width="71dp"
+        android:layout_height="54dp"
+        android:src="@drawable/baseline_add_shopping_cart_24" />
 
 </FrameLayout>
