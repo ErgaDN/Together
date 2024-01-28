@@ -22,6 +22,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -132,6 +133,10 @@ public class RegisterAgricultural extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(Void unused) {
                                             Log.d(TAG, "user created" + userID);
+
+                                            // create products collection to the current agricultural
+                                            mStore.collection("agriculturals").document(userID).collection("products");
+
                                             Intent intent = new Intent(getApplicationContext(), Agricultural.class);
                                             startActivity(intent);
                                             finish();

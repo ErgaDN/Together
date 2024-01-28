@@ -3,11 +3,13 @@ package com.example.together;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
+import static android.content.ContentValues.TAG;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,10 +21,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ktx.Firebase;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class AddProduct extends AppCompatActivity {
 
@@ -31,6 +36,7 @@ public class AddProduct extends AppCompatActivity {
     private Button btn_addproduct;
 
     private FirebaseAuth firebaseAuth;
+    FirebaseFirestore mStore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +48,9 @@ public class AddProduct extends AppCompatActivity {
         price = findViewById(R.id.price);
         btn_addproduct = findViewById(R.id.btn_addproduct);
         firebaseAuth = FirebaseAuth.getInstance();
+        mStore = FirebaseFirestore.getInstance();
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         category.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,36 +95,31 @@ private void addProduct() {
     //add data to db
     //TODO: check if it on the db (55:30)
     String timestamp = "" + System.currentTimeMillis();
-    HashMap<String, Object> hashMap = new HashMap<>();
-    hashMap.put("productId", "" + timestamp);
-    hashMap.put("productTitle", "" + productTitle);
-    hashMap.put("productDescription", "" + productDescription);
-    hashMap.put("productCategory", "" + productCategory);
-    hashMap.put("productQuantity", "" + productQuantity);
-    hashMap.put("productPrice", "" + originalPrice);
-    hashMap.put("timestamp", "" + timestamp);
-    hashMap.put("uid", "" + firebaseAuth.getUid());
+    HashMap<String, Object> productData = new HashMap<>();
+    productData.put("productId", "" + timestamp);
+    productData.put("productTitle", "" + productTitle);
+    productData.put("productDescription", "" + productDescription);
+    productData.put("productCategory", "" + productCategory);
+    productData.put("productQuantity", "" + productQuantity);
+    productData.put("productPrice", "" + originalPrice);
+    productData.put("timestamp", "" + timestamp);
+    productData.put("uid", "" + firebaseAuth.getUid());
     //add to DB
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
+    String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+    CollectionReference productCollectionRef = mStore.collection("agriculturals").document(userID).collection("products");
 
-    reference.child(firebaseAuth.getUid())
-            .child("Products")
-            .child(timestamp)
-            .setValue(hashMap)
-            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    // Data added successfully
-                    Toast.makeText(AddProduct.this, "Product added to the database", Toast.LENGTH_SHORT).show();
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    // Failed to add data
-                    Toast.makeText(AddProduct.this, "Failed to add product to the database", Toast.LENGTH_SHORT).show();
-                }
-            });
+    // Add the sample product document to the "product" collection
+    productCollectionRef.add(productData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        @Override
+        public void onSuccess(DocumentReference documentReference) {
+            Log.d(TAG, "Product added to the 'products' collection under user: " + userID);
+
+            Intent intent = new Intent(getApplicationContext(), Agricultural.class);
+            startActivity(intent);
+            finish();
+        }
+    });
+
 }
     private void categoryDialog() {
         //dialog
