@@ -5,6 +5,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -22,9 +23,7 @@ public class client extends AppCompatActivity {
 
     TextView profilefirstname, profilelastname, profilephone, profileaddress;
     FirebaseAuth mAuth;
-
-
-    Button editProfile;
+    Button editProfile, button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +35,23 @@ public class client extends AppCompatActivity {
         profilephone = findViewById(R.id.profilePhoneNumber);
         profileaddress = findViewById(R.id.profileAddress);
         mAuth = FirebaseAuth.getInstance();
-
+        button = findViewById(R.id.logout);
 
         showUserData();
 
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
+
+
 
     public void showUserData(){
 
