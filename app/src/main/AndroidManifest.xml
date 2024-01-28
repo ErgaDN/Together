@@ -20,9 +20,6 @@
             android:name=".RegisterClient"
             android:exported="false" />
         <activity
-            android:name=".register_client"
-            android:exported="false" />
-        <activity
             android:name=".client"
             android:exported="false" />
         <activity
@@ -32,25 +29,19 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
             </intent-filter>
         </activity>
         <activity
             android:name=".Register"
             android:exported="false"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
-            android:name=".RegisterClient"
-            android:exported="false" />
         <activity
             android:name=".RegisterAgricultural"
             android:exported="false" />
         <activity
             android:name=".RegisterCentralizer"
             android:exported="false" />
-        <activity
-            android:name=".Register"
-            android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity
             android:name=".Login"
             android:theme="@style/Theme.Material3.Light.NoActionBar"
