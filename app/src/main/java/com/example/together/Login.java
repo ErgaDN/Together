@@ -99,7 +99,6 @@ public class Login extends AppCompatActivity {
 
                             // Query the appropriate collection to get user role
                             if (user != null) {
-                                // TODO: check if the user's type and than move it to the fit screen
                                 userID = user.getUid();
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                                 String[] collectionNames = {"agriculturals", "centralizers", "clients"};
@@ -153,7 +152,7 @@ public class Login extends AppCompatActivity {
             case "centralizers":
                 return MainActivity.class; // Replace with your actual activity class
             case "clients":
-                return MainActivity.class; // Replace with your actual activity class
+                return client.class; // Replace with your actual activity class
             default:
                 return null;
         }
