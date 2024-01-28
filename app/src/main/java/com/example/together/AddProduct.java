@@ -50,6 +50,7 @@ public class AddProduct extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         mStore = FirebaseFirestore.getInstance();
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         category.setOnClickListener(new View.OnClickListener() {
             @Override

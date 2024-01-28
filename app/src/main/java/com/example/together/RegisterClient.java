@@ -102,6 +102,7 @@ public class RegisterClient extends AppCompatActivity {
         buttonReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "Button clicked!");
                 progressBar.setVisibility(View.VISIBLE);
                 String email, password, firstName, lastName, phoneNumber;//, address;
                 email = String.valueOf(editTextEmail.getText());
@@ -154,8 +155,9 @@ public class RegisterClient extends AppCompatActivity {
                                     documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
+                                            Log.d(TAG, "Firestore data inserted successfully.");
                                             Log.d(TAG, "user created" + userID);
-                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class); // TODO: change it to the view of client
+                                            Intent intent = new Intent(getApplicationContext(), client.class); // TODO: change it to the view of client
                                             startActivity(intent);
                                             finish();
                                         }
@@ -163,7 +165,7 @@ public class RegisterClient extends AppCompatActivity {
 
 
                                 } else {
-                                    // If sign in fails, display a message to the user.
+                                    Log.e(TAG, "Authentication failed.", task.getException());
                                     Toast.makeText(RegisterClient.this, "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
                                 }

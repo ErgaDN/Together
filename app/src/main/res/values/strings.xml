@@ -28,6 +28,12 @@
     <string name="price">מחיר</string>
     <string name="update_product">לחץ לעידכון מוצר קיים</string>
     <string name="SelectAddress">Select an Address</string>
+    <string name="edit_profile">edit_profile</string>
+    <string name="First_Name">First Name</string>
+    <string name="Last_Name">Last Name</string>
+    <string name="Phone_Number">Phone Number</string>
+    <string name="Address">Address</string>
+    <string name="username">username</string>
 
 
 </resources>
