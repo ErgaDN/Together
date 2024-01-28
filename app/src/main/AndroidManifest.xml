@@ -15,6 +15,7 @@
         tools:targetApi="31">
         <activity
             android:name=".AddProduct"
+            android:parentActivityName=".Agricultural"
             android:exported="false" />
         <activity
             android:name=".RegisterClient"
