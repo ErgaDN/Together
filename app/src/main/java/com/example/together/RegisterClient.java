@@ -163,7 +163,6 @@ public class RegisterClient extends AppCompatActivity {
                                         }
                                     });
 
-
                                 } else {
                                     Log.e(TAG, "Authentication failed.", task.getException());
                                     Toast.makeText(RegisterClient.this, "Authentication failed.",
