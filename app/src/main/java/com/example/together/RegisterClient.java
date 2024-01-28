@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,14 +35,22 @@ import java.util.Objects;
 
 public class RegisterClient extends AppCompatActivity {
 
-    TextInputEditText editTextEmail, editTextPassword, editTextFirstName, editTextLastName, editTextPhone, editTextAddress;
+    TextInputEditText editTextEmail, editTextPassword, editTextFirstName, editTextLastName, editTextPhone; //, editTextAddress;
     Button buttonReg;
     FirebaseAuth mAuth;
     FirebaseFirestore mStore;
     ProgressBar progressBar;
     TextView textView;
     String userID;
+    String address;
 
+    String[] selectAddress = {"Ariel", "Tel-Aviv"};
+    AutoCompleteTextView autoCompleteSelectAddress;
+    ArrayAdapter<String> adapterAddress;
+
+
+
+//    Query capitalCities = mStore.collection("centralizers");
 
     @Override
     public void onStart() {
@@ -62,11 +74,22 @@ public class RegisterClient extends AppCompatActivity {
         editTextFirstName = findViewById(R.id.firstName);
         editTextLastName = findViewById(R.id.lastName);
         editTextPhone = findViewById(R.id.phoneNumber);
-        editTextAddress = findViewById(R.id.address);
+//        editTextAddress = findViewById(R.id.address);
         buttonReg = findViewById(R.id.btn_register);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.loginNow);
         mStore = FirebaseFirestore.getInstance();
+        autoCompleteSelectAddress = findViewById(R.id.select_address);
+        adapterAddress = new ArrayAdapter<String>(this, R.layout.list_of_address, selectAddress);
+
+        autoCompleteSelectAddress.setAdapter(adapterAddress);
+        autoCompleteSelectAddress.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                address = adapterView.getItemAtPosition(position).toString();
+//                Toast.ma
+            }
+        });
         textView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -80,13 +103,13 @@ public class RegisterClient extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                String email, password, firstName, lastName, phoneNumber, address;
+                String email, password, firstName, lastName, phoneNumber;//, address;
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextPassword.getText());
                 firstName = String.valueOf(editTextFirstName.getText());
                 lastName = String.valueOf(editTextLastName.getText());
                 phoneNumber = String.valueOf(editTextPhone.getText());
-                address = String.valueOf(editTextAddress.getText());
+//                address = String.valueOf(editTextAddress.getText());
 
                 if(TextUtils.isEmpty(email)){
                     Toast.makeText(RegisterClient.this, "Enter email", Toast.LENGTH_SHORT).show();
@@ -109,7 +132,7 @@ public class RegisterClient extends AppCompatActivity {
                     return;
                 }
                 if(TextUtils.isEmpty(address)){
-                    Toast.makeText(RegisterClient.this, "Enter Address", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterClient.this, "Select Address", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

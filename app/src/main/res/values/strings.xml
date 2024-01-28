@@ -27,6 +27,7 @@
     <string name="quantity">כמות</string>
     <string name="price">מחיר</string>
     <string name="update_product">לחץ לעידכון מוצר קיים</string>
+    <string name="SelectAddress">Select an Address</string>
 
 
 </resources>
