@@ -122,7 +122,7 @@ public class RegisterClient extends AppCompatActivity {
                                     Toast.makeText(RegisterClient.this, "Account created.",
                                             Toast.LENGTH_SHORT).show();
                                     userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                                    DocumentReference documentReference = mStore.collection("agriculturals").document(userID);
+                                    DocumentReference documentReference = mStore.collection("clients").document(userID);
                                     Map<String, Object> user = new HashMap<>();
                                     user.put("First Name", firstName);
                                     user.put("Last Name", lastName);
@@ -132,7 +132,7 @@ public class RegisterClient extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(Void unused) {
                                             Log.d(TAG, "user created" + userID);
-                                            Intent intent = new Intent(getApplicationContext(), Agricultural.class);
+                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class); // TODO: change it to the view of client
                                             startActivity(intent);
                                             finish();
                                         }
