@@ -93,7 +93,6 @@ public class AddProduct extends AppCompatActivity {
 
 private void addProduct() {
     //add data to db
-    //TODO: check if it on the db (55:30)
     String timestamp = "" + System.currentTimeMillis();
     HashMap<String, Object> productData = new HashMap<>();
     productData.put("productId", "" + timestamp);
