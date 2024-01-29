@@ -15,9 +15,12 @@
         android:theme="@style/Theme.Material3.Light"
         tools:targetApi="31">
         <activity
-            android:name=".clientEditProfile"
-            android:parentActivityName=".ClientProfile"
+            android:name=".AddProductToCart"
             android:exported="false" />
+        <activity
+            android:name=".clientEditProfile"
+            android:exported="false"
+            android:parentActivityName=".ClientProfile" />
         <activity
             android:name=".AddProduct"
             android:exported="false"
@@ -27,6 +30,9 @@
             android:exported="false" />
         <activity
             android:name=".ClientProfile"
+            android:exported="false"/>
+        <activity
+            android:name=".Client"
             android:exported="false" />
         <activity
             android:name=".Agricultural"
@@ -60,7 +66,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

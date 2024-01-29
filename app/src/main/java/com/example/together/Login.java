@@ -146,7 +146,7 @@ public class Login extends AppCompatActivity {
             case "centralizers":
                 return MainActivity.class; // Replace with your actual activity class
             case "clients":
-                return ClientProfile.class; // Replace with your actual activity class
+                return Client.class; // Replace with your actual activity class
             default:
                 return null;
         }
