@@ -14,8 +14,8 @@
         android:gravity="center">
 
         <Button
-            android:id="@+id/btn_add_product_to_cart"
-            android:text="@string/add_product_to_cart"
+            android:id="@+id/btn_client_cart"
+            android:text="@string/client_cart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
