@@ -38,6 +38,7 @@
     <string name="save">save</string>
     <string name="choose_center">בחר נקודות חלוקה</string>
     <string name="description_distribution_center">בחר לאילו נקודות חלוקה תגיע השבוע\n ניתן לבחור עד מוצש בחצות</string>
+    <string name="summary_centers">נקודות חלוקה אליהם אתה מגיע השבוע:</string>
 
 
 </resources>

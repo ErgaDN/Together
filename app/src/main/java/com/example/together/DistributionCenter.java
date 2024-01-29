@@ -114,7 +114,7 @@ public class DistributionCenter extends Fragment {
         //add data to db
         String timestamp = "" + System.currentTimeMillis();
         HashMap<String, Object> addressesData = new HashMap<>();
-        addressesData.put("productId", "" + timestamp);
+        addressesData.put("addressesId", "" + timestamp);
         addressesData.put("addresses", "" + addresses);
         addressesData.put("timestamp", "" + timestamp);
         addressesData.put("uid", "" + firebaseAuth.getUid());
@@ -126,7 +126,7 @@ public class DistributionCenter extends Fragment {
         productCollectionRef.add(addressesData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                Log.d(TAG, "Product added to the 'products' collection under user: " + userID);
+                Log.d(TAG, "Addresses added to the 'Distribution Center' collection under user: " + userID);
 
                 Intent intent = new Intent(requireContext(), Agricultural.class);
                 startActivity(intent);
