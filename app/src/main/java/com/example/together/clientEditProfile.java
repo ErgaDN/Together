@@ -40,6 +40,9 @@ public class clientEditProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_edit_profile);
+        getSupportActionBar().setTitle("Edit Profile");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
 //        reference = FirebaseDatabase.getInstance().getReference("clients");
 
@@ -70,43 +73,6 @@ public class clientEditProfile extends AppCompatActivity {
 
 
     public boolean isFifstNameChanged(){
-//        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-//        DocumentReference documentReference = mStore.collection("clients").document(userID);
-//
-//        documentReference.get()
-//                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                        if (documentSnapshot.exists()) {
-//                            String firstName = documentSnapshot.getString("First Name");
-//                            if (firstName != null) {
-//                                // Store the retrieved "First Name" in the 'firstName' variable
-//                                firstNameUser = firstName;
-//
-//                                // Now you can use the 'storedFirstName' variable in your code
-//                                Log.d(TAG, "Stored First Name: " + firstNameUser);
-//
-//                                // For example, update a UI element with this stored value
-//                                // textViewFirstName.setText(storedFirstName);
-//                            } else {
-//                                Log.d(TAG, "First Name is null");
-//                                // Handle the case where "First Name" is not present in the document
-//                            }
-//                        } else {
-//                            Log.d(TAG, "Document does not exist");
-//                            // Handle the case where the document does not exist
-//                        }
-//                    }
-//                })
-//                .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception e) {
-//                        Log.w(TAG, "Error getting document", e);
-//                        // Handle any errors that occurred while fetching the document
-//                    }
-//                });
-
-//        if (!firstNameUser.trim().equals(editFirstName.getText().toString())){//
         if (editFirstName != null && editFirstName.length() > 0){//
             firstNameUser= editFirstName.getText().toString();
             updateFirstName(firstNameUser);
@@ -123,7 +89,7 @@ public class clientEditProfile extends AppCompatActivity {
         DocumentReference documentReference = mStore.collection("clients").document(userID);
 
         Map<String, Object> update = new HashMap<>();
-        update.put("Fist Name", firstName);
+        update.put("First Name", firstName);
         documentReference.update(update).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
@@ -137,43 +103,6 @@ public class clientEditProfile extends AppCompatActivity {
         });
     }
 
-//    public boolean isLastNameChanged(){
-//        if (!lastNameUser.equals(editLastName.getText().toString())){
-//            reference.child(usernameUser).child("Last Name").setValue(editLastName.getText().toString());
-//            lastNameUser = editLastName.getText().toString();
-//            return true;
-//        } else{
-//            return false;
-//        }
-//    }
-//    public boolean isPhoneChanged(){
-//        if (!phoneUser.equals(editphone.getText().toString())){
-//            reference.child(usernameUser).child("Phone Number").setValue(editphone.getText().toString());
-//            phoneUser = editphone.getText().toString();
-//            return true;
-//        } else{
-//            return false;
-//        }
-//    }
-//    public boolean isEmailChanged(){
-//        if (!emailUser.equals(editEmail.getText().toString())){
-//            reference.child(usernameUser).child("Email").setValue(editEmail.getText().toString());
-//            emailUser = editEmail.getText().toString();
-//            return true;
-//        } else{
-//            return false;
-//        }
-//    }
-
-//    public boolean isPasswordChanged(){
-//        if (!passwordUser.equals(editPassword.getText().toString())){
-//            reference.child(usernameUser).child("password").setValue(editPassword.getText().toString());
-//            passwordUser = editPassword.getText().toString();
-//            return true;
-//        } else{
-//            return false;
-//        }
-//    }
 
     public void showData(){
         Intent intent = getIntent();

@@ -16,6 +16,7 @@
         tools:targetApi="31">
         <activity
             android:name=".clientEditProfile"
+            android:parentActivityName=".ClientProfile"
             android:exported="false" />
         <activity
             android:name=".AddProduct"
