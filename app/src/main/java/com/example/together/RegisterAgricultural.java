@@ -136,6 +136,8 @@ public class RegisterAgricultural extends AppCompatActivity {
 
                                             // create products collection to the current agricultural
                                             mStore.collection("agriculturals").document(userID).collection("products");
+                                            // create Distribution Center collection to the current agricultural
+                                            mStore.collection("agriculturals").document(userID).collection("Distribution Center");
 
                                             Intent intent = new Intent(getApplicationContext(), Agricultural.class);
                                             startActivity(intent);

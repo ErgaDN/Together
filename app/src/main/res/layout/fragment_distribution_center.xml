@@ -6,6 +6,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".DistributionCenter">
 
+    <TextView
+        android:layout_width="327dp"
+        android:layout_height="141dp"
+        android:layout_gravity="center"
+        android:text="@string/description_distribution_center" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/select_center"

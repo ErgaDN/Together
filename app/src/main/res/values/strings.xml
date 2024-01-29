@@ -35,6 +35,7 @@
     <string name="Address">Address</string>
     <string name="username">username</string>
     <string name="choose_center">בחר נקודות חלוקה</string>
+    <string name="description_distribution_center">בחר לאילו נקודות חלוקה תגיע השבוע\n ניתן לבחור עד מוצש בחצות</string>
 
 
 </resources>
