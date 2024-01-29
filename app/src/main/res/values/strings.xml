@@ -34,6 +34,10 @@
     <string name="Phone_Number">Phone Number</string>
     <string name="Address">Address</string>
     <string name="username">username</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="recover_password">Recover Password</string>
+    <string name="recover">Recover</string>
+    <string name="navigate_back">Navigate Back</string>
 
 
 </resources>
