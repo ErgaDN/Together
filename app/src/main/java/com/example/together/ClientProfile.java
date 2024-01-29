@@ -15,11 +15,19 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class client extends AppCompatActivity {
+public class ClientProfile extends AppCompatActivity {
+
+
 
     TextView profilefirstname, profilelastname, profilephone, profileaddress;
     FirebaseAuth mAuth;
@@ -28,7 +36,7 @@ public class client extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_client);
+        setContentView(R.layout.activity_client_profile);
         editProfile = findViewById(R.id.editButton);
         profilefirstname = findViewById(R.id.profileFirstName);
         profilelastname = findViewById(R.id.profileLastName);
@@ -37,7 +45,14 @@ public class client extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         button = findViewById(R.id.logout);
 
-        showUserData();
+        showUserData(); // TODO: FIX IT!
+
+        editProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                passUserData();
+            }
+        });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,8 +65,6 @@ public class client extends AppCompatActivity {
         });
 
     }
-
-
 
     public void showUserData(){
 
@@ -81,6 +94,53 @@ public class client extends AppCompatActivity {
                             profilelastname.setText(lastnameUser);
                             profilephone.setText(phoneUser);
                             profileaddress.setText(addressUser);
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error getting document", e);
+                    }
+                });
+
+    }
+
+    public void passUserData(){
+
+        Intent intent = getIntent();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userID = user.getUid();
+        DocumentReference docRef = db.collection("clients").document(userID);
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            // DocumentSnapshot data may be null if the document doesn't exist
+                            Log.d(TAG, "DocumentSnapshot data: " + documentSnapshot.getData());
+
+                            // Access specific fields
+                            String firstnameUser = documentSnapshot.getString("First Name");
+                            String lastnameUser = documentSnapshot.getString("Last Name");
+                            String phoneUser = documentSnapshot.getString("Phone Number");
+                            String addressUser = documentSnapshot.getString("Address");
+
+                            Intent intent = new Intent(ClientProfile.this, clientEditProfile.class);
+
+
+                            // Display the fields
+                            profilefirstname.setText(firstnameUser);
+                            profilelastname.setText(lastnameUser);
+                            profilephone.setText(phoneUser);
+                            profileaddress.setText(addressUser);
+
+                            startActivity(intent);
 
                         } else {
                             Log.d(TAG, "No such document");

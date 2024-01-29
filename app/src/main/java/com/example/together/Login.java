@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -20,13 +19,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.Objects;
 
 public class Login extends AppCompatActivity {
 
@@ -152,7 +146,7 @@ public class Login extends AppCompatActivity {
             case "centralizers":
                 return MainActivity.class; // Replace with your actual activity class
             case "clients":
-                return client.class; // Replace with your actual activity class
+                return ClientProfile.class; // Replace with your actual activity class
             default:
                 return null;
         }

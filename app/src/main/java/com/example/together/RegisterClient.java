@@ -27,7 +27,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +57,7 @@ public class RegisterClient extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(), client.class);
+            Intent intent = new Intent(getApplicationContext(), ClientProfile.class);
             startActivity(intent);
             finish();
         }
@@ -157,7 +156,7 @@ public class RegisterClient extends AppCompatActivity {
                                         public void onSuccess(Void unused) {
                                             Log.d(TAG, "Firestore data inserted successfully.");
                                             Log.d(TAG, "user created" + userID);
-                                            Intent intent = new Intent(getApplicationContext(), client.class); // TODO: change it to the view of client
+                                            Intent intent = new Intent(getApplicationContext(), ClientProfile.class); // TODO: change it to the view of client
                                             startActivity(intent);
                                             finish();
                                         }
