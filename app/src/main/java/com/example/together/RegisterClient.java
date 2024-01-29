@@ -44,7 +44,8 @@ public class RegisterClient extends AppCompatActivity {
     String userID;
     String address;
 
-    String[] selectAddress = {"Ariel", "Tel-Aviv"};
+//    String[] selectAddress = {"Ariel", "Tel-Aviv"};
+    //TODO: erga: I move it to the constants class for use it from the farmer too;)
     AutoCompleteTextView autoCompleteSelectAddress;
     ArrayAdapter<String> adapterAddress;
 
@@ -80,7 +81,8 @@ public class RegisterClient extends AppCompatActivity {
         textView = findViewById(R.id.loginNow);
         mStore = FirebaseFirestore.getInstance();
         autoCompleteSelectAddress = findViewById(R.id.select_address);
-        adapterAddress = new ArrayAdapter<String>(this, R.layout.list_of_address, selectAddress);
+//        adapterAddress = new ArrayAdapter<String>(this, R.layout.list_of_address, selectAddress);
+        adapterAddress = new ArrayAdapter<String>(this, R.layout.list_of_address, Constants.address);
 
         autoCompleteSelectAddress.setAdapter(adapterAddress);
         autoCompleteSelectAddress.setOnItemClickListener(new AdapterView.OnItemClickListener() {

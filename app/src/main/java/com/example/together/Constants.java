@@ -7,4 +7,11 @@ public class Constants {
             "fruits",
             "vegetables"
     };
+
+    //list of address
+    public static final String[] address = {
+            "Ariel",
+            "Tel-Aviv",
+            "Jerusalem"
+    };
 }

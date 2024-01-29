@@ -38,6 +38,8 @@
     <string name="recover_password">Recover Password</string>
     <string name="recover">Recover</string>
     <string name="navigate_back">Navigate Back</string>
+    <string name="choose_center">בחר נקודות חלוקה</string>
+    <string name="description_distribution_center">בחר לאילו נקודות חלוקה תגיע השבוע\n ניתן לבחור עד מוצש בחצות</string>
 
 
 </resources>
