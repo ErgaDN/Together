@@ -28,7 +28,7 @@ public class Login extends AppCompatActivity {
     Button buttonLogin;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
-    TextView textView, forgetPass;
+    TextView textView;
 
     String userID;
 
@@ -53,7 +53,6 @@ public class Login extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
-        forgetPass = findViewById(R.id.forgetPass);
         buttonLogin = findViewById(R.id.btn_login);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.registerNow);
@@ -64,13 +63,6 @@ public class Login extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Register.class);
                 startActivity(intent);
                 finish();
-            }
-        });
-
-        forgetPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Login.this, ForgotPassword.class));
             }
         });
 
@@ -154,7 +146,7 @@ public class Login extends AppCompatActivity {
             case "centralizers":
                 return MainActivity.class; // Replace with your actual activity class
             case "clients":
-                return ClientProfile.class; // Replace with your actual activity class
+                return Client.class; // Replace with your actual activity class
             default:
                 return null;
         }
