@@ -22,14 +22,21 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.core.FirestoreClient;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -43,23 +50,19 @@ public class RegisterClient extends AppCompatActivity {
     TextView textView;
     String userID;
     String address;
-
-//    String[] selectAddress = {"Ariel", "Tel-Aviv"};
-    //TODO: erga: I move it to the constants class for use it from the farmer too;)
     AutoCompleteTextView autoCompleteSelectAddress;
     ArrayAdapter<String> adapterAddress;
+    ArrayList<String> addressList = new ArrayList<>();
+    FirebaseFirestore db;
 
-
-
-//    Query capitalCities = mStore.collection("centralizers");
 
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(), client.class);
+        if (currentUser != null) {
+            Intent intent = new Intent(getApplicationContext(), ClientProfile.class);
             startActivity(intent);
             finish();
         }
@@ -75,24 +78,32 @@ public class RegisterClient extends AppCompatActivity {
         editTextFirstName = findViewById(R.id.firstName);
         editTextLastName = findViewById(R.id.lastName);
         editTextPhone = findViewById(R.id.phoneNumber);
-//        editTextAddress = findViewById(R.id.address);
         buttonReg = findViewById(R.id.btn_register);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.loginNow);
         mStore = FirebaseFirestore.getInstance();
+
+        getAddressArray();
+
+
         autoCompleteSelectAddress = findViewById(R.id.select_address);
-//        adapterAddress = new ArrayAdapter<String>(this, R.layout.list_of_address, selectAddress);
-        adapterAddress = new ArrayAdapter<String>(this, R.layout.list_of_address, Constants.address);
+
+        adapterAddress = new ArrayAdapter<String>(this, R.layout.list_of_address, addressList);
+        FirebaseApp.initializeApp(this);
+
 
         autoCompleteSelectAddress.setAdapter(adapterAddress);
+
+
         autoCompleteSelectAddress.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 address = adapterView.getItemAtPosition(position).toString();
-//                Toast.ma
             }
         });
-        textView.setOnClickListener(new View.OnClickListener(){
+
+
+        textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Login.class);
@@ -100,6 +111,7 @@ public class RegisterClient extends AppCompatActivity {
                 finish();
             }
         });
+
 
         buttonReg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,30 +124,12 @@ public class RegisterClient extends AppCompatActivity {
                 firstName = String.valueOf(editTextFirstName.getText());
                 lastName = String.valueOf(editTextLastName.getText());
                 phoneNumber = String.valueOf(editTextPhone.getText());
-//                address = String.valueOf(editTextAddress.getText());
 
-                if(TextUtils.isEmpty(email)){
-                    Toast.makeText(RegisterClient.this, "Enter email", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(password)){
-                    Toast.makeText(RegisterClient.this, "Enter password", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(firstName)){
-                    Toast.makeText(RegisterClient.this, "Enter First Name", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(lastName)){
-                    Toast.makeText(RegisterClient.this, "Enter Last Name", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(phoneNumber)){
-                    Toast.makeText(RegisterClient.this, "Enter Phone Number", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(TextUtils.isEmpty(address)){
-                    Toast.makeText(RegisterClient.this, "Select Address", Toast.LENGTH_SHORT).show();
+
+                if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(firstName) ||
+                        TextUtils.isEmpty(lastName) || TextUtils.isEmpty(phoneNumber) || TextUtils.isEmpty(address)) {
+                    Toast.makeText(RegisterClient.this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
 
@@ -159,7 +153,7 @@ public class RegisterClient extends AppCompatActivity {
                                         public void onSuccess(Void unused) {
                                             Log.d(TAG, "Firestore data inserted successfully.");
                                             Log.d(TAG, "user created" + userID);
-                                            Intent intent = new Intent(getApplicationContext(), client.class); // TODO: change it to the view of client
+                                            Intent intent = new Intent(getApplicationContext(), ClientProfile.class); // TODO: change it to the view of client
                                             startActivity(intent);
                                             finish();
                                         }
@@ -177,4 +171,41 @@ public class RegisterClient extends AppCompatActivity {
             }
         });
     }
+
+    private void getAddressArray() {
+        db = FirebaseFirestore.getInstance();
+        db.collection("centralizers")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                        if (task.isSuccessful()) {
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Check if the "Address" field exists in the document
+                                if (document.contains("Address")) {
+                                    String address = document.getString("Address");
+                                    addressList.add(address);
+                                    System.out.println("add:"+address);
+                                }
+                            }
+                            // Now, addressesList contains all "Address" values
+                            for (String address : addressList) {
+                                Log.d(TAG, "Address: " + address);
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+
+
+
+
+
+
+
 }

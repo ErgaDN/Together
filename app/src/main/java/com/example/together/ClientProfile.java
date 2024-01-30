@@ -19,7 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class client extends AppCompatActivity {
+public class ClientProfile extends AppCompatActivity {
 
     TextView profilefirstname, profilelastname, profilephone, profileaddress;
     FirebaseAuth mAuth;

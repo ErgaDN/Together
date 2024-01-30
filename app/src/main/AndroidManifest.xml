@@ -25,7 +25,7 @@
             android:name=".RegisterClient"
             android:exported="false" />
         <activity
-            android:name=".client"
+            android:name=".ClientProfile"
             android:exported="false" />
         <activity
             android:name=".Agricultural"
