@@ -28,9 +28,6 @@
             android:name=".RegisterClient"
             android:exported="false" />
         <activity
-            android:name=".RegisterClient"
-            android:exported="false" />
-        <activity
             android:name=".Client"
             android:exported="false" />
         <activity
