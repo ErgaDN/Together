@@ -39,6 +39,7 @@
             android:scaleType="fitXY"
             android:src="@drawable/ic_filter"/>
 
+<!--show filtered product title-->
         <TextView
             android:id="@+id/filteredProductsTv"
             android:layout_width="wrap_content"

@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,6 +20,11 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -28,6 +34,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.zip.Inflater;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class DistributionCenter extends Fragment {
@@ -35,6 +42,11 @@ public class DistributionCenter extends Fragment {
   private EditText searchProductsEt;
   private ImageButton filterProductBtn;
   private TextView filteredProductsTv;
+  private RecyclerView productsRv;
+  private ArrayList<ModelProduct> productList;
+  private AdapterProductSeller adapterProductSeller;
+  private FirebaseAuth firebaseAuth;
+  ///TODO:-----50:00-----
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
@@ -42,25 +54,71 @@ public class DistributionCenter extends Fragment {
     searchProductsEt = view.findViewById(R.id.searchProductsEt);
     filterProductBtn = view.findViewById(R.id.filterProductBtn);
     filteredProductsTv = view.findViewById(R.id.filteredProductsTv);
+    productsRv = view.findViewById(R.id.productsRv);
 
-    btn_addproduct.setOnClickListener(new View.OnClickListener() {
+    loadAllProducts();
+
+    filterProductBtn.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        //open add product activity
-        startActivity(new Intent(requireContext(), AddProduct.class));
+        AlertDialog.Builder builder = new AlertDialog.Builder(DistributionCenter.this);
+        builder.setTitle("Choose Category:").setItems(Constants.productCategories, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            //get selected item
+            String selected = Constants.productCategories_1[which];
+            filteredProductsTv.setText(selected);
+            if (selected.equals("הכל")) {
+              /////TODO: 55:17-----------
+            }
+          }
+        });
       }
     });
 
-    btn_updateproduct.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        //open update product activity
-        startActivity(new Intent(requireContext(), ChooseUpdateProduct.class));
-      }
-    });
+//    btn_addproduct.setOnClickListener(new View.OnClickListener() {
+//      @Override
+//      public void onClick(View v) {
+//        //open add product activity
+//        startActivity(new Intent(requireContext(), AddProduct.class));
+//      }
+//    });
+//
+//    btn_updateproduct.setOnClickListener(new View.OnClickListener() {
+//      @Override
+//      public void onClick(View v) {
+//        //open update product activity
+//        startActivity(new Intent(requireContext(), ChooseUpdateProduct.class));
+//      }
+//    });
 
     return view;
 
+  }
+
+  private void loadAllProducts() {
+    productList = new ArrayList<>();
+
+    //get all product
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User");
+    reference.child(firebaseAuth.getUid()).child("Products")
+            .addChildEventListener(new ValueEventListener() {
+              @Override
+              public void onDataChange(@Nonnull DataSnapshot dataSnapshot) {
+                //before getting rest list
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                  ModelProduct modelProduct = ds.getValue(ModelProduct.class);
+                  productList.add(modelProduct);
+                }
+                //setup adapter
+                productsRv.setAdapter(adapterProductSeller);
+              }
+
+              @Override
+              public void onCancelled(@Nonnull DatabaseError databaseError) {
+
+              }
+            });
   }
 
 }
