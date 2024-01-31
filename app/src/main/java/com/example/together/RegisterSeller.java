@@ -22,7 +22,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -30,7 +29,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class RegisterAgricultural extends AppCompatActivity {
+public class RegisterSeller extends AppCompatActivity {
 
     TextInputEditText editTextEmail, editTextPassword, editTextFirstName, editTextLastName, editTextPhone, editTextAddress;
     Button buttonReg;
@@ -47,7 +46,7 @@ public class RegisterAgricultural extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(getApplicationContext(), Agricultural.class);
+            Intent intent = new Intent(getApplicationContext(), Seller.class);
             startActivity(intent);
             finish();
         }
@@ -56,7 +55,7 @@ public class RegisterAgricultural extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_agricultural);
+        setContentView(R.layout.activity_register_seller);
         mAuth = FirebaseAuth.getInstance();
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
@@ -90,27 +89,27 @@ public class RegisterAgricultural extends AppCompatActivity {
                 address = String.valueOf(editTextAddress.getText());
 
                 if(TextUtils.isEmpty(email)){
-                    Toast.makeText(RegisterAgricultural.this, "Enter email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterSeller.this, "Enter email", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
-                    Toast.makeText(RegisterAgricultural.this, "Enter password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterSeller.this, "Enter password", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(TextUtils.isEmpty(firstName)){
-                    Toast.makeText(RegisterAgricultural.this, "Enter First Name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterSeller.this, "Enter First Name", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(TextUtils.isEmpty(lastName)){
-                    Toast.makeText(RegisterAgricultural.this, "Enter Last Name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterSeller.this, "Enter Last Name", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(TextUtils.isEmpty(phoneNumber)){
-                    Toast.makeText(RegisterAgricultural.this, "Enter Phone Number", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterSeller.this, "Enter Phone Number", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(TextUtils.isEmpty(address)){
-                    Toast.makeText(RegisterAgricultural.this, "Enter Address", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterSeller.this, "Enter Address", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -120,7 +119,7 @@ public class RegisterAgricultural extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(RegisterAgricultural.this, "Account created.",
+                                    Toast.makeText(RegisterSeller.this, "Account created.",
                                             Toast.LENGTH_SHORT).show();
                                     userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                                     DocumentReference documentReference = mStore.collection("agriculturals").document(userID);
@@ -139,7 +138,7 @@ public class RegisterAgricultural extends AppCompatActivity {
                                             // create Distribution Center collection to the current agricultural
                                             mStore.collection("agriculturals").document(userID).collection("Distribution Center");
 
-                                            Intent intent = new Intent(getApplicationContext(), Agricultural.class);
+                                            Intent intent = new Intent(getApplicationContext(), Seller.class);
                                             startActivity(intent);
                                             finish();
                                         }
@@ -148,7 +147,7 @@ public class RegisterAgricultural extends AppCompatActivity {
 
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Toast.makeText(RegisterAgricultural.this, "Authentication failed.",
+                                    Toast.makeText(RegisterSeller.this, "Authentication failed.",
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }

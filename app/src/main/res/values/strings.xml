@@ -46,6 +46,7 @@
     <string name="client_screen">Client Screen</string>
     <string name="profile">אזור אישי</string>
     <string name="client_cart">הסל שלי</string>
+    <string name="seller">seller</string>
 
 
 </resources>

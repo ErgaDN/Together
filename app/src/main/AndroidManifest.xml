@@ -23,7 +23,7 @@
         <activity
             android:name=".AddProduct"
             android:exported="false"
-            android:parentActivityName=".Agricultural" />
+            android:parentActivityName=".Seller" />
         <activity
             android:name=".RegisterClient"
             android:exported="false" />
@@ -34,7 +34,7 @@
             android:name=".ClientProfile"
             android:exported="false" />
         <activity
-            android:name=".Agricultural"
+            android:name=".Seller"
             android:exported="true"
             android:theme="@style/Theme.Material3.Light.NoActionBar">
             <intent-filter>
@@ -48,7 +48,7 @@
             android:exported="false"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity
-            android:name=".RegisterAgricultural"
+            android:name=".RegisterSeller"
             android:exported="false" />
         <activity
             android:name=".Login"

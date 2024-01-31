@@ -128,7 +128,7 @@ public class DistributionCenter extends Fragment {
             public void onSuccess(DocumentReference documentReference) {
                 Log.d(TAG, "Addresses added to the 'Distribution Center' collection under user: " + userID);
 
-                Intent intent = new Intent(requireContext(), Agricultural.class);
+                Intent intent = new Intent(requireContext(), Seller.class);
                 startActivity(intent);
                 requireActivity().finish();
             }

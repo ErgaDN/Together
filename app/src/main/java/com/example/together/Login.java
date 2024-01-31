@@ -142,7 +142,7 @@ public class Login extends AppCompatActivity {
     private Class<?> getDestinationActivity(String collectionName) {
         switch (collectionName) {
             case "agriculturals":
-                return Agricultural.class;
+                return Seller.class;
             case "centralizers":
                 return MainActivity.class; // Replace with your actual activity class
             case "clients":

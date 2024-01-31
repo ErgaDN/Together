@@ -7,13 +7,13 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
 
-public class Agricultural extends AppCompatActivity {
+public class Seller extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_agricultural);
+        setContentView(R.layout.activity_seller);
 
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewpager);
