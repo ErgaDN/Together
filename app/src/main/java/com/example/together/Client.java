@@ -28,13 +28,15 @@ public class Client extends AppCompatActivity {
         });
 
         btn_client_cart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(Client.this, ClientCart.class);
-                        startActivity(intent);
-                        finish();
-                    }
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Client.this, ClientCart.class);
+                startActivity(intent);
+                finish();
+            }
         });
+
+        
 
     }
 }
