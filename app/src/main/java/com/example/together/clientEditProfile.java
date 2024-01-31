@@ -74,8 +74,6 @@ public class clientEditProfile extends AppCompatActivity {
         });
     }
 
-
-
     public boolean isFifstNameChanged(){
         if (editFirstName != null && editFirstName.length() > 0){//
             firstNameUser= editFirstName.getText().toString();

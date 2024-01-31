@@ -1,95 +1,138 @@
 package com.example.together;
 
-import static android.content.ContentValues.TAG;
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class UpdateProduct extends AppCompatActivity {
+    String value;
+    EditText editTitle, editDescription, editQuantity, editPrice;
+    String title, description, quantity, price;
+    TextView editCategory;
+    Button btn_updateproduct;
+    private FirebaseAuth firebaseAuth;
+    FirebaseFirestore mStore;
     FirebaseFirestore db;
-    FirebaseAuth mAuth;
-    ArrayList<String> productTitleList = new ArrayList<>();
-    AutoCompleteTextView aCSelectProduct;
-    ArrayAdapter<String> adapterProduct;
-    String product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_product);
+
+        editTitle = findViewById(R.id.titleEt);
+        editDescription = findViewById(R.id.descriptionEt);
+        editQuantity = findViewById(R.id.quantity);
+        editPrice = findViewById(R.id.price);
+        editCategory = findViewById(R.id.category);
+        btn_updateproduct = findViewById(R.id.btn_updateproduct);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        mStore = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
+
         getSupportActionBar().setTitle("עדכון מוצר");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        db = FirebaseFirestore.getInstance();
-        mAuth = FirebaseAuth.getInstance();
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            value = extras.getString("IDproduct");
+        }
 
-        getProductTitles();
-
-
-        aCSelectProduct = findViewById(R.id.choose_product_name);
-
-        adapterProduct = new ArrayAdapter<String>(this, R.layout.list_of_proudcts, productTitleList);
-        FirebaseApp.initializeApp(this);
-
-
-        aCSelectProduct.setAdapter(adapterProduct);
-
-
-        aCSelectProduct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        btn_updateproduct.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                product = adapterView.getItemAtPosition(position).toString();
+            public void onClick(View view) {
+                boolean isTitleChanged;
+                isTitleChanged = isTitleChanged();
+
+
+                if (isTitleChanged ) {
+                    Toast.makeText(UpdateProduct.this, "Saved", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(UpdateProduct.this, "No Changes Found", Toast.LENGTH_SHORT).show();
+                }
+                Intent intent = new Intent(getApplicationContext(), ChooseUpdateProduct.class);
+                startActivity(intent);
             }
         });
 
+
+
+
     }
 
-    private void getProductTitles() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        String userID = user.getUid();
-        DocumentReference docRef = db.collection("seller").document(userID);
+    public boolean isTitleChanged(){
+        if (editTitle != null && editTitle.length() > 0){//
+            title = editTitle.getText().toString();
+            updateTitle(title);
+            return true;
+        } else{
+            return false;
+        }
+    }
 
-        docRef.collection("products")  // Access the "products" sub-collection
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+private void updateTitle(String title) {
+    String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot productDocument : task.getResult()) {
-                                // Check if the "productTitle" field exists in the product document
-                                if (productDocument.contains("productTitle")) {
-                                    String productTitle = productDocument.getString("productTitle");
-                                    productTitleList.add(productTitle);
+    // Reference to the "products" collection
+    CollectionReference productsRef = db.collection("seller")
+            .document(userID)
+            .collection("products");
+
+    // Query to find the document where "productId" matches the given value
+    Query query = productsRef.whereEqualTo("productId", value);
+
+    query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        @Override
+        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    // Update the "productTitle" field in the found document
+                    document.getReference().update("productTitle", title)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Log.d(TAG, "Title update successful for user: " + userID);
                                 }
-                            }
-                            // Now, productTitleList contains all "productTitle" values
-                            for (String productTitle : productTitleList) {
-                                Log.d(TAG, "Product Title: " + productTitle);
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-    }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.e(TAG, "Title update failed for user: " + userID, e);
+                                }
+                            });
+                }
+            } else {
+                Log.e(TAG, "Error getting documents: ", task.getException());
+            }
+        }
+    });
+}
+
 }

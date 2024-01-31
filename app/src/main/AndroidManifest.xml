@@ -17,8 +17,11 @@
         <activity
             android:name=".UpdateProduct"
             android:exported="false"
-            android:parentActivityName=".Seller"
-            />
+            android:parentActivityName=".ChooseUpdateProduct"/>
+        <activity
+            android:name=".ChooseUpdateProduct"
+            android:exported="false"
+            android:parentActivityName=".Seller" />
         <activity
             android:name=".ClientCart"
             android:exported="false" />
@@ -68,7 +71,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>

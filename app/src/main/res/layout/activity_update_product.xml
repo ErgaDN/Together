@@ -4,34 +4,117 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
-    android:padding="30dp"
     tools:context=".UpdateProduct">
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:gravity="center"
-        android:text="@string/update_product"
-        android:textSize="25sp"
-        android:textStyle="bold" />
+        android:layout_height="60dp"
+        android:padding = "10dp"
+        tools:ignore="UselessParent">
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/address"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-
-        <AutoCompleteTextView
-            android:id="@+id/choose_product_name"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none">
-        </AutoCompleteTextView>
+            android:layout_marginBottom="2dp"
+            android:gravity="center"
+            android:text="@string/update_single_product"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/titleEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:drawableStart="@drawable/write"
+            android:drawablePadding="10dp"
+            android:hint="@string/product_name"
+            android:inputType="text"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/descriptionEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titleEt"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:drawableStart="@drawable/write"
+            android:drawablePadding="10dp"
+            android:hint="@string/description"
+            android:inputType="textCapSentences|textImeMultiLine"
+            android:padding="10dp" />
+
+        <TextView
+            android:id="@+id/category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/descriptionEt"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:drawableStart="@drawable/baseline_arrow_drop_down_24"
+            android:drawablePadding="10dp"
+            android:hint="@string/category"
+            android:inputType="textCapSentences|textImeMultiLine"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="@string/quantity"
+            android:drawableStart="@drawable/baseline_add_shopping_cart_24"
+            android:drawablePadding="10dp"
+            android:inputType="textCapWords"
+            android:padding="10dp"
+            android:layout_below="@+id/category"
+            />
+
+        <EditText
+            android:id="@+id/price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:drawableStart="@drawable/baseline_attach_money_24"
+            android:drawablePadding="10dp"
+            android:hint="@string/price"
+            android:inputType="numberDecimal"
+            android:padding="10dp"
+            android:layout_below="@+id/quantity"/>
+
+        <Button
+            android:id="@+id/btn_updateproduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="שמור שינויים"
+            android:layout_marginTop="5dp"
+            android:layout_below="@id/price"
+
+            />
+
+
+
+    </RelativeLayout>
+
+
+
+    <!--    TODO: 21:04-->
 
 </LinearLayout>

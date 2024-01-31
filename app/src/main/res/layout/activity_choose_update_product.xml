@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ChooseUpdateProduct">
+
+    <!-- Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/update_product"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- AutoCompleteTextView for choosing the product -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/choose_update_product"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+        <AutoCompleteTextView
+            android:id="@+id/choose_product_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none">
+        </AutoCompleteTextView>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+<!--    &lt;!&ndash; Layout for updating product details &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:id="@+id/updateProductLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        android:visibility="gone">-->
+
+<!--        &lt;!&ndash; EditText for updating product title &ndash;&gt;-->
+<!--        <EditText-->
+<!--            android:id="@+id/updateTitleEt"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="5dp"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_marginEnd="5dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:drawableStart="@drawable/write"-->
+<!--            android:drawablePadding="10dp"-->
+<!--            android:hint="@string/product_name"-->
+<!--            android:inputType="text"-->
+<!--            android:padding="10dp" />-->
+
+<!--        &lt;!&ndash; EditText for updating product description &ndash;&gt;-->
+<!--        <EditText-->
+<!--            android:id="@+id/updateDescriptionEt"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@id/updateTitleEt"-->
+<!--            android:layout_marginStart="5dp"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_marginEnd="5dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:drawableStart="@drawable/write"-->
+<!--            android:drawablePadding="10dp"-->
+<!--            android:hint="@string/description"-->
+<!--            android:inputType="textCapSentences|textImeMultiLine"-->
+<!--            android:padding="10dp" />-->
+
+<!--        &lt;!&ndash; EditText for updating product category &ndash;&gt;-->
+<!--        <EditText-->
+<!--            android:id="@+id/updateCategory"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@+id/updateDescriptionEt"-->
+<!--            android:layout_marginStart="5dp"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_marginEnd="5dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:drawableStart="@drawable/baseline_arrow_drop_down_24"-->
+<!--            android:drawablePadding="10dp"-->
+<!--            android:hint="@string/category"-->
+<!--            android:inputType="textCapSentences|textImeMultiLine"-->
+<!--            android:padding="10dp" />-->
+
+<!--        &lt;!&ndash; EditText for updating product quantity &ndash;&gt;-->
+<!--        <EditText-->
+<!--            android:id="@+id/updateQuantity"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:hint="@string/quantity"-->
+<!--            android:drawableStart="@drawable/baseline_add_shopping_cart_24"-->
+<!--            android:drawablePadding="10dp"-->
+<!--            android:inputType="textCapWords"-->
+<!--            android:padding="10dp"-->
+<!--            android:layout_below="@+id/updateCategory" />-->
+
+<!--        &lt;!&ndash; EditText for updating product price &ndash;&gt;-->
+<!--        <EditText-->
+<!--            android:id="@+id/updatePrice"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="5dp"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_marginEnd="5dp"-->
+<!--            android:layout_marginBottom="5dp"-->
+<!--            android:drawableStart="@drawable/baseline_attach_money_24"-->
+<!--            android:drawablePadding="10dp"-->
+<!--            android:hint="@string/price"-->
+<!--            android:inputType="numberDecimal"-->
+<!--            android:padding="10dp"-->
+<!--            android:layout_below="@+id/updateQuantity" />-->
+
+<!--        &lt;!&ndash; Button to update product &ndash;&gt;-->
+<!--        <Button-->
+<!--            android:id="@+id/btnUpdateProduct"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/update_product"-->
+<!--            android:layout_marginTop="16dp"-->
+<!--            android:onClick="updateProduct"/>-->
+<!--    </LinearLayout>-->
+
+</LinearLayout>

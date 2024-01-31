@@ -31,26 +31,30 @@
             android:id="@+id/titleEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:hint="@string/product_name"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
             android:drawableStart="@drawable/write"
             android:drawablePadding="10dp"
+            android:hint="@string/product_name"
             android:inputType="text"
-            android:padding="10dp"
-            />
+            android:padding="10dp" />
 
         <EditText
             android:id="@+id/descriptionEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:hint="@string/description"
+            android:layout_below="@id/titleEt"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
             android:drawableStart="@drawable/write"
             android:drawablePadding="10dp"
+            android:hint="@string/description"
             android:inputType="textCapSentences|textImeMultiLine"
-            android:padding="10dp"
-            android:layout_below="@id/titleEt"
-            />
+            android:padding="10dp" />
 
         <TextView
             android:id="@+id/category"

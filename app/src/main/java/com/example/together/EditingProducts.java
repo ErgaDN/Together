@@ -1,6 +1,5 @@
 package com.example.together;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
@@ -8,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 public class EditingProducts extends Fragment {
@@ -32,7 +30,7 @@ public class EditingProducts extends Fragment {
             @Override
             public void onClick(View v) {
                 //open update product activity
-                startActivity(new Intent(requireContext(), UpdateProduct.class));
+                startActivity(new Intent(requireContext(), ChooseUpdateProduct.class));
             }
         });
 
