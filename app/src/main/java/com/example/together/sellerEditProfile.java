@@ -28,9 +28,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class clientEditProfile extends AppCompatActivity {
+public class sellerEditProfile extends AppCompatActivity {
 
-    EditText editFirstName, editLastName, editPhone, editAddress;
+    EditText editFirstName, editLastName, editPhone;
     Button saveButton;
     String firstNameUser, lastNameUser, phoneUser, addressUser;
     private FirebaseAuth firebaseAuth;
@@ -39,7 +39,7 @@ public class clientEditProfile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_client_edit_profile);
+        setContentView(R.layout.activity_seller_edit_profile);
         getSupportActionBar().setTitle("עריכת פרופיל");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -47,7 +47,6 @@ public class clientEditProfile extends AppCompatActivity {
         editFirstName = findViewById(R.id.editFirstName);
         editLastName = findViewById(R.id.editLastName);
         editPhone = findViewById(R.id.editPhoneNumber);
-        editAddress = findViewById(R.id.select_address);
         saveButton = findViewById(R.id.btn_save);
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -58,19 +57,17 @@ public class clientEditProfile extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean isFifstNameChanged, isLastNameChanged, isPhoneChanged, isAddressChanged;
+                boolean isFifstNameChanged, isLastNameChanged, isPhoneChanged;
                 isFifstNameChanged = isFifstNameChanged();
                 isLastNameChanged = isLastNameChanged();
                 isPhoneChanged = isPhoneChanged();
-                isAddressChanged = isAddressChanged();
 
-
-                if (isFifstNameChanged || isLastNameChanged || isPhoneChanged || isAddressChanged) {
-                    Toast.makeText(clientEditProfile.this, "Saved", Toast.LENGTH_SHORT).show();
+                if (isFifstNameChanged || isLastNameChanged || isPhoneChanged ) {
+                    Toast.makeText(sellerEditProfile.this, "Saved", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(clientEditProfile.this, "No Changes Found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(sellerEditProfile.this, "No Changes Found", Toast.LENGTH_SHORT).show();
                 }
-                Intent intent = new Intent(getApplicationContext(), ClientProfile.class);
+                Intent intent = new Intent(getApplicationContext(), SellerProfile.class);
                 startActivity(intent);
             }
         });
@@ -105,21 +102,12 @@ public class clientEditProfile extends AppCompatActivity {
             return false;
         }
     }
-    public boolean isAddressChanged(){
-        if (editAddress != null && editAddress.length() > 0){//
-            addressUser= editAddress.getText().toString();
-            updateAddress(addressUser);
-            return true;
-        } else{
-            return false;
-        }
-    }
 
     private void updateFirstName(String firstName) {
 
         //add to DB
         String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = mStore.collection("clients").document(userID);
+        DocumentReference documentReference = mStore.collection("seller").document(userID);
 
         Map<String, Object> update = new HashMap<>();
         update.put("First Name", firstName);
@@ -140,7 +128,7 @@ public class clientEditProfile extends AppCompatActivity {
 
         //add to DB
         String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = mStore.collection("clients").document(userID);
+        DocumentReference documentReference = mStore.collection("seller").document(userID);
 
         Map<String, Object> update = new HashMap<>();
         update.put("Last Name", lastName);
@@ -161,7 +149,7 @@ public class clientEditProfile extends AppCompatActivity {
 
         //add to DB
         String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = mStore.collection("clients").document(userID);
+        DocumentReference documentReference = mStore.collection("seller").document(userID);
 
         Map<String, Object> update = new HashMap<>();
         update.put("Phone Number", phone);
@@ -177,35 +165,14 @@ public class clientEditProfile extends AppCompatActivity {
             }
         });
     }
-    private void updateAddress(String address) {
 
-        //add to DB
-        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        DocumentReference documentReference = mStore.collection("clients").document(userID);
-
-        Map<String, Object> update = new HashMap<>();
-        update.put("Addressr", address);
-        documentReference.update(update).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d(TAG, "address number update" + userID);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "address number fail" + userID);
-            }
-        });
-    }
 
     public void showUserData(){
-
-        Intent intent = getIntent();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String userID = user.getUid();
-        DocumentReference docRef = db.collection("clients").document(userID);
+        DocumentReference docRef = db.collection("seller").document(userID);
 
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -219,13 +186,11 @@ public class clientEditProfile extends AppCompatActivity {
                             String firstnameUser = documentSnapshot.getString("First Name");
                             String lastnameUser = documentSnapshot.getString("Last Name");
                             String phoneUser = documentSnapshot.getString("Phone Number");
-                            String addressUser = documentSnapshot.getString("Address");
 
                             // Display the fields
                             editFirstName.setText(firstnameUser);
                             editLastName.setText(lastnameUser);
                             editPhone.setText(phoneUser);
-                            editAddress.setText(addressUser);
 
                         } else {
                             Log.d(TAG, "No such document");
