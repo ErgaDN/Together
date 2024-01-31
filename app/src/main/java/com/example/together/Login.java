@@ -95,7 +95,7 @@ public class Login extends AppCompatActivity {
                             if (user != null) {
                                 userID = user.getUid();
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                                String[] collectionNames = {"agriculturals", "centralizers", "clients"};
+                                String[] collectionNames = {"seller", "clients"};
 
                                 for (String collectionName : collectionNames) {
 
@@ -141,10 +141,8 @@ public class Login extends AppCompatActivity {
 
     private Class<?> getDestinationActivity(String collectionName) {
         switch (collectionName) {
-            case "agriculturals":
-                return Agricultural.class;
-            case "centralizers":
-                return MainActivity.class; // Replace with your actual activity class
+            case "seller":
+                return Seller.class;
             case "clients":
                 return Client.class; // Replace with your actual activity class
             default:

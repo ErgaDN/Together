@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Material3.Light"
         tools:targetApi="31">
         <activity
+            android:name=".UpdateProduct"
+            android:exported="false" />
+        <activity
             android:name=".ClientCart"
             android:exported="false" />
         <activity
@@ -24,18 +27,18 @@
         <activity
             android:name=".AddProduct"
             android:exported="false"
-            android:parentActivityName=".Agricultural" />
+            android:parentActivityName=".Seller" />
         <activity
             android:name=".RegisterClient"
             android:exported="false" />
         <activity
-            android:name=".ClientProfile"
-            android:exported="false"/>
-        <activity
             android:name=".Client"
             android:exported="false" />
         <activity
-            android:name=".Agricultural"
+            android:name=".ClientProfile"
+            android:exported="false" />
+        <activity
+            android:name=".Seller"
             android:exported="true"
             android:theme="@style/Theme.Material3.Light.NoActionBar">
             <intent-filter>
@@ -49,10 +52,7 @@
             android:exported="false"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity
-            android:name=".RegisterAgricultural"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterCentralizer"
+            android:name=".RegisterSeller"
             android:exported="false" />
         <activity
             android:name=".Login"
@@ -66,7 +66,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true" />
+            android:exported="true"></activity>
     </application>
 
 </manifest>

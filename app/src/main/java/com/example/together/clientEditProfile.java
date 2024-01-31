@@ -42,10 +42,14 @@ public class clientEditProfile extends AppCompatActivity {
         getSupportActionBar().setTitle("Edit Profile");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+//        reference = FirebaseDatabase.getInstance().getReference("clients");
+
         editFirstName = findViewById(R.id.editFirstName);
         editLastName = findViewById(R.id.editLastName);
         editPhone = findViewById(R.id.editPhoneNumber);
         saveButton = findViewById(R.id.btn_save);
+
         firebaseAuth = FirebaseAuth.getInstance();
         mStore = FirebaseFirestore.getInstance();
 
@@ -69,6 +73,8 @@ public class clientEditProfile extends AppCompatActivity {
             }
         });
     }
+
+
 
     public boolean isFifstNameChanged(){
         if (editFirstName != null && editFirstName.length() > 0){//

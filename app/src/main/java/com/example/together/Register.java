@@ -38,8 +38,7 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         mAuth = FirebaseAuth.getInstance();
         btn_cl = findViewById(R.id.btn_register_client);
-        btn_cen = findViewById(R.id.btn_register_centralizer);
-        btn_ag = findViewById(R.id.btn_register_agricultural);
+        btn_ag = findViewById(R.id.btn_register_seller);
         textView = findViewById(R.id.loginNow);
 
         textView.setOnClickListener(new View.OnClickListener(){
@@ -60,19 +59,10 @@ public class Register extends AppCompatActivity {
             }
         });
 
-        btn_cen.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), RegisterCentralizer.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
         btn_ag.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), RegisterAgricultural.class);
+                Intent intent = new Intent(getApplicationContext(), RegisterSeller.class);
                 startActivity(intent);
                 finish();
             }

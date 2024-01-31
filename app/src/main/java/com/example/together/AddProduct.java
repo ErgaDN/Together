@@ -1,10 +1,9 @@
 package com.example.together;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import static android.content.ContentValues.TAG;
-import android.app.ProgressDialog;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,15 +15,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.ktx.Firebase;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -105,7 +100,7 @@ private void addProduct() {
     productData.put("uid", "" + firebaseAuth.getUid());
     //add to DB
     String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-    CollectionReference productCollectionRef = mStore.collection("agriculturals").document(userID).collection("products");
+    CollectionReference productCollectionRef = mStore.collection("seller").document(userID).collection("products");
 
     // Add the sample product document to the "product" collection
     productCollectionRef.add(productData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -113,7 +108,7 @@ private void addProduct() {
         public void onSuccess(DocumentReference documentReference) {
             Log.d(TAG, "Product added to the 'products' collection under user: " + userID);
 
-            Intent intent = new Intent(getApplicationContext(), Agricultural.class);
+            Intent intent = new Intent(getApplicationContext(), Seller.class);
             startActivity(intent);
             finish();
         }
