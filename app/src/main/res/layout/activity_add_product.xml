@@ -56,14 +56,16 @@
             android:id="@+id/category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:hint="@string/category"
+            android:layout_below="@+id/descriptionEt"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
             android:drawableStart="@drawable/baseline_arrow_drop_down_24"
             android:drawablePadding="10dp"
+            android:hint="@string/category"
             android:inputType="textCapSentences|textImeMultiLine"
-            android:padding="10dp"
-            android:layout_below="@+id/descriptionEt"
-            />
+            android:padding="10dp" />
 
         <EditText
             android:id="@+id/quantity"

@@ -47,6 +47,7 @@
     <string name="profile">אזור אישי</string>
     <string name="client_cart">הסל שלי</string>
     <string name="seller">seller</string>
+    <string name="choose_update_product">בחירת מוצר לעריכה</string>
 
 
 </resources>

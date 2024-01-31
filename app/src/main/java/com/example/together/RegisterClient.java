@@ -26,17 +26,13 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.core.FirestoreClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -88,7 +84,7 @@ public class RegisterClient extends AppCompatActivity {
 
         autoCompleteSelectAddress = findViewById(R.id.select_address);
 
-        adapterAddress = new ArrayAdapter<String>(this, R.layout.list_of_address, addressList);
+        adapterAddress = new ArrayAdapter<String>(this, R.layout.list_of_proudcts, addressList);
         FirebaseApp.initializeApp(this);
 
 
@@ -172,6 +168,7 @@ public class RegisterClient extends AppCompatActivity {
         });
     }
 
+    //TODO: delete
     private void getAddressArray() {
         db = FirebaseFirestore.getInstance();
         db.collection("centralizers")
