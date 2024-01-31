@@ -120,7 +120,7 @@ public class DistributionCenter extends Fragment {
         addressesData.put("uid", "" + firebaseAuth.getUid());
         //add to DB
         String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        CollectionReference productCollectionRef = mStore.collection("agriculturals").document(userID).collection("Distribution Center");
+        CollectionReference productCollectionRef = mStore.collection("seller").document(userID).collection("Distribution Center");
 
         // Add the sample addresses document to the "Distribution Center" collection
         productCollectionRef.add(addressesData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

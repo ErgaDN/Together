@@ -100,7 +100,7 @@ private void addProduct() {
     productData.put("uid", "" + firebaseAuth.getUid());
     //add to DB
     String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-    CollectionReference productCollectionRef = mStore.collection("agriculturals").document(userID).collection("products");
+    CollectionReference productCollectionRef = mStore.collection("seller").document(userID).collection("products");
 
     // Add the sample product document to the "product" collection
     productCollectionRef.add(productData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

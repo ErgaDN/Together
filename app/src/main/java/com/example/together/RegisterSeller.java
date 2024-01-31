@@ -122,7 +122,7 @@ public class RegisterSeller extends AppCompatActivity {
                                     Toast.makeText(RegisterSeller.this, "Account created.",
                                             Toast.LENGTH_SHORT).show();
                                     userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                                    DocumentReference documentReference = mStore.collection("agriculturals").document(userID);
+                                    DocumentReference documentReference = mStore.collection("seller").document(userID);
                                     Map<String, Object> user = new HashMap<>();
                                     user.put("First Name", firstName);
                                     user.put("Last Name", lastName);
@@ -133,10 +133,9 @@ public class RegisterSeller extends AppCompatActivity {
                                         public void onSuccess(Void unused) {
                                             Log.d(TAG, "user created" + userID);
 
-                                            // create products collection to the current agricultural
-                                            mStore.collection("agriculturals").document(userID).collection("products");
-                                            // create Distribution Center collection to the current agricultural
-                                            mStore.collection("agriculturals").document(userID).collection("Distribution Center");
+                                            // create products collection to the current Seller
+                                            mStore.collection("seller").document(userID).collection("products");
+
 
                                             Intent intent = new Intent(getApplicationContext(), Seller.class);
                                             startActivity(intent);

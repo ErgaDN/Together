@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
     Button button;
-    Button button_agricultural;
+    Button button_seller;
     TextView textView;
     FirebaseUser user;
 
