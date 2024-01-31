@@ -2,7 +2,7 @@ package com.example.together;
 
 public class ModelProduct {
     private String productId, productTitle, productDescription,
-            productCategory, productQuantity, productPrice, timestamp, uid;
+            productCategory, productQuantity, productPrice, timestamp, uid, productIcon;
 
     public ModelProduct(String productId, String productTitle, String productDescription, String productCategory, String productQuantity, String productPrice, String timestamp, String uid) {
         this.productId = productId;
@@ -13,6 +13,7 @@ public class ModelProduct {
         this.productPrice = productPrice;
         this.timestamp = timestamp;
         this.uid = uid;
+        this.productIcon = productIcon;
     }
 
     public String getProductId() {
@@ -77,6 +78,14 @@ public class ModelProduct {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getProductIcon() {
+        return productIcon;
+    }
+
+    public void setProductIcon(String uid) {
+        this.productIcon = productIcon;
     }
 
     public ModelProduct() {

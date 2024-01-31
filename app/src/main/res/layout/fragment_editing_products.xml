@@ -20,7 +20,7 @@
         android:layout_height="54dp"
         android:layout_gravity="top|center_horizontal"
         android:layout_marginTop="70dp"
-        android:src="@drawable/baseline_add_shopping_cart_24" />
+        android:src="@drawable/ic_add_shopping_primary" />
 
     <TextView
         android:layout_width="match_parent"
