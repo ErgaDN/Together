@@ -69,7 +69,7 @@ public class DistributionCenter extends Fragment {
             String selected = Constants.productCategories_1[which];
             filteredProductsTv.setText(selected);
             if (selected.equals("הכל")) {
-              /////TODO: 55:17-----------
+              /////TODO: 55:17------------
             }
           }
         });
