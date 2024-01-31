@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -37,9 +38,10 @@ public class UpdateProduct extends AppCompatActivity {
     String value;
     EditText editTitle, editDescription, editQuantity, editPrice;
     String title, category, description, quantity, price;
-    TextView editCategory;
+    EditText editCategory;
     Button btn_updateproduct;
     private FirebaseAuth firebaseAuth;
+
     FirebaseFirestore mStore;
     FirebaseFirestore db;
 
@@ -64,9 +66,11 @@ public class UpdateProduct extends AppCompatActivity {
 
         //get the IDproduct from the other activity
         Bundle extras = getIntent().getExtras();
-        if(extras != null){
+        if (extras != null) {
             value = extras.getString("IDproduct");
         }
+
+        showUserData();
 
         editCategory.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +88,7 @@ public class UpdateProduct extends AppCompatActivity {
                 isCategoryChanged = isCategoryChanged();
 
 
-                if (isTitleChanged || isCategoryChanged ) {
+                if (isTitleChanged || isCategoryChanged) {
                     Toast.makeText(UpdateProduct.this, "Saved", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(UpdateProduct.this, "No Changes Found", Toast.LENGTH_SHORT).show();
@@ -95,26 +99,24 @@ public class UpdateProduct extends AppCompatActivity {
         });
 
 
-
-
     }
 
-    public boolean isTitleChanged(){
-        if (editTitle != null && editTitle.length() > 0){//
+    public boolean isTitleChanged() {
+        if (editTitle != null && editTitle.length() > 0) {//
             title = editTitle.getText().toString();
             updateTitle(title);
             return true;
-        } else{
+        } else {
             return false;
         }
     }
 
-    public boolean isCategoryChanged(){
-        if (editCategory != null && editCategory.length() > 0){//
+    public boolean isCategoryChanged() {
+        if (editCategory != null && editCategory.length() > 0) {//
             category = editCategory.getText().toString();
             updateCategory(category);
             return true;
-        } else{
+        } else {
             return false;
         }
     }
@@ -209,5 +211,58 @@ public class UpdateProduct extends AppCompatActivity {
             }
         }).show();
     }
+
+
+    public void showUserData() {
+
+        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+
+        // Reference to the "products" collection
+        CollectionReference productsRef = db.collection("seller")
+                .document(userID)
+                .collection("products");
+
+        // Query to find the document where "productId" matches the given value
+        Query query = productsRef.whereEqualTo("productId", value);
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        // Update the "productTitle" field in the found document
+                        document.getReference().update("productCategory", category)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        String title = document.getString("productTitle");
+                                        String quantity = document.getString("productQuantity");
+                                        String price = document.getString("productPrice");
+                                        String description = document.getString("productDescription");
+                                        String category = document.getString("productCategory");
+
+                                        editTitle.setText(title);
+                                        editDescription.setText(description);
+                                        editQuantity.setText(quantity);
+                                        editPrice.setText(price);
+                                        editCategory.setText(category);
+
+                                        Log.d(TAG, "Category update successful for user: " + userID);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e(TAG, "Category update failed for user: " + userID, e);
+                                    }
+                                });
+                    }
+                } else {
+                    Log.e(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
 
 }
