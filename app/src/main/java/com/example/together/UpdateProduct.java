@@ -88,8 +88,10 @@ public class UpdateProduct extends AppCompatActivity {
                 isTitleChanged = isTitleChanged();
                 isCategoryChanged = isCategoryChanged();
                 isDescriptionChanged = isDescriptionChanged();
+                isQuantityChanged = isQuantityChanged();
+                isPriceChanged = isPriceChanged();
 
-                if (isTitleChanged || isCategoryChanged) {
+                if (isTitleChanged || isCategoryChanged || isDescriptionChanged || isQuantityChanged || isPriceChanged) {
                     Toast.makeText(UpdateProduct.this, "Saved", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(UpdateProduct.this, "No Changes Found", Toast.LENGTH_SHORT).show();
@@ -125,13 +127,30 @@ public class UpdateProduct extends AppCompatActivity {
     public boolean isDescriptionChanged() {
         if (editDescription != null && editDescription.length() > 0) {//
             description = editDescription.getText().toString();
-//            updateDescription(title); // TODO: contunue
+            updateDescription(description);
             return true;
         } else {
             return false;
         }
     }
-
+    public boolean isQuantityChanged() {
+        if (editQuantity != null && editQuantity.length() > 0) {//
+            quantity = editQuantity.getText().toString();
+            updateQuantity(quantity);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public boolean isPriceChanged() {
+        if (editPrice != null && editPrice.length() > 0) {//
+            price = editPrice.getText().toString();
+            updatePrice(price);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     private void updateTitle(String title) {
         String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
@@ -199,6 +218,118 @@ public class UpdateProduct extends AppCompatActivity {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
                                         Log.e(TAG, "Category update failed for user: " + userID, e);
+                                    }
+                                });
+                    }
+                } else {
+                    Log.e(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+
+    private void updateDescription(String description) {
+        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+
+        // Reference to the "products" collection
+        CollectionReference productsRef = db.collection("seller")
+                .document(userID)
+                .collection("products");
+
+        // Query to find the document where "productId" matches the given value
+        Query query = productsRef.whereEqualTo("productId", value);
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        // Update the "productTitle" field in the found document
+                        document.getReference().update("productDescription", description)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Log.d(TAG, "Description update successful for user: " + userID);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e(TAG, "Description update failed for user: " + userID, e);
+                                    }
+                                });
+                    }
+                } else {
+                    Log.e(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+    private void updateQuantity(String quantity) {
+        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+
+        // Reference to the "products" collection
+        CollectionReference productsRef = db.collection("seller")
+                .document(userID)
+                .collection("products");
+
+        // Query to find the document where "productId" matches the given value
+        Query query = productsRef.whereEqualTo("productId", value);
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        // Update the "productTitle" field in the found document
+                        document.getReference().update("productQuantity", quantity)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Log.d(TAG, "Quantity update successful for user: " + userID);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e(TAG, "Quantity update failed for user: " + userID, e);
+                                    }
+                                });
+                    }
+                } else {
+                    Log.e(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+    private void updatePrice(String price) {
+        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+
+        // Reference to the "products" collection
+        CollectionReference productsRef = db.collection("seller")
+                .document(userID)
+                .collection("products");
+
+        // Query to find the document where "productId" matches the given value
+        Query query = productsRef.whereEqualTo("productId", value);
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        // Update the "productTitle" field in the found document
+                        document.getReference().update("productPrice", price)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Log.d(TAG, "Price update successful for user: " + userID);
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.e(TAG, "Price update failed for user: " + userID, e);
                                     }
                                 });
                     }
