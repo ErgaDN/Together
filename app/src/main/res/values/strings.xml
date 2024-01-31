@@ -49,6 +49,8 @@
     <string name="seller">seller</string>
     <string name="choose_update_product">בחירת מוצר לעריכה</string>
     <string name="update_single_product">עריכת מוצר</string>
+    <string name="search">חיפוש</string>
+    <string name="showingAll">הצג הכל</string>
 
 
 </resources>

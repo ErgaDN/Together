@@ -38,10 +38,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_toStartOf="@+id/filterProductBtn"
-            android:drawableStart="@drawable/ic_search_gray"
             android:drawablePadding="10dp"
             android:hint="@string/search"
             android:padding="10dp" />
+        <!--            android:drawableStart="@drawable/ic_search_gray"-->
+
         <!--            android:background="@drawable/sha-->
         <!--        TODO - add rectangel to the serach -->
 
@@ -55,7 +56,9 @@
             android:layout_marginEnd="5dp"
             android:background="@null"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_filter" />
+            />
+        <!--            android:src="@drawable/ic_filter" -->
+
         <!--        show filtered products title -->
         <TextView
             android:id="@+id/filteredProductsTv"
