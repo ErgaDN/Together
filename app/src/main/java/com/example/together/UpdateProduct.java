@@ -83,10 +83,11 @@ public class UpdateProduct extends AppCompatActivity {
         btn_updateproduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean isTitleChanged, isCategoryChanged;
+                boolean isTitleChanged, isCategoryChanged,
+                isDescriptionChanged, isQuantityChanged,isPriceChanged;
                 isTitleChanged = isTitleChanged();
                 isCategoryChanged = isCategoryChanged();
-
+                isDescriptionChanged = isDescriptionChanged();
 
                 if (isTitleChanged || isCategoryChanged) {
                     Toast.makeText(UpdateProduct.this, "Saved", Toast.LENGTH_SHORT).show();
@@ -120,6 +121,17 @@ public class UpdateProduct extends AppCompatActivity {
             return false;
         }
     }
+
+    public boolean isDescriptionChanged() {
+        if (editDescription != null && editDescription.length() > 0) {//
+            description = editDescription.getText().toString();
+//            updateDescription(title); // TODO: contunue
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     private void updateTitle(String title) {
         String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();

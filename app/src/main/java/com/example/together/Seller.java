@@ -4,12 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+import androidx.appcompat.widget.Toolbar;
+
+
 import com.google.android.material.tabs.TabLayout;
 
 public class Seller extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    Button btn_edit_profile;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,13 +26,26 @@ public class Seller extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.tablayout);
         viewPager = findViewById(R.id.viewpager);
+        btn_edit_profile = findViewById(R.id.btn_editProfile);
 
         tabLayout.setupWithViewPager(viewPager);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         VPAdapter vpAdapter = new VPAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         vpAdapter.addFragment(new DistributionCenter(), "נקודת חלוקה");
         vpAdapter.addFragment(new EditingProducts(), "עריכת מוצרים");
         vpAdapter.addFragment(new OrderSummary(), "סיכום הזמנות");
+
+        btn_edit_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Seller.this, SellerProfile.class);
+                startActivity(intent);
+            }
+        });
 
         viewPager.setAdapter(vpAdapter);
 

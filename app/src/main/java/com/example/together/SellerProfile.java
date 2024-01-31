@@ -1,26 +1,23 @@
 package com.example.together;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class ClientProfile extends AppCompatActivity {
-
-
-
+public class SellerProfile extends AppCompatActivity {
     TextView profilefirstname, profilelastname, profilephone, profileaddress;
     FirebaseAuth mAuth;
     Button editProfile, button;
@@ -28,7 +25,10 @@ public class ClientProfile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_client_profile);
+        setContentView(R.layout.activity_seller_profile);
+
+        getSupportActionBar().setTitle("אזור אישי");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         editProfile = findViewById(R.id.editButton);
         profilefirstname = findViewById(R.id.profileFirstName);
@@ -56,15 +56,14 @@ public class ClientProfile extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
-    public void showUserData(){
+    public void showUserData() {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         String userID = user.getUid();
-        DocumentReference docRef = db.collection("clients").document(userID);
+        DocumentReference docRef = db.collection("seller").document(userID);
 
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -97,7 +96,6 @@ public class ClientProfile extends AppCompatActivity {
                         Log.w(TAG, "Error getting document", e);
                     }
                 });
-
     }
 
     public void passUserData(){
@@ -105,7 +103,7 @@ public class ClientProfile extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         String userID = user.getUid();
-        DocumentReference docRef = db.collection("clients").document(userID);
+        DocumentReference docRef = db.collection("seller").document(userID);
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -120,8 +118,7 @@ public class ClientProfile extends AppCompatActivity {
                             String phoneUser = documentSnapshot.getString("Phone Number");
                             String addressUser = documentSnapshot.getString("Address");
 
-                            Intent intent = new Intent(ClientProfile.this, clientEditProfile.class);
-
+                            Intent intent = new Intent(SellerProfile.this, sellerEditProfile.class);
 
                             // Display the fields
                             profilefirstname.setText(firstnameUser);
@@ -145,4 +142,3 @@ public class ClientProfile extends AppCompatActivity {
 
     }
 }
-
