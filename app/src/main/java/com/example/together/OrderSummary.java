@@ -20,16 +20,6 @@ public class OrderSummary extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_order_summary, container, false);
 
-        button = view.findViewById(R.id.logout);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(requireContext(), Login.class);
-                startActivity(intent);
-                getActivity().finish();
-            }
-        });
 
 
         return view;
