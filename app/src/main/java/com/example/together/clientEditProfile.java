@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
@@ -29,9 +30,9 @@ import java.util.Objects;
 
 public class clientEditProfile extends AppCompatActivity {
 
-    EditText editFirstName, editLastName, editPhone;
+    EditText editFirstName, editLastName, editPhone, editAddress;
     Button saveButton;
-    String firstNameUser, lastNameUser, phoneUser;
+    String firstNameUser, lastNameUser, phoneUser, addressUser;
     private FirebaseAuth firebaseAuth;
     FirebaseFirestore mStore;
 
@@ -43,17 +44,16 @@ public class clientEditProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-//        reference = FirebaseDatabase.getInstance().getReference("clients");
-
         editFirstName = findViewById(R.id.editFirstName);
         editLastName = findViewById(R.id.editLastName);
         editPhone = findViewById(R.id.editPhoneNumber);
+        editAddress = findViewById(R.id.select_address);
         saveButton = findViewById(R.id.btn_save);
 
         firebaseAuth = FirebaseAuth.getInstance();
         mStore = FirebaseFirestore.getInstance();
 
-        //showData();
+        showUserData();
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +98,15 @@ public class clientEditProfile extends AppCompatActivity {
         if (editPhone != null && editPhone.length() > 0){//
             phoneUser= editPhone.getText().toString();
             updatePhone(phoneUser);
+            return true;
+        } else{
+            return false;
+        }
+    }
+    public boolean isAddressChanged(){
+        if (editAddress != null && editAddress.length() > 0){//
+            addressUser= editAddress.getText().toString();
+            updateAddress(addressUser);
             return true;
         } else{
             return false;
@@ -166,21 +175,67 @@ public class clientEditProfile extends AppCompatActivity {
             }
         });
     }
+    private void updateAddress(String address) {
 
+        //add to DB
+        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        DocumentReference documentReference = mStore.collection("clients").document(userID);
 
-    public void showData(){
+        Map<String, Object> update = new HashMap<>();
+        update.put("Addressr", address);
+        documentReference.update(update).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d(TAG, "address number update" + userID);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "address number fail" + userID);
+            }
+        });
+    }
+
+    public void showUserData(){
+
         Intent intent = getIntent();
 
-        firstNameUser = intent.getStringExtra("First Name");
-        lastNameUser = intent.getStringExtra("Last name");
-        phoneUser = intent.getStringExtra("Phone number");
-//        emailUser = intent.getStringExtra("Email");
-//        passwordUser = intent.getStringExtra("Password");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userID = user.getUid();
+        DocumentReference docRef = db.collection("clients").document(userID);
 
-        editFirstName.setText(firstNameUser);
-        editLastName.setText(lastNameUser);
-        editPhone.setText(phoneUser);
-//        editEmail.setText(emailUser);
-//        editPassword.setText(passwordUser);
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()) {
+                            // DocumentSnapshot data may be null if the document doesn't exist
+                            Log.d(TAG, "DocumentSnapshot data: " + documentSnapshot.getData());
+
+                            // Access specific fields
+                            String firstnameUser = documentSnapshot.getString("First Name");
+                            String lastnameUser = documentSnapshot.getString("Last Name");
+                            String phoneUser = documentSnapshot.getString("Phone Number");
+                            String addressUser = documentSnapshot.getString("Address");
+
+                            // Display the fields
+                            editFirstName.setText(firstnameUser);
+                            editLastName.setText(lastnameUser);
+                            editPhone.setText(phoneUser);
+                            editAddress.setText(addressUser);
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error getting document", e);
+                    }
+                });
+
     }
 }

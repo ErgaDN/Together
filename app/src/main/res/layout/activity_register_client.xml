@@ -53,30 +53,14 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/address"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        android:layout_height="wrap_content">
 
-        <AutoCompleteTextView
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/select_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none">
-        </AutoCompleteTextView>
-
+            android:hint="@string/address" />
     </com.google.android.material.textfield.TextInputLayout>
-
-
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content">-->
-
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/address"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="@string/address" />-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"

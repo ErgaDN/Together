@@ -37,6 +37,7 @@ public class ClientProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_profile);
+
         editProfile = findViewById(R.id.editButton);
         profilefirstname = findViewById(R.id.profileFirstName);
         profilelastname = findViewById(R.id.profileLastName);
@@ -45,7 +46,7 @@ public class ClientProfile extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         button = findViewById(R.id.logout);
 
-        showUserData(); // TODO: FIX IT!
+        showUserData();
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,8 +111,6 @@ public class ClientProfile extends AppCompatActivity {
     }
 
     public void passUserData(){
-
-        Intent intent = getIntent();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();

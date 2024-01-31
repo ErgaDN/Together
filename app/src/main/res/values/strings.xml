@@ -1,25 +1,22 @@
 <resources>
     <string name="app_name">Together</string>
     <string name="login">Login</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="register">Register</string>
-    <string name="click_to_login">Click to login</string>
+    <string name="email">מייל</string>
+    <string name="password">סיסמא</string>
+    <string name="register">התחברות</string>
+    <string name="click_to_login">לחץ להרשמה</string>
     <string name="click_to_register">click to register</string>
     <string name="logout">logout</string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
-    <string name="phone_number">Phone Number</string>
+    <string name="first_name">שם פרטי</string>
+    <string name="last_name">שם משפחה</string>
+    <string name="phone_number">מספר טלפון</string>
     <string name="editing_products">עריכת מוצרים</string>
     <string name="distribution_center">עריכת נקודות חלוקה</string>
     <string name="order_summary">סיכום הזמנות</string>
     <string name="adding_products">הוספת מוצר חדש</string>
-    <string name="agricultural">agricultural</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="address">Address</string>
     <string name="client">Client</string>
-    <string name="centralizer">Centralizer</string>
-    <string name="register_as">Register as</string>
+    <string name="register_as">בחר פרופיל התחברות</string>
     <string name="add_product">לחץ להוספת מוצר חדש</string>
     <string name="product_name">שם מוצר</string>
     <string name="description">תיאור מוצר</string>
@@ -53,6 +50,7 @@
     <string name="update_single_product">עריכת מוצר</string>
     <string name="search">חיפוש</string>
     <string name="showingAll">הצג הכל</string>
+    <string name="address">כתובת</string>
 
 
 </resources>
