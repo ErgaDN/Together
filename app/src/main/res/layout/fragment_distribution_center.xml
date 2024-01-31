@@ -16,51 +16,49 @@
             android:id="@+id/searchProductsEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toStartOf="@id/filterProductBtn"
             android:background="@drawable/shape_rect02"
             android:drawableStart="@drawable/ic_search"
             android:drawablePadding="10dp"
-            android:padding="10dp"
-            android:hint="@string/search" />
+            android:hint="@string/search"
+            android:padding="10dp" />
 
+<!--Filter-->
+        <ImageButton
+            android:id="@+id/filterProductBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_filter"/>
 
+        <TextView
+            android:id="@+id/filteredProductsTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/searchProductsEt"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/black"
+            android:text="@string/showingAll"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"/>
+
+<!--RecyclerView: show products-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/productsRv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/filteredProductsTv"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/row_product_seller"/>
 
     </RelativeLayout>
-
-<!--    <TextView-->
-<!--        android:layout_width="327dp"-->
-<!--        android:layout_height="141dp"-->
-<!--        android:layout_gravity="center"-->
-<!--        android:text="@string/description_distribution_center" />-->
-
-<!--    <com.google.android.material.card.MaterialCardView-->
-<!--        android:id="@+id/select_center"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="30dp"-->
-<!--        android:layout_gravity="center"-->
-<!--        app:cardBackgroundColor="@color/white"-->
-<!--        app:cardCornerRadius="5dp"-->
-<!--        app:cardElevation="10dp">-->
-
-<!--        <RelativeLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="43dp">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/tvAddresses"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_centerInParent="true"-->
-<!--                android:hint="@string/choose_center" />-->
-
-<!--            <ImageView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_alignParentEnd="true"-->
-<!--                android:layout_centerInParent="true"-->
-<!--                android:src="@drawable/baseline_arrow_drop_down_24" />-->
-<!--        </RelativeLayout>-->
-
-<!--    </com.google.android.material.card.MaterialCardView>-->
 
 </FrameLayout>
