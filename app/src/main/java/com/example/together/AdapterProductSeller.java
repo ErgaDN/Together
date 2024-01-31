@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,14 +16,16 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class AdapterProductSeller extends RecyclerView.Adapter<AdapterProductSeller.HolderProductSeller>{
+public class AdapterProductSeller extends RecyclerView.Adapter<AdapterProductSeller.HolderProductSeller> implements Filterable {
 
     private Context context;
-    public ArrayList<ModelProduct> productList;
+    public ArrayList<ModelProduct> productList, filterList;
+    private FilterProduct filter;
 
     public AdapterProductSeller(Context context, ArrayList<ModelProduct> productList) {
         this.context = context;
         this.productList = productList;
+        this.filterList = productList;
     }
 
     @NonNull
@@ -69,6 +73,14 @@ public class AdapterProductSeller extends RecyclerView.Adapter<AdapterProductSel
     @Override
     public int getItemCount() {
         return productList.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new FilterProduct(this, filterList);
+        }
+        return filter;
     }
 
     class HolderProductSeller extends RecyclerView.ViewHolder{
