@@ -6,40 +6,61 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".DistributionCenter">
 
-    <TextView
-        android:layout_width="327dp"
-        android:layout_height="141dp"
-        android:layout_gravity="center"
-        android:text="@string/description_distribution_center" />
+    <RelativeLayout
+        android:id="@+id/productsRl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/select_center"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="10dp">
-
-        <RelativeLayout
+<!--SearchView-->
+        <EditText
+            android:id="@+id/searchProductsEt"
             android:layout_width="match_parent"
-            android:layout_height="43dp">
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape_rect02"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="10dp"
+            android:padding="10dp"
+            android:hint="@string/search" />
 
-            <TextView
-                android:id="@+id/tvAddresses"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:hint="@string/choose_center" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerInParent="true"
-                android:src="@drawable/baseline_arrow_drop_down_24" />
-        </RelativeLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </RelativeLayout>
+
+<!--    <TextView-->
+<!--        android:layout_width="327dp"-->
+<!--        android:layout_height="141dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:text="@string/description_distribution_center" />-->
+
+<!--    <com.google.android.material.card.MaterialCardView-->
+<!--        android:id="@+id/select_center"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        app:cardBackgroundColor="@color/white"-->
+<!--        app:cardCornerRadius="5dp"-->
+<!--        app:cardElevation="10dp">-->
+
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="43dp">-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tvAddresses"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:hint="@string/choose_center" />-->
+
+<!--            <ImageView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:src="@drawable/baseline_arrow_drop_down_24" />-->
+<!--        </RelativeLayout>-->
+
+<!--    </com.google.android.material.card.MaterialCardView>-->
 
 </FrameLayout>
