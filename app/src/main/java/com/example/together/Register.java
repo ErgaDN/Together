@@ -38,7 +38,6 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         mAuth = FirebaseAuth.getInstance();
         btn_cl = findViewById(R.id.btn_register_client);
-        btn_cen = findViewById(R.id.btn_register_centralizer);
         btn_ag = findViewById(R.id.btn_register_agricultural);
         textView = findViewById(R.id.loginNow);
 
@@ -55,15 +54,6 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), RegisterClient.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        btn_cen.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), RegisterCentralizer.class);
                 startActivity(intent);
                 finish();
             }

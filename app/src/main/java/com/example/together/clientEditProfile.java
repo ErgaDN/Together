@@ -89,6 +89,7 @@ public class clientEditProfile extends AppCompatActivity {
         DocumentReference documentReference = mStore.collection("clients").document(userID);
 
         Map<String, Object> update = new HashMap<>();
+
         update.put("First Name", firstName);
         documentReference.update(update).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -102,7 +103,6 @@ public class clientEditProfile extends AppCompatActivity {
             }
         });
     }
-
 
     public void showData(){
         Intent intent = getIntent();
