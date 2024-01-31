@@ -38,7 +38,7 @@ import java.util.Objects;
 
 public class RegisterClient extends AppCompatActivity {
 
-    TextInputEditText editTextEmail, editTextPassword, editTextFirstName, editTextLastName, editTextPhone; //, editTextAddress;
+    TextInputEditText editTextEmail, editTextPassword, editAddress, editTextFirstName, editTextLastName, editTextPhone; //, editTextAddress;
     Button buttonReg;
     FirebaseAuth mAuth;
     FirebaseFirestore mStore;
@@ -46,7 +46,7 @@ public class RegisterClient extends AppCompatActivity {
     TextView textView;
     String userID;
     String address;
-    AutoCompleteTextView autoCompleteSelectAddress;
+//    AutoCompleteTextView autoCompleteSelectAddress;
     ArrayAdapter<String> adapterAddress;
     ArrayList<String> addressList = new ArrayList<>();
     FirebaseFirestore db;
@@ -72,31 +72,13 @@ public class RegisterClient extends AppCompatActivity {
         editTextEmail = findViewById(R.id.email);
         editTextPassword = findViewById(R.id.password);
         editTextFirstName = findViewById(R.id.firstName);
+        editAddress = findViewById(R.id.select_address);
         editTextLastName = findViewById(R.id.lastName);
         editTextPhone = findViewById(R.id.phoneNumber);
         buttonReg = findViewById(R.id.btn_register);
         progressBar = findViewById(R.id.progressBar);
         textView = findViewById(R.id.loginNow);
         mStore = FirebaseFirestore.getInstance();
-
-        getAddressArray();
-
-
-        autoCompleteSelectAddress = findViewById(R.id.select_address);
-
-        adapterAddress = new ArrayAdapter<String>(this, R.layout.list_of_proudcts, addressList);
-        FirebaseApp.initializeApp(this);
-
-
-        autoCompleteSelectAddress.setAdapter(adapterAddress);
-
-
-        autoCompleteSelectAddress.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                address = adapterView.getItemAtPosition(position).toString();
-            }
-        });
 
 
         textView.setOnClickListener(new View.OnClickListener() {
@@ -114,12 +96,13 @@ public class RegisterClient extends AppCompatActivity {
             public void onClick(View v) {
                 Log.d(TAG, "Button clicked!");
                 progressBar.setVisibility(View.VISIBLE);
-                String email, password, firstName, lastName, phoneNumber;//, address;
+                String email, password, firstName, lastName, phoneNumber, address;
                 email = String.valueOf(editTextEmail.getText());
                 password = String.valueOf(editTextPassword.getText());
                 firstName = String.valueOf(editTextFirstName.getText());
                 lastName = String.valueOf(editTextLastName.getText());
                 phoneNumber = String.valueOf(editTextPhone.getText());
+                address = String.valueOf(editAddress.getText());
 
 
                 if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password) || TextUtils.isEmpty(firstName) ||
@@ -149,7 +132,7 @@ public class RegisterClient extends AppCompatActivity {
                                         public void onSuccess(Void unused) {
                                             Log.d(TAG, "Firestore data inserted successfully.");
                                             Log.d(TAG, "user created" + userID);
-                                            Intent intent = new Intent(getApplicationContext(), ClientProfile.class); // TODO: change it to the view of client
+                                            Intent intent = new Intent(getApplicationContext(), Client.class);
                                             startActivity(intent);
                                             finish();
                                         }
@@ -167,42 +150,4 @@ public class RegisterClient extends AppCompatActivity {
             }
         });
     }
-
-    //TODO: delete
-    private void getAddressArray() {
-        db = FirebaseFirestore.getInstance();
-        db.collection("centralizers")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                        if (task.isSuccessful()) {
-
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                // Check if the "Address" field exists in the document
-                                if (document.contains("Address")) {
-                                    String address = document.getString("Address");
-                                    addressList.add(address);
-                                    System.out.println("add:"+address);
-                                }
-                            }
-                            // Now, addressesList contains all "Address" values
-                            for (String address : addressList) {
-                                Log.d(TAG, "Address: " + address);
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-    }
-
-
-
-
-
-
-
-
 }

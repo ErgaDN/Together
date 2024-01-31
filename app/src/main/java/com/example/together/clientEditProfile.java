@@ -43,8 +43,6 @@ public class clientEditProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-//        reference = FirebaseDatabase.getInstance().getReference("clients");
-
         editFirstName = findViewById(R.id.editFirstName);
         editLastName = findViewById(R.id.editLastName);
         editPhone = findViewById(R.id.editPhoneNumber);
@@ -174,13 +172,11 @@ public class clientEditProfile extends AppCompatActivity {
         firstNameUser = intent.getStringExtra("First Name");
         lastNameUser = intent.getStringExtra("Last name");
         phoneUser = intent.getStringExtra("Phone number");
-//        emailUser = intent.getStringExtra("Email");
-//        passwordUser = intent.getStringExtra("Password");
+
 
         editFirstName.setText(firstNameUser);
         editLastName.setText(lastNameUser);
         editPhone.setText(phoneUser);
-//        editEmail.setText(emailUser);
-//        editPassword.setText(passwordUser);
+
     }
 }
