@@ -4,8 +4,22 @@ public class Constants {
 
     //product category
     public static final String[] productCategories = {
-            "fruits",
-            "vegetables"
+            "תכשיטים",
+            "אביזרים לבית",
+            "נעליים",
+            "מטפחות",
+            "כיפות",
+            "יודאיקה",
+            "הדפסות תלת מימד",
+            "קרמיקה",
+            "מקרמה",
+            "ציורים",
+            "סבונים",
+            "שעון",
+            "אגרטל",
+            "חנוכיה",
+            "מזוזות",
+            "אחר"
     };
 
     //list of address
