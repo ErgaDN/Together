@@ -46,7 +46,8 @@
             android:exported="false" />
         <activity
             android:name=".Client"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Material3.Light.NoActionBar"/>
         <activity
             android:name=".ClientProfile"
             android:exported="false" />
