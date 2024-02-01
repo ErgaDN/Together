@@ -126,5 +126,5 @@
         android:textColor="@color/white"
         android:textAllCaps="false"/>
 
-
+    <!--TODO: ADD TO CART 12:14-->
 </LinearLayout>
