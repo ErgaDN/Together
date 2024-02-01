@@ -70,31 +70,51 @@ public class DistributionCenter extends Fragment {
             filteredProductsTv.setText(selected);
             if (selected.equals("הכל")) {
               /////TODO: 55:17------------
+              loadAllProducts();
+            }
+            else {
+              loadFilteredProducts(selected);
             }
           }
         });
       }
     });
 
-//    btn_addproduct.setOnClickListener(new View.OnClickListener() {
-//      @Override
-//      public void onClick(View v) {
-//        //open add product activity
-//        startActivity(new Intent(requireContext(), AddProduct.class));
-//      }
-//    });
-//
-//    btn_updateproduct.setOnClickListener(new View.OnClickListener() {
-//      @Override
-//      public void onClick(View v) {
-//        //open update product activity
-//        startActivity(new Intent(requireContext(), ChooseUpdateProduct.class));
-//      }
-//    });
-
     return view;
 
   }
+
+  private void loadFilteredProducts(String selected) {
+    productList = new ArrayList<>();
+
+    //get all product
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User");
+    reference.child(firebaseAuth.getUid()).child("Products")
+            .addChildEventListener(new ValueEventListener() {
+              @Override
+              public void onDataChange(@Nonnull DataSnapshot dataSnapshot) {
+                //before getting rest list
+                productList.clear();
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                  String productCategory = "" + ds.child("productCategory").getValue();
+                  if (selected.equals(productCategory))
+
+                  ModelProduct modelProduct = ds.getValue(ModelProduct.class);
+                  productList.add(modelProduct);
+                }
+                //setup adapter
+                productsRv.setAdapter(adapterProductSeller);
+                //set adapter
+                productsRv.setAdapter(adapterProductSeller);
+              }
+
+              @Override
+              public void onCancelled(@Nonnull DatabaseError databaseError) {
+
+              }
+            });
+  }
+
 
   private void loadAllProducts() {
     productList = new ArrayList<>();
@@ -106,11 +126,14 @@ public class DistributionCenter extends Fragment {
               @Override
               public void onDataChange(@Nonnull DataSnapshot dataSnapshot) {
                 //before getting rest list
+                productList.clear();
                 for (DataSnapshot ds: dataSnapshot.getChildren()) {
                   ModelProduct modelProduct = ds.getValue(ModelProduct.class);
                   productList.add(modelProduct);
                 }
                 //setup adapter
+                productsRv.setAdapter(adapterProductSeller);
+                //set adapter
                 productsRv.setAdapter(adapterProductSeller);
               }
 
