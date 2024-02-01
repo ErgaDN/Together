@@ -39,7 +39,7 @@ public class Seller extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         VPAdapter vpAdapter = new VPAdapter(getSupportFragmentManager(), FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        vpAdapter.addFragment(new DistributionCenter(), "נקודת חלוקה");
+        vpAdapter.addFragment(new SellerProducts(), "המוצרים שלי");
         vpAdapter.addFragment(new EditingProducts(), "עריכת מוצרים");
         vpAdapter.addFragment(new OrderSummary(), "סיכום הזמנות");
 
