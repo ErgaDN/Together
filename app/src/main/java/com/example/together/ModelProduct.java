@@ -4,6 +4,7 @@ public class ModelProduct {
     private String productId, productTitle, productDescription,
             productCategory, productQuantity, productPrice, timestamp, uid, productIcon;
 
+
     public ModelProduct(String productId, String productTitle, String productDescription, String productCategory, String productQuantity, String productPrice, String timestamp, String uid) {
         this.productId = productId;
         this.productTitle = productTitle;
