@@ -11,6 +11,8 @@ public class ClientCart extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_cart);
 
+        getSupportActionBar().setTitle("הסל שלי");
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 }
