@@ -57,6 +57,8 @@ public class DistributionCenter extends Fragment {
     filterProductBtn = view.findViewById(R.id.filterProductBtn);
     filteredProductsTv = view.findViewById(R.id.filteredProductsTv);
     productsRv = view.findViewById(R.id.productsRv);
+    firebaseAuth = FirebaseAuth.getInstance();
+
 
     loadAllProducts();
 
@@ -99,7 +101,7 @@ public class DistributionCenter extends Fragment {
                       loadAllProducts();
                     }
                     else {
-//                      loadFilteredProducts(selected);
+                      loadFilteredProducts(selected);
                     }
                   }
                 })
@@ -111,40 +113,40 @@ public class DistributionCenter extends Fragment {
 
   }
 
-//  private void loadFilteredProducts(String selected) {
-//    productList = new ArrayList<>();
-//
-//    //get all product
-//    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User");
-//    //TODO: change the "User"
-//    reference.child(firebaseAuth.getUid()).child("products")
-//            .addValueEventListener(new ValueEventListener() {
-//              @Override
-//              public void onDataChange(@Nonnull DataSnapshot dataSnapshot) {
-//                //before getting rest list
-//                productList.clear();
-//                for (DataSnapshot ds: dataSnapshot.getChildren()) {
-//                  String productCategory = "" + ds.child("productCategory").getValue();
-//
-//                  //if selected category matches product category that add in list
-//                  if (selected.equals(productCategory)) {
-//                    ModelProduct modelProduct = ds.getValue(ModelProduct.class);
-//                    productList.add(modelProduct);
-//                  }
-//
-//                }
-//                //setup adapter
-//                adapterProductSeller = new AdapterProductSeller(getContext(), productList);
-//                //set adapter
-//                productsRv.setAdapter(adapterProductSeller);
-//              }
-//
-//              @Override
-//              public void onCancelled(@Nonnull DatabaseError databaseError) {
-//
-//              }
-//            });
-//  }
+  private void loadFilteredProducts(String selected) {
+    productList = new ArrayList<>();
+
+    //get all product
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("User");
+    //TODO: change the "User"
+    reference.child(firebaseAuth.getUid()).child("products")
+            .addValueEventListener(new ValueEventListener() {
+              @Override
+              public void onDataChange(@Nonnull DataSnapshot dataSnapshot) {
+                //before getting rest list
+                productList.clear();
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                  String productCategory = "" + ds.child("productCategory").getValue();
+
+                  //if selected category matches product category that add in list
+                  if (selected.equals(productCategory)) {
+                    ModelProduct modelProduct = ds.getValue(ModelProduct.class);
+                    productList.add(modelProduct);
+                  }
+
+                }
+                //setup adapter
+                adapterProductSeller = new AdapterProductSeller(getContext(), productList);
+                //set adapter
+                productsRv.setAdapter(adapterProductSeller);
+              }
+
+              @Override
+              public void onCancelled(@Nonnull DatabaseError databaseError) {
+
+              }
+            });
+  }
 
 
   private void loadAllProducts() {
