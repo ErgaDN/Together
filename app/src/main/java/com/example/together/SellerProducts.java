@@ -115,44 +115,40 @@ public class SellerProducts extends Fragment {
 
   }
 
-  private void loadFilteredProducts(String selected) {
-    productList = new ArrayList<>();
-    FirebaseUser user = firebaseAuth.getCurrentUser();
-    String userID = user.getUid();
-    DocumentReference docRef = db.collection("seller").document(userID);
 
-    docRef.collection("products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-      @Override
-      public void onComplete(@NonNull Task<QuerySnapshot> task) {
-        if (task.isSuccessful()) {
-          for (QueryDocumentSnapshot productDocument : task.getResult()) {
+private void loadFilteredProducts(String selected) {
+  productList = new ArrayList<>();
+  FirebaseUser user = firebaseAuth.getCurrentUser();
+  String userID = user.getUid();
+  DocumentReference docRef = db.collection("seller").document(userID);
 
-            if (productDocument.contains("productCategory")) {
-              String productCategory = productDocument.getString("productCategory");
+  docRef.collection("products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    @Override
+    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+      productList.clear();
+      if (task.isSuccessful()) {
+        for (QueryDocumentSnapshot productDocument : task.getResult()) {
+          if (productDocument.contains("productCategory")) {
+            String productCategory = productDocument.getString("productCategory");
 
-              // Check if the productCategory matches the selected category
-              if (selected.equals(productCategory)) {
-                // Use toObject to convert the document snapshot to a ModelProduct object
-                ModelProduct modelProduct = productDocument.toObject(ModelProduct.class);
-                productList.add(modelProduct);
-              }
+            // Check if the productCategory matches the selected category
+            if (selected.equals(productCategory)) {
+              // Use toObject to convert the document snapshot to a ModelProduct object
+              ModelProduct modelProduct = productDocument.toObject(ModelProduct.class);
+              productList.add(modelProduct);
             }
-
-            // Use toObject to convert the document snapshot to a ModelProduct object
-            ModelProduct modelProduct = productDocument.toObject(ModelProduct.class);
-            productList.add(modelProduct);
-
           }
-          //setup adapter
-          adapterProductSeller = new AdapterProductSeller(getContext(), productList);
-          //set adapter
-          productsRv.setAdapter(adapterProductSeller);
         }
+
+        // Move the adapter setup and assignment outside the loop
+        //setup adapter
+        adapterProductSeller = new AdapterProductSeller(getContext(), productList);
+        //set adapter
+        productsRv.setAdapter(adapterProductSeller);
       }
-    });
-
-
-  }
+    }
+  });
+}
 
 
   private void loadAllProducts() {
@@ -164,6 +160,7 @@ public class SellerProducts extends Fragment {
     docRef.collection("products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
       @Override
       public void onComplete(@NonNull Task<QuerySnapshot> task) {
+        productList.clear();
         if (task.isSuccessful()) {
           for (QueryDocumentSnapshot productDocument : task.getResult()) {
             // Use toObject to convert the document snapshot to a ModelProduct object
