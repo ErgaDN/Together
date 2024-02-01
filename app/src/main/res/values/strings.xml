@@ -53,6 +53,7 @@
     <string name="address">כתובת</string>
     <string name="product_title">שם מוצר</string>
     <string name="add_to_cart">הוספה לסל</string>
+    <string name="confrim_order">אישור הזמנה</string>
 
 
 </resources>
