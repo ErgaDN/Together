@@ -2,19 +2,28 @@ package com.example.together;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Client extends AppCompatActivity {
+import java.util.ArrayList;
 
-    ImageButton btn_profile, btn_client_cart, btn_logout;
+public class Client extends AppCompatActivity {
+    ImageButton btn_profile, btn_client_cart, btn_logout, filterProductBtn;
     Toolbar toolbar;
+    private EditText searchProductsEt;
+    private TextView filteredProductsTv;
+    private RecyclerView productsRv;
+    private FirebaseAuth firebaseAuth;
+    private ArrayList<ModelProduct> productList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +32,14 @@ public class Client extends AppCompatActivity {
         btn_profile = findViewById(R.id.btn_profile);
         btn_client_cart = findViewById(R.id.btn_client_cart);
         btn_logout = findViewById(R.id.btn_logout);
+        searchProductsEt = findViewById(R.id.searchProductsEt);
+        filteredProductsTv = findViewById(R.id.filteredProductsTv);
+        filterProductBtn = findViewById(R.id.filterProductBtn);
+        productsRv = findViewById(R.id.productsRv);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        loadProducts();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -57,5 +74,8 @@ public class Client extends AppCompatActivity {
         });
         
 
+    }
+
+    private void loadProducts() {
     }
 }
