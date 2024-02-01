@@ -174,5 +174,4 @@ public class DistributionCenter extends Fragment {
               }
             });
   }
-
 }
