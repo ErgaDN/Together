@@ -17,9 +17,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -59,7 +56,7 @@ public class clientEditProfile extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 boolean isFifstNameChanged, isLastNameChanged, isPhoneChanged, isAddressChanged;
-                isFifstNameChanged = isFifstNameChanged();
+                isFifstNameChanged = isFirstNameChanged();
                 isLastNameChanged = isLastNameChanged();
                 isPhoneChanged = isPhoneChanged();
                 isAddressChanged = isAddressChanged();
@@ -76,7 +73,7 @@ public class clientEditProfile extends AppCompatActivity {
         });
     }
 
-    public boolean isFifstNameChanged(){
+    public boolean isFirstNameChanged(){
         if (editFirstName != null && editFirstName.length() > 0){//
             firstNameUser= editFirstName.getText().toString();
             updateFirstName(firstNameUser);

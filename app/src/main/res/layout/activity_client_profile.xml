@@ -196,7 +196,20 @@
             tools:layout_editor_absoluteX="118dp"
             tools:layout_editor_absoluteY="521dp" />
 
+
+        <Button
+            android:id="@+id/historyButton"
+            android:layout_width="188dp"
+            android:layout_height="58dp"
+            android:gravity="center"
+            android:text="היסטוריית הזמנות"
+            android:textSize="18sp"
+            app:cornerRadius="20dp"
+            tools:layout_editor_absoluteX="118dp"
+            tools:layout_editor_absoluteY="521dp" />
+
     </LinearLayout>
+
 
 
     <Button

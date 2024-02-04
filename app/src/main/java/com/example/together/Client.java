@@ -37,6 +37,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -231,9 +232,11 @@ public class Client extends AppCompatActivity {
                     // cart list is empty
                     Toast.makeText(Client.this, "No item in cart", Toast.LENGTH_SHORT).show();
                 }
-                submitOrder();
+//                submitOrder();
                 submitOrdersToSellers();
 
+                submitOrder(); //add the order to DB under the orders collection
+                deleteCartData(); //when confirm the order delete the products from the cart
             }
         });
 
@@ -366,6 +369,46 @@ public class Client extends AppCompatActivity {
     }
 
     private void submitOrder() {
+    private void deleteCartData() {
+        FirebaseFirestore mStore = FirebaseFirestore.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        CollectionReference cartCollectionRef = mStore.collection("clients").document(userID).collection("cart");
+
+        // Query all documents in the "cart" collection
+        cartCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    // Create a batch to delete all documents
+                    WriteBatch batch = mStore.batch();
+
+                    // Iterate through each document and add a delete operation to the batch
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        DocumentReference docRef = cartCollectionRef.document(document.getId());
+                        batch.delete(docRef);
+                    }
+
+                    // Commit the batch to delete all documents
+                    batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> batchTask) {
+                            if (batchTask.isSuccessful()) {
+                                // Documents successfully deleted
+                                Toast.makeText(Client.this, "All documents in cart deleted", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Handle the error if the batch commit fails
+                                Toast.makeText(Client.this, "Failed to delete documents in cart", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+
+    protected void submitOrder() {
         // show progress dialog
         progressDialog.setMessage("מבצע הזמנה...");
         progressDialog.show();
