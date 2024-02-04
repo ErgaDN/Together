@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -127,7 +128,6 @@ public class Client extends AppCompatActivity {
     private void showCartDialog() {
         //init list
         cartItemList = new ArrayList<>();
-        allTotalPrice = 0;
 
         //inflate cart layout
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_cart, null);
@@ -225,6 +225,14 @@ public class Client extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        //reset total price on dialog dismiss
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                allTotalPrice = 0.0;
+            }
+        });
 
     }
 

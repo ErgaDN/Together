@@ -35,12 +35,14 @@ public class AdapterCartItem extends RecyclerView.Adapter<AdapterCartItem.Holder
     private ArrayList<ModelCartItem> cartItems;
     FirebaseFirestore db;
     private FirebaseAuth firebaseAuth;
+    Double allTotalPrice;
 
 
 
     public AdapterCartItem(Context context, ArrayList<ModelCartItem> cartItems) {
         this.context = context;
         this.cartItems = cartItems;
+        this.allTotalPrice = allTotalPrice;
     }
 
     @NonNull
@@ -50,7 +52,6 @@ public class AdapterCartItem extends RecyclerView.Adapter<AdapterCartItem.Holder
         View view = LayoutInflater.from(context).inflate(R.layout.row_cartitem, parent, false);
         return new HolderCartItem(view);
     }
-    //TODO: 22:25
 
     @Override
     public void onBindViewHolder(@NonNull HolderCartItem holder, int position) {
@@ -118,6 +119,12 @@ public class AdapterCartItem extends RecyclerView.Adapter<AdapterCartItem.Holder
 
                 notifyItemChanged(position);
                 notifyDataSetChanged();
+
+//                double tx = Double.parseDouble((((Client)context).sTotalTv.getText().toString().trim().replace("₪", "")));
+//                double totalPrice = tx - Double.parseDouble(cost.replace("₪",""));
+                ((Client)context).allTotalPrice -= Double.parseDouble(cost);
+                ((Client)context).sTotalTv.setText("₪" + ((Client)context).allTotalPrice);
+
             }
 
         });
