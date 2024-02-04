@@ -229,7 +229,7 @@ public class Client extends AppCompatActivity {
                     cartCountTv.setText(String.valueOf(count));
                     Toast.makeText(Client.this, "quntity"+count, Toast.LENGTH_SHORT).show();
                 }else {
-                    cartCountTv.setVisibility(View.GONE);cl
+                    cartCountTv.setVisibility(View.GONE);
                 }
             }
         });
