@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,15 +21,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class Client extends AppCompatActivity {
@@ -48,6 +55,9 @@ public class Client extends AppCompatActivity {
     private ArrayList<ModelCartItem> cartItemList;
     private AdapterCartItem adapterCartItem;
 
+    // prograss dialog
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +70,12 @@ public class Client extends AppCompatActivity {
         filterProductBtn = findViewById(R.id.filterProductBtn);
         productsRv = findViewById(R.id.productsRv);
         cartCountTv = findViewById(R.id.cartCountTv);
+
+        // init progress dialog
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("please wait...");
+        progressDialog.setCanceledOnTouchOutside(false);
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
@@ -105,6 +121,8 @@ public class Client extends AppCompatActivity {
     public TextView sTotalTv;
     public Button checkoutBtn;
 
+    String myAddress , myNumber;
+
     //need to access these views in adapter so making public
     private void showCartDialog() {
         //init list
@@ -116,12 +134,55 @@ public class Client extends AppCompatActivity {
         sTotalTv = view.findViewById(R.id.sTotalTv);
         checkoutBtn = view.findViewById(R.id.checkoutBtn);
 
+        DocumentReference userDocument = db.collection("clients").document(userId);
+
+        userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()) {
+                        // Check if the "Address" field exists in the document
+                        if (document.contains("Address")) {
+                            // Retrieve the "Address" field as a String
+                             myAddress = document.getString("Address");
+                        }
+                        if (document.contains("Phone Number")) {
+                            myNumber = document.getString("Phone Number");
+                        }
+
+                    }
+                }
+            }
+        });
+
+
         //dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //set view to dialog
         builder.setView(view);
 
 
+        checkoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // first validate delivery address
+                if (myAddress.equals("") || myAddress.equals("null")) {
+                    Toast.makeText(Client.this, "Please enter your address in your profile before placing order", Toast.LENGTH_SHORT).show();
+                    return; // don't proceed further
+                }
+                if (myNumber.equals("") || myNumber.equals("null")) {
+                    Toast.makeText(Client.this, "Please enter your phone in your profile before placing order", Toast.LENGTH_SHORT).show();
+                    return; // don't proceed further
+                }
+                if (cartItemList.size() == 0) {
+                    // cart list is empty
+                    Toast.makeText(Client.this, "No item in cart", Toast.LENGTH_SHORT).show();
+                }
+                submitOrder();
+            }
+        });
 
         DocumentReference docRef = db.collection("clients").document(userId);
 
@@ -161,6 +222,79 @@ public class Client extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
+    }
+
+    private void submitOrder() {
+        // show progress dialog
+        progressDialog.setMessage("מבצע הזמנה...");
+        progressDialog.show();
+
+        // for order id and the order time
+        String timestamp = "" + System.currentTimeMillis();
+        String cost = sTotalTv.getText().toString().trim().replace("₪", ""); // remove ₪ if contains
+
+        //setup order data
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("orderId", "" + timestamp);
+        hashMap.put("orderTime", "" + timestamp);
+        hashMap.put("orderStatus", "In Progress"); // 3 options: In progress/Completed/Cancelled
+        hashMap.put("orderCost", "" + cost);
+        hashMap.put("orderBy", "" + firebaseAuth.getUid());
+
+
+        // add to db
+        FirebaseFirestore mStore = FirebaseFirestore.getInstance();
+        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        CollectionReference ordersCollectionRef = mStore.collection("clients").document(userID).collection("orders");
+
+        // Add the sample order document to the "orders" collection
+        ordersCollectionRef.add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+
+                String orderID = documentReference.getId();
+                CollectionReference productCollectionRef = mStore.collection("clients").document(userID).collection("orders")
+                        .document(orderID).collection("products");
+
+                Toast.makeText(Client.this, "Added to orders!", Toast.LENGTH_SHORT).show();
+                for (int i = 0; i < cartItemList.size(); i++) {
+                    String pId = cartItemList.get(i).getpId();
+                    String id = cartItemList.get(i).getId();
+                    String cost = cartItemList.get(i).getCost();
+                    String name = cartItemList.get(i).getName();
+                    String price = cartItemList.get(i).getPrice();
+                    String quantity = cartItemList.get(i).getQuantity();
+
+                    HashMap<String, String> hproducts = new HashMap<>();
+                    hproducts.put("pId", pId);
+                    hproducts.put("name", name);
+                    hproducts.put("cost", cost);
+                    hproducts.put("price", price);
+                    hproducts.put("quantity", quantity);
+
+                    productCollectionRef.add(hproducts).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            progressDialog.dismiss();
+                            Toast.makeText(Client.this, "Products added successfully", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                }
+                Intent intent = new Intent(getApplicationContext(), Client.class);
+                startActivity(intent);
+                finish();
+                // TODO- delete the items from the cart
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
+                Toast.makeText(Client.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        })
+        ;
     }
 
 
