@@ -133,7 +133,6 @@
 //            itemPriceTv = itemView.findViewById(R.id.itemPriceTv);
 //            itemQuantityTv = itemView.findViewById(R.id.itemQuantityTv);
 //            itemRemoveTv = itemView.findViewById(R.id.itemRemoveTv);
-//
 //        }
 //    }
 //}
