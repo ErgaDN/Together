@@ -124,7 +124,7 @@ public class AdapterCartItem extends RecyclerView.Adapter<AdapterCartItem.Holder
 //                double totalPrice = tx - Double.parseDouble(cost.replace("₪",""));
                 ((Client)context).allTotalPrice -= Double.parseDouble(cost);
                 ((Client)context).sTotalTv.setText("₪" + ((Client)context).allTotalPrice);
-
+                ((Client)context).submitOrder();
             }
 
         });
