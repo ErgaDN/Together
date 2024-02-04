@@ -109,6 +109,7 @@ public class Client extends AppCompatActivity {
     private void showCartDialog() {
         //init list
         cartItemList = new ArrayList<>();
+        allTotalPrice = 0;
 
         //inflate cart layout
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_cart, null);
@@ -139,6 +140,8 @@ public class Client extends AppCompatActivity {
                         String costProduct = cartDocument.getString("productPrice");
                         String quantityProduct = cartDocument.getString("productQuantity");
 
+                        allTotalPrice += Double.parseDouble(costProduct);
+
                         // Use toObject to convert the document snapshot to a ModelProduct object
                         ModelCartItem modelCartItem = new ModelCartItem(
                                 ""+idProduct,
@@ -155,6 +158,7 @@ public class Client extends AppCompatActivity {
                     adapterCartItem = new AdapterCartItem(Client.this, cartItemList);
                     //set adapter
                     cardItemRv.setAdapter(adapterCartItem);
+                    sTotalTv.setText("₪" + allTotalPrice);
                 }
             }
         });

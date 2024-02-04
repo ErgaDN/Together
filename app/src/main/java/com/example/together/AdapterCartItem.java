@@ -115,6 +115,7 @@ public class AdapterCartItem extends RecyclerView.Adapter<AdapterCartItem.Holder
                         });
                 Toast.makeText(context, "Remove from cart", Toast.LENGTH_SHORT).show();
                 cartItems.remove(position);
+
                 notifyItemChanged(position);
                 notifyDataSetChanged();
             }
