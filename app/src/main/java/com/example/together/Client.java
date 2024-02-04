@@ -9,8 +9,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,7 +83,29 @@ public class Client extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
-        loadProducts();
+        loadAllProducts();
+        //search
+        searchProductsEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    adapterProductClient.getFilter().filter(s);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         cartCount();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -110,6 +135,29 @@ public class Client extends AppCompatActivity {
                 Intent intent = new Intent(Client.this, Login.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        filterProductBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Client.this);
+                builder.setTitle("Choose Category:")
+                        .setItems(Constants.productCategories_1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //get selected item
+                                String selected = Constants.productCategories_1[which];
+                                filteredProductsTv.setText(selected);
+                                if (selected.equals("הכל")) {
+                                    loadAllProducts();
+                                }
+                                else {
+                                    adapterProductClient.getFilter().filter(selected);
+                                }
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -146,7 +194,7 @@ public class Client extends AppCompatActivity {
                         // Check if the "Address" field exists in the document
                         if (document.contains("Address")) {
                             // Retrieve the "Address" field as a String
-                             myAddress = document.getString("Address");
+                            myAddress = document.getString("Address");
                         }
                         if (document.contains("Phone Number")) {
                             myNumber = document.getString("Phone Number");
@@ -200,6 +248,9 @@ public class Client extends AppCompatActivity {
                         String costProduct = cartDocument.getString("productPrice");
                         String quantityProduct = cartDocument.getString("productQuantity");
 
+                        //update allTotalPrice
+                        allTotalPrice += Double.parseDouble(costProduct);
+
                         // Use toObject to convert the document snapshot to a ModelProduct object
                         ModelCartItem modelCartItem = new ModelCartItem(
                                 ""+idProduct,
@@ -216,11 +267,20 @@ public class Client extends AppCompatActivity {
                     adapterCartItem = new AdapterCartItem(Client.this, cartItemList);
                     //set adapter
                     cardItemRv.setAdapter(adapterCartItem);
+                    sTotalTv.setText("₪" + allTotalPrice);
                 }
             }
         });
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        //reset total price on dialog dismiss
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                allTotalPrice = 0.0;
+            }
+        });
 
     }
 
@@ -298,7 +358,7 @@ public class Client extends AppCompatActivity {
     }
 
 
-    private void loadProducts() {
+    private void loadAllProducts() {
 
         productList = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
@@ -337,6 +397,7 @@ public class Client extends AppCompatActivity {
             }
         });
     }
+
 
     private void cartCount(){
         DocumentReference docRef = db.collection("clients").document(userId);
