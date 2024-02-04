@@ -1,5 +1,7 @@
 package com.example.together;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,46 +10,39 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.common.subtyping.qual.Bottom;
-
 import java.util.ArrayList;
 import java.util.Objects;
-
-import javax.annotation.Nonnull;
 
 public class Client extends AppCompatActivity {
     ImageButton btn_profile, btn_client_cart, btn_logout, filterProductBtn;
     Toolbar toolbar;
     FirebaseFirestore db;
     private EditText searchProductsEt;
-    private TextView filteredProductsTv;
+    private TextView filteredProductsTv, cartCountTv;
     private RecyclerView productsRv;
     private FirebaseAuth firebaseAuth;
     private ArrayList<ModelProduct> productList;
     private AdapterProductClient adapterProductClient;
     private String userId;
+    private int count;
 
     //cart
     private ArrayList<ModelCartItem> cartItemList;
@@ -64,12 +59,13 @@ public class Client extends AppCompatActivity {
         filteredProductsTv = findViewById(R.id.filteredProductsTv);
         filterProductBtn = findViewById(R.id.filterProductBtn);
         productsRv = findViewById(R.id.productsRv);
-
+        cartCountTv = findViewById(R.id.cartCountTv);
 
         firebaseAuth = FirebaseAuth.getInstance();
         userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
         loadProducts();
+        cartCount();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -173,7 +169,7 @@ public class Client extends AppCompatActivity {
         productList = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
 
-// Create a reference to the "sellers" collection
+        // Create a reference to the "sellers" collection
         CollectionReference sellersRef = db.collection("seller");
 
         sellersRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -207,4 +203,36 @@ public class Client extends AppCompatActivity {
             }
         });
     }
+
+    private void cartCount(){
+        DocumentReference docRef = db.collection("clients").document(userId);
+
+        docRef.collection("cart").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                count=0;
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot cartDocument : task.getResult()) {
+                        //get information
+                        String quantityProduct = cartDocument.getString("productQuantity");
+
+                        // Use toObject to convert the document snapshot to a ModelProduct object
+                        try {
+                            int quantity = Integer.parseInt(quantityProduct);
+                            count += quantity;
+                        } catch (NumberFormatException e) {
+                            // Handle the case where the quantityProduct is not a valid integer
+                            Log.e(TAG, "Error parsing quantity as integer", e);
+                        }
+                    }
+                    cartCountTv.setVisibility(View.VISIBLE);
+                    cartCountTv.setText(String.valueOf(count));
+                    Toast.makeText(Client.this, "quntity"+count, Toast.LENGTH_SHORT).show();
+                }else {
+                    cartCountTv.setVisibility(View.GONE);cl
+                }
+            }
+        });
+    }
+
 }
