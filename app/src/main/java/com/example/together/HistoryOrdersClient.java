@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -35,7 +36,7 @@ public class HistoryOrdersClient extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_orders_client);
 
-//        orderRv = findViewById(R.id.orderRv);
+        orderRv = findViewById(R.id.orderRv);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
@@ -45,7 +46,41 @@ public class HistoryOrdersClient extends AppCompatActivity {
 
     }
 
+    //go over the orders collection and get the product collection
     private void loadOrders() {
+        // Initialize order list
+        orderList = new ArrayList<>();
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userID = user.getUid();
+
+        CollectionReference ordersRef = db.collection("clients").document(userID).collection("orders");
+        Toast.makeText(HistoryOrdersClient.this, "get ordersRef"+ordersRef, Toast.LENGTH_SHORT).show();
+
+        ordersRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot orderDocument : task.getResult()) {
+                        String orderId = orderDocument.getId();
+
+                        // Assuming this is the correct type for productRef
+                        CollectionReference productRef = ordersRef.document(orderId).collection("products");
+
+                        productRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> productTask) {
+                                if (productTask.isSuccessful()) {
+                                    for (QueryDocumentSnapshot productDocument : productTask.getResult()) {
+                                        String productTitle = productDocument.getString("name");
+                                        Toast.makeText(HistoryOrdersClient.this, "productTitle" + productTitle, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
 
     }
 //    private void loadOrders() {
