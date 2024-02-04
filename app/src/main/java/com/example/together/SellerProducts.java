@@ -89,7 +89,6 @@ public class SellerProducts extends Fragment {
                     String selected = Constants.productCategories_1[which];
                     filteredProductsTv.setText(selected);
                     if (selected.equals("הכל")) {
-                      /////TODO: 55:17------------
                       loadAllProducts();
                     }
                     else {
