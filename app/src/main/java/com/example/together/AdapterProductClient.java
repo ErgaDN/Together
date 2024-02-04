@@ -211,6 +211,7 @@ public class AdapterProductClient extends RecyclerView.Adapter<AdapterProductCli
 //                context.finish();
             }
         });
+//        ((Client) context).cartCount();
     }
 
     @Override

@@ -6,8 +6,16 @@
     android:orientation="vertical"
     android:gravity="center"
     android:layout_height="match_parent"
+    android:paddingTop="20dp"
+    android:paddingBottom="30dp"
     android:padding="30dp"
     tools:context=".Login">
+
+    <ImageView
+        android:id="@+id/togetherLogo"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:src="@drawable/hands" />
 
     <TextView
         android:text="@string/login"

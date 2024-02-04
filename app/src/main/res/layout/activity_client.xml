@@ -27,7 +27,20 @@
                 android:id="@+id/btn_client_cart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_shopping_cart_24"/>
+                android:src="@drawable/ic_shopping_cart_24"
+                android:layout_marginTop="8dp"
+                />
+
+            <TextView
+                android:id="@+id/cartCountTv"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="end"
+                android:background="@drawable/shape_circle03"
+                android:gravity="center"
+                android:text="10"
+                android:textColor="@color/black"
+                android:textSize="8sp" />
 
             <ImageButton
                 android:id="@+id/btn_profile"
@@ -42,6 +55,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_logout"
                 android:layout_marginStart="16dp" />
+
+
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
