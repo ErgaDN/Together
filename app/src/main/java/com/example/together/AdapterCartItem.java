@@ -72,54 +72,54 @@ public class AdapterCartItem extends RecyclerView.Adapter<AdapterCartItem.Holder
         holder.itemPriceEachTv.setText("₪"+price);
 
         //handle remove click listener, delete item from cart
-//        holder.itemRemoveTv.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-//
-//                // Reference to the "products" collection
-//                CollectionReference productsRef = db.collection("clients")
-//                        .document(userID)
-//                        .collection("cart");
-//
-//                // Query to find the document where productId matches the given value
-//                Query query = productsRef.whereEqualTo("productId", getpid);
-//
-//                query.get()
-//                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                            @Override
-//                            public void onSuccess(QuerySnapshot querySnapshot) {
-//                                for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-//                                    // Delete each document
-//                                    document.getReference().delete()
-//                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                                @Override
-//                                                public void onSuccess(Void aVoid) {
-//                                                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
-//                                                }
-//                                            })
-//                                            .addOnFailureListener(new OnFailureListener() {
-//                                                @Override
-//                                                public void onFailure(@NonNull Exception e) {
-//                                                    Log.w(TAG, "Error deleting document", e);
-//                                                }
-//                                            });
-//                                }
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Log.w(TAG, "Error getting documents", e);
-//                            }
-//                        });
-//                Toast.makeText(context, "Remove from cart", Toast.LENGTH_SHORT).show();
-//                cartItems.remove(position);
-//                notifyItemChanged(position);
-//                notifyDataSetChanged();
-//            }
-//
-//        });
+        holder.itemRemoveTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+
+                // Reference to the "products" collection
+                CollectionReference productsRef = db.collection("clients")
+                        .document(userID)
+                        .collection("cart");
+
+                // Query to find the document where productId matches the given value
+                Query query = productsRef.whereEqualTo("productId", getpid);
+
+                query.get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot querySnapshot) {
+                                for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                                    // Delete each document
+                                    document.getReference().delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error deleting document", e);
+                                                }
+                                            });
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error getting documents", e);
+                            }
+                        });
+                Toast.makeText(context, "Remove from cart", Toast.LENGTH_SHORT).show();
+                cartItems.remove(position);
+                notifyItemChanged(position);
+                notifyDataSetChanged();
+            }
+
+        });
 
     }
 
