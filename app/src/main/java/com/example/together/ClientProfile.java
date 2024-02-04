@@ -23,7 +23,7 @@ public class ClientProfile extends AppCompatActivity {
 
     TextView profilefirstname, profilelastname, profilephone, profileaddress;
     FirebaseAuth mAuth;
-    Button editProfile, button;
+    Button editProfile, button, historyButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class ClientProfile extends AppCompatActivity {
         setContentView(R.layout.activity_client_profile);
 
         editProfile = findViewById(R.id.editButton);
+        historyButton = findViewById(R.id.historyButton);
         profilefirstname = findViewById(R.id.profileFirstName);
         profilelastname = findViewById(R.id.profileLastName);
         profilephone = findViewById(R.id.profilePhoneNumber);
@@ -57,6 +58,20 @@ public class ClientProfile extends AppCompatActivity {
             }
         });
 
+        historyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openHistoryOrderClient();
+
+
+
+            }
+        });
+
+    }
+    private void openHistoryOrderClient() {
+        Intent intent = new Intent(ClientProfile.this, HistoryOrdersClient.class);
+        startActivity(intent);
     }
 
     public void showUserData(){

@@ -25,7 +25,7 @@
     <string name="price">מחיר</string>
     <string name="update_product">לחץ לעידכון מוצר קיים</string>
     <string name="SelectAddress">Select an Address</string>
-    <string name="edit_profile">edit_profile</string>
+    <string name="edit_profile">עריכת פרופיל</string>
     <string name="First_Name">First Name</string>
     <string name="Last_Name">Last Name</string>
     <string name="Phone_Number">Phone Number</string>
@@ -57,6 +57,11 @@
     <string name="AddToCart">הוסף לסל</string>
     <string name="_10">₪10</string>
     <string name="MyCart">הסל שלי</string>
+    <string name="number_order">הזמנה: 12354</string>
+    <string name="order_date">10/12/18</string>
+    <string name="shop_name">ABC Shop</string>
+    <string name="order_final_amount">סכום סופי: 100₪</string>
+    <string name="order_in_progress">בתהליך</string>
 
 
 </resources>
