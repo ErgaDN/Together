@@ -2,17 +2,16 @@ package com.example.together;
 
 public class ModelCartItem {
 
-    String id, pId, name, price, cost, quantity;
+    String id, pId, name, price, quantity;
 
     public ModelCartItem() {
     }
 
-    public ModelCartItem(String id, String pId, String name, String price, String cost, String quantity) {
+    public ModelCartItem(String id, String pId, String name, String price, String quantity) {
         this.id = id;
         this.pId = pId;
         this.name = name;
         this.price = price;
-        this.cost = cost;
         this.quantity = quantity;
     }
 
@@ -46,14 +45,6 @@ public class ModelCartItem {
 
     public void setPrice(String price) {
         this.price = price;
-    }
-
-    public String getCost() {
-        return cost;
-    }
-
-    public void setCost(String cost) {
-        this.cost = cost;
     }
 
     public String getQuantity() {
