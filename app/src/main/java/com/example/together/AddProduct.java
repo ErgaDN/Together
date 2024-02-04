@@ -58,7 +58,7 @@ public class AddProduct extends AppCompatActivity {
         btn_addproduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              inputData();
+                inputData();
             }
         });
     }
@@ -86,36 +86,36 @@ public class AddProduct extends AppCompatActivity {
         addProduct();
     }
 
-private void addProduct() {
+    private void addProduct() {
 
-    //add data to db
-    String timestamp = "" + System.currentTimeMillis();
-    HashMap<String, Object> productData = new HashMap<>();
-    productData.put("productId", "" + timestamp);
-    productData.put("productTitle", "" + productTitle);
-    productData.put("productDescription", "" + productDescription);
-    productData.put("productCategory", "" + productCategory);
-    productData.put("productQuantity", "" + productQuantity);
-    productData.put("productPrice", "" + originalPrice);
-    productData.put("timestamp", "" + timestamp);
-    productData.put("uid", "" + firebaseAuth.getUid());
-    //add to DB
-    String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-    CollectionReference productCollectionRef = mStore.collection("seller").document(userID).collection("products");
+        //add data to db
+        String timestamp = "" + System.currentTimeMillis();
+        HashMap<String, Object> productData = new HashMap<>();
+        productData.put("productId", "" + timestamp);
+        productData.put("productTitle", "" + productTitle);
+        productData.put("productDescription", "" + productDescription);
+        productData.put("productCategory", "" + productCategory);
+        productData.put("productQuantity", "" + productQuantity);
+        productData.put("productPrice", "" + originalPrice);
+        productData.put("timestamp", "" + timestamp);
+        productData.put("uid", "" + firebaseAuth.getUid());
+        //add to DB
+        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        CollectionReference productCollectionRef = mStore.collection("seller").document(userID).collection("products");
 
-    // Add the sample product document to the "product" collection
-    productCollectionRef.add(productData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-        @Override
-        public void onSuccess(DocumentReference documentReference) {
-            Log.d(TAG, "Product added to the 'products' collection under user: " + userID);
+        // Add the sample product document to the "product" collection
+        productCollectionRef.add(productData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Log.d(TAG, "Product added to the 'products' collection under user: " + userID);
 
-            Intent intent = new Intent(getApplicationContext(), Seller.class);
-            startActivity(intent);
-            finish();
-        }
-    });
+                Intent intent = new Intent(getApplicationContext(), Seller.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
-}
+    }
     private void categoryDialog() {
         //dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
