@@ -65,19 +65,28 @@ public class HistoryOrdersClient extends AppCompatActivity {
 
                         // Assuming this is the correct type for productRef
                         CollectionReference productRef = ordersRef.document(orderId).collection("products");
+                        ModelOrderClient modelOrderClient = orderDocument.toObject(ModelOrderClient.class);
+                                        orderList.add(modelOrderClient);
 
-                        productRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> productTask) {
-                                if (productTask.isSuccessful()) {
-                                    for (QueryDocumentSnapshot productDocument : productTask.getResult()) {
-                                        String productTitle = productDocument.getString("name");
-                                        Toast.makeText(HistoryOrdersClient.this, "productTitle" + productTitle, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }
-                        });
+//                        productRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<QuerySnapshot> productTask) {
+//                                if (productTask.isSuccessful()) {
+//                                    for (QueryDocumentSnapshot productDocument : productTask.getResult()) {
+//                                        String productTitle = productDocument.getString("name");
+//                                        Toast.makeText(HistoryOrdersClient.this, "productTitle" + productTitle, Toast.LENGTH_SHORT).show();
+//
+//                                        ModelOrderClient modelOrderClient = productDocument.toObject(ModelOrderClient.class);
+//                                        orderList.add(modelOrderClient);
+//                                    }
+//                                    adapterOrderClient = new AdapterOrderClient(HistoryOrdersClient.this, orderList);
+//                                    orderRv.setAdapter(adapterOrderClient);
+//                                }
+//                            }
+//                        });
                     }
+                    adapterOrderClient = new AdapterOrderClient(HistoryOrdersClient.this, orderList);
+                    orderRv.setAdapter(adapterOrderClient);
                 }
             }
         });
