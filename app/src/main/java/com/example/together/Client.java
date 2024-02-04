@@ -1,12 +1,14 @@
 package com.example.together;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,19 +30,28 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.checkerframework.common.subtyping.qual.Bottom;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
 public class Client extends AppCompatActivity {
     ImageButton btn_profile, btn_client_cart, btn_logout, filterProductBtn;
     Toolbar toolbar;
+    FirebaseFirestore db;
     private EditText searchProductsEt;
     private TextView filteredProductsTv;
     private RecyclerView productsRv;
     private FirebaseAuth firebaseAuth;
     private ArrayList<ModelProduct> productList;
     private AdapterProductClient adapterProductClient;
+    private String userId;
+
+    //cart
+    private ArrayList<ModelCartItem> cartItemList;
+    private AdapterCartItem adapterCartItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +65,9 @@ public class Client extends AppCompatActivity {
         filterProductBtn = findViewById(R.id.filterProductBtn);
         productsRv = findViewById(R.id.productsRv);
 
+
         firebaseAuth = FirebaseAuth.getInstance();
+        userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
         loadProducts();
 
@@ -74,9 +87,7 @@ public class Client extends AppCompatActivity {
         btn_client_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Client.this, ClientCart.class);
-                startActivity(intent);
-                finish();
+                showCartDialog();
             }
         });
 
@@ -89,14 +100,81 @@ public class Client extends AppCompatActivity {
                 finish();
             }
         });
-        
+
 
     }
+
+    public double allTotalPrice = 0.0;
+    public RecyclerView cardItemRv;
+    public TextView sTotalTv;
+    public Button checkoutBtn;
+
+    //need to access these views in adapter so making public
+    private void showCartDialog() {
+        //init list
+        cartItemList = new ArrayList<>();
+
+        //inflate cart layout
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_cart, null);
+        cardItemRv = view.findViewById(R.id.cardItemRv);
+        sTotalTv = view.findViewById(R.id.sTotalTv);
+        checkoutBtn = view.findViewById(R.id.checkoutBtn);
+
+        //dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //set view to dialog
+        builder.setView(view);
+
+
+
+        DocumentReference docRef = db.collection("clients").document(userId);
+
+        docRef.collection("cart").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                cartItemList.clear();
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot cartDocument : task.getResult()) {
+                        //get information
+                        String idProduct = cartDocument.getString("uid");
+                        String pIdProduct = cartDocument.getString("productId");
+                        String nameProduct = cartDocument.getString("productTitle");
+                        String priceProduct = cartDocument.getString("productPriceEach");
+                        String costProduct = cartDocument.getString("productPrice");
+                        String quantityProduct = cartDocument.getString("productQuantity");
+
+                        // Use toObject to convert the document snapshot to a ModelProduct object
+                        ModelCartItem modelCartItem = new ModelCartItem(
+                                ""+idProduct,
+                                ""+pIdProduct,
+                                ""+nameProduct,
+                                ""+priceProduct,
+                                ""+costProduct,
+                                ""+quantityProduct);
+
+                        cartItemList.add(modelCartItem);
+
+                    }
+                    //setup adapter
+                    adapterCartItem = new AdapterCartItem(Client.this, cartItemList);
+                    //set adapter
+                    cardItemRv.setAdapter(adapterCartItem);
+                }
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+
+
+
+    }
+
 
     private void loadProducts() {
 
         productList = new ArrayList<>();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
 
 // Create a reference to the "sellers" collection
         CollectionReference sellersRef = db.collection("seller");
@@ -131,30 +209,5 @@ public class Client extends AppCompatActivity {
                 }
             }
         });
-
-//        //get all product
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("seller");
-//        reference.child("products")
-//                .addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@Nonnull DataSnapshot dataSnapshot) {
-//                        //before getting rest list
-//                        productList.clear();
-//                        for (DataSnapshot ds: dataSnapshot.getChildren()) {
-//                            ModelProduct modelProduct = ds.getValue(ModelProduct.class);
-//                            productList.add(modelProduct);
-//                        }
-//                        //setup adapter
-//                        adapterProductClient = new AdapterProductClient(Client.this, productList);
-//                        //set adapter
-//                        productsRv.setAdapter(adapterProductClient);
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@Nonnull DatabaseError databaseError) {
-//
-//                    }
-//                });
-
     }
 }
