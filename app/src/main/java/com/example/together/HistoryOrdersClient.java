@@ -40,8 +40,6 @@ public class HistoryOrdersClient extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-//        FirebaseApp.initializeApp(this);
-
         loadOrders();
 
     }
@@ -54,7 +52,6 @@ public class HistoryOrdersClient extends AppCompatActivity {
         String userID = user.getUid();
 
         CollectionReference ordersRef = db.collection("clients").document(userID).collection("orders");
-        Toast.makeText(HistoryOrdersClient.this, "get ordersRef"+ordersRef, Toast.LENGTH_SHORT).show();
 
         ordersRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -63,27 +60,10 @@ public class HistoryOrdersClient extends AppCompatActivity {
                     for (QueryDocumentSnapshot orderDocument : task.getResult()) {
                         String orderId = orderDocument.getId();
 
-                        // Assuming this is the correct type for productRef
                         CollectionReference productRef = ordersRef.document(orderId).collection("products");
                         ModelOrderClient modelOrderClient = orderDocument.toObject(ModelOrderClient.class);
                                         orderList.add(modelOrderClient);
 
-//                        productRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<QuerySnapshot> productTask) {
-//                                if (productTask.isSuccessful()) {
-//                                    for (QueryDocumentSnapshot productDocument : productTask.getResult()) {
-//                                        String productTitle = productDocument.getString("name");
-//                                        Toast.makeText(HistoryOrdersClient.this, "productTitle" + productTitle, Toast.LENGTH_SHORT).show();
-//
-//                                        ModelOrderClient modelOrderClient = productDocument.toObject(ModelOrderClient.class);
-//                                        orderList.add(modelOrderClient);
-//                                    }
-//                                    adapterOrderClient = new AdapterOrderClient(HistoryOrdersClient.this, orderList);
-//                                    orderRv.setAdapter(adapterOrderClient);
-//                                }
-//                            }
-//                        });
                     }
                     adapterOrderClient = new AdapterOrderClient(HistoryOrdersClient.this, orderList);
                     orderRv.setAdapter(adapterOrderClient);
@@ -92,138 +72,5 @@ public class HistoryOrdersClient extends AppCompatActivity {
         });
 
     }
-//    private void loadOrders() {
-//        // Initialize order list
-//        orderList = new ArrayList<>();
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        String userID = user.getUid();
-//
-//        DocumentReference clientRef = db.collection("clients").document(userID);
-//        Toast.makeText(HistoryOrdersClient.this, "get clientRef", Toast.LENGTH_SHORT).show();
-//
-//        // Get orders
-//        clientRef.collection("orders").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                orderList.clear();
-//                Toast.makeText(HistoryOrdersClient.this, "onComplete orders", Toast.LENGTH_SHORT).show();
-//                if (task.isSuccessful()) {
-//                    Toast.makeText(HistoryOrdersClient.this, "on the if", Toast.LENGTH_SHORT).show();
-//
-//                    for (QueryDocumentSnapshot orderDocument : task.getResult()) {
-//                        Toast.makeText(HistoryOrdersClient.this, "on the for", Toast.LENGTH_SHORT).show();
-//
-//                        String orderId = orderDocument.getId();
-//
-//                        // Check if the order document exists
-//                        if (orderDocument.exists()) {
-//                            CollectionReference productsRef = clientRef.collection("orders").document(orderId).collection("products");
-//                            Toast.makeText(HistoryOrdersClient.this, "get productsRef", Toast.LENGTH_SHORT).show();
-//
-//
-//                        } else {
-//                            // Handle the case where the order document doesn't exist
-//                            Toast.makeText(HistoryOrdersClient.this, "Order document with ID " + orderId + " does not exist", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//    }
-
-
-//    private void loadOrders() {
-//        //init order list
-//        orderList = new ArrayList<>();
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        String userID = user.getUid();
-//
-//        DocumentReference clientRef = db.collection("clients").document(userID);
-//        Toast.makeText(HistoryOrdersClient.this, "get clientRef", Toast.LENGTH_SHORT).show();
-//
-//        //get orders
-//        clientRef.collection("orders").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                orderList.clear();
-//                Toast.makeText(HistoryOrdersClient.this, "onComplete orders", Toast.LENGTH_SHORT).show();
-//                if (task.isSuccessful()) {
-//                    // Iterate over each order document
-//                    Toast.makeText(HistoryOrdersClient.this, "on the if", Toast.LENGTH_SHORT).show();
-//
-//                    for (QueryDocumentSnapshot orderDocument : task.getResult()) {
-//                        Toast.makeText(HistoryOrdersClient.this, "on the for", Toast.LENGTH_SHORT).show();
-//
-//                        String orderId = orderDocument.getId();
-//
-//                        // Access the "products" sub-collection inside the order document
-//                        CollectionReference productsRef = clientRef.collection("orders").document(orderId).collection("products");
-//                        Toast.makeText(HistoryOrdersClient.this, "get productsRef", Toast.LENGTH_SHORT).show();
-//
-//                        productsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                if (task.isSuccessful()) {
-//                                    Toast.makeText(HistoryOrdersClient.this, "productsRef if", Toast.LENGTH_SHORT).show();
-//
-//                                    for (QueryDocumentSnapshot productDocument : task.getResult()) {
-//                                        Toast.makeText(HistoryOrdersClient.this, "productsRef for", Toast.LENGTH_SHORT).show();
-//
-////                                        ModelOrderClient modelOrderClient = productDocument.toObject(ModelOrderClient.class);
-////                                        orderList.add(modelOrderClient);
-//                                    }
-////                                    adapterOrderClient = new AdapterOrderClient(HistoryOrdersClient.this, orderList);
-////                                    orderRv.setAdapter(adapterOrderClient);
-//                                }
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//        });
-//    }
-
-//
-//    private void loadOrders() {
-//        //init order list
-//        orderList = new ArrayList<>();
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        String userID = user.getUid();
-//
-//        DocumentReference clientRef = db.collection("clients").document(userID);
-//
-//        //get orders
-//        clientRef.collection("orders").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                orderList.clear();
-//                if (task.isSuccessful()) {
-//                    // Iterate over each order document
-//                    for (QueryDocumentSnapshot productDocument : task.getResult()) {
-//                        String orderId = productDocument.getId();
-//
-//                        // Access the "products" subcollection inside the order document
-//                        CollectionReference productsRef = clientRef.collection("orders").document(orderId).collection("products");
-//
-//
-//                        productsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                if (task.isSuccessful()) {
-//                                    for (QueryDocumentSnapshot productDocument : task.getResult()) {
-//
-//                                        ModelOrderClient modelOrderClient = productDocument.toObject(ModelOrderClient.class);
-//                                        orderList.add(modelOrderClient);
-//                                    }
-//                                    adapterOrderClient = new AdapterOrderClient(HistoryOrdersClient.this, orderList);
-//                                    orderRv.setAdapter(adapterOrderClient);
-//                                }
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//        });
-//    }
 
 }
