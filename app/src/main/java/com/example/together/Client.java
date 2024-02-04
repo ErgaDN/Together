@@ -382,10 +382,15 @@ public class Client extends AppCompatActivity {
                         }
                     });
                 }
-                Intent intent = new Intent(getApplicationContext(), Client.class);
+                //TODO:here its go to the OrderDeatails and not to client
+//                Intent intent = new Intent(getApplicationContext(), Client.class);
+//                startActivity(intent);
+//                finish();
+
+                //open order details
+                Intent intent = new Intent(Client.this, OrderDeatailsClient.class);
+                intent.putExtra("orderId", timestamp);
                 startActivity(intent);
-                finish();
-                // TODO- delete the items from the cart
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

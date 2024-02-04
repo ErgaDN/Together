@@ -70,6 +70,15 @@ public class AdapterOrderClient extends RecyclerView.Adapter<AdapterOrderClient.
 
         holder.dateTv.setText(formattedDate);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //open order details
+                Intent intent = new Intent(context, OrderDeatailsClient.class);
+                intent.putExtra("orderId", orderId);
+                context.startActivity(intent);
+            }
+        });
 
 
     }
