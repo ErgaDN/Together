@@ -2,7 +2,7 @@ package com.example.together;
 
 public class ModelCartItem {
 
-    String id, pId, name, price, cost, quantity;
+    String id, pId, name, price, cost, quantity, sellerId;
 //    double allTotalPrice;
 
     public ModelCartItem() {
@@ -15,6 +15,7 @@ public class ModelCartItem {
         this.price = price;
         this.cost = cost;
         this.quantity = quantity;
+//        this.sellerId = sellerId
 //        this.allTotalPrice = 0;
     }
 
@@ -48,6 +49,10 @@ public class ModelCartItem {
     public void setName(String name) {
         this.name = name;
     }
+
+//    public void setSellerId(String sellerId){
+//        this.sellerId = sellerId;
+//    }
 
     public String getPrice() {
         return price;

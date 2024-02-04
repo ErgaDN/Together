@@ -87,7 +87,7 @@ public class AddProduct extends AppCompatActivity {
     }
 
     private void addProduct() {
-
+        String sellerID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         //add data to db
         String timestamp = "" + System.currentTimeMillis();
         HashMap<String, Object> productData = new HashMap<>();
@@ -99,6 +99,8 @@ public class AddProduct extends AppCompatActivity {
         productData.put("productPrice", "" + originalPrice);
         productData.put("timestamp", "" + timestamp);
         productData.put("uid", "" + firebaseAuth.getUid());
+        productData.put("sellerId", "" + sellerID);
+
         //add to DB
         String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         CollectionReference productCollectionRef = mStore.collection("seller").document(userID).collection("products");

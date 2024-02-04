@@ -34,11 +34,13 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class Client extends AppCompatActivity {
@@ -57,6 +59,7 @@ public class Client extends AppCompatActivity {
     //cart
     private ArrayList<ModelCartItem> cartItemList;
     private AdapterCartItem adapterCartItem;
+    private List<QueryDocumentSnapshot> sellersList;
 
     // prograss dialog
     private ProgressDialog progressDialog;
@@ -229,6 +232,8 @@ public class Client extends AppCompatActivity {
                     Toast.makeText(Client.this, "No item in cart", Toast.LENGTH_SHORT).show();
                 }
                 submitOrder();
+                submitOrdersToSellers();
+
             }
         });
 
@@ -282,6 +287,82 @@ public class Client extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void submitOrdersToSellers() {
+        for (int i = 0; i < cartItemList.size(); i++) {
+            String pId = cartItemList.get(i).getpId(); // getId() method that return the id of the client TODO: FIX IT TO GET THE ID OF THE SELLER
+            String name = cartItemList.get(i).getName();
+            String cost = cartItemList.get(i).getCost();
+            String price = cartItemList.get(i).getPrice();
+            String quantity = cartItemList.get(i).getQuantity();
+
+            // Get the seller ID from the product details
+
+            // i need to get uid
+            String sellerId = getSellerIdForProduct(pId);
+
+            if (sellerId != null) {
+                // Create an order for the seller's products subcollection
+                addOrderToSellerProducts(sellerId, pId, name, cost, price, quantity);
+            } else {
+                // Handle the case where the seller ID is not found for the product
+                Toast.makeText(this, "Seller ID not found for product: " + name, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private String getSellerIdForProduct(String productId) {
+        // Iterate through sellers to find the seller containing the product
+        for (QueryDocumentSnapshot sellerDocument : sellersList) {
+            String sellerId = sellerDocument.getId();
+
+            // Access the "products" subcollection inside the seller document
+            CollectionReference productsRef = db.collection("seller").document(sellerId).collection("products");
+
+            // Check if the product ID exists in the seller's products
+            Query query = productsRef.whereEqualTo("productId", productId);
+            Task<QuerySnapshot> querySnapshot = query.get();
+
+            // Assuming productId is unique and there will be only one result
+            if (querySnapshot.isSuccessful() && !querySnapshot.getResult().isEmpty()) {
+                // Product found in this seller's products
+                return sellerId;
+            }
+        }
+        return null; // Seller ID not found for the given product
+    }
+    // Helper method to add an order to the seller's products subcollection
+    private void addOrderToSellerProducts(String sellerId, String pId, String name, String cost, String price, String quantity) {
+        FirebaseFirestore mStore = FirebaseFirestore.getInstance();
+        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+
+        // Access the "products" subcollection inside the seller document
+        CollectionReference productsRef = mStore.collection("seller").document(sellerId).collection("products");
+
+        // Create a new order document in the seller's products subcollection
+        HashMap<String, String> orderData = new HashMap<>();
+        orderData.put("customerId", userID);
+        orderData.put("productName", name);
+        orderData.put("productCost", cost);
+        orderData.put("productPrice", price);
+        orderData.put("productQuantity", quantity);
+
+        productsRef.add(orderData)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        // Handle the success scenario
+                        Log.d(TAG, "Order added to seller's products: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle the failure scenario
+                        Log.e(TAG, "Error adding order to seller's products", e);
+                    }
+                });
     }
 
     private void submitOrder() {
@@ -362,6 +443,7 @@ public class Client extends AppCompatActivity {
 
         productList = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
+        sellersList = new ArrayList<>(); // Initialize sellersList
 
         // Create a reference to the "sellers" collection
         CollectionReference sellersRef = db.collection("seller");
@@ -370,9 +452,11 @@ public class Client extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 productList.clear();
+                sellersList.clear(); // Clear the list before populating
                 if (task.isSuccessful()) {
                     // Iterate over each seller document
                     for (QueryDocumentSnapshot sellerDocument : task.getResult()) {
+                        sellersList.add(sellerDocument); // Add each seller to the list
                         String sellerId = sellerDocument.getId();
 
                         // Access the "products" subcollection inside the seller document
