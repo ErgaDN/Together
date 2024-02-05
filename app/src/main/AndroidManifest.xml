@@ -15,50 +15,50 @@
         android:theme="@style/Theme.Material3.Light"
         tools:targetApi="31">
         <activity
-            android:name=".OrderDeatailsClient"
+            android:name=".activities.OrderDetailsClient"
             android:exported="false" />
         <activity
-            android:name=".HistoryOrdersClient"
+            android:name=".activities.HistoryOrdersClient"
             android:exported="false" />
         <activity
-            android:name=".sellerEditProfile"
+            android:name=".activities.sellerEditProfile"
             android:exported="false"
-            android:parentActivityName=".SellerProfile" />
+            android:parentActivityName=".activities.SellerProfile" />
         <activity
-            android:name=".SellerProfile"
+            android:name=".activities.SellerProfile"
             android:exported="false"
-            android:parentActivityName=".Seller" />
+            android:parentActivityName=".activities.Seller" />
         <activity
-            android:name=".UpdateProduct"
+            android:name=".activities.UpdateProduct"
             android:exported="false"
-            android:parentActivityName=".ChooseUpdateProduct" />
+            android:parentActivityName=".activities.ChooseUpdateProduct" />
         <activity
-            android:name=".ChooseUpdateProduct"
+            android:name=".activities.ChooseUpdateProduct"
             android:exported="false"
-            android:parentActivityName=".Seller" />
+            android:parentActivityName=".activities.Seller" />
         <activity
-            android:name=".ClientCart"
+            android:name=".activities.ClientCart"
             android:exported="false" />
         <activity
-            android:name=".clientEditProfile"
+            android:name=".activities.clientEditProfile"
             android:exported="false"
-            android:parentActivityName=".ClientProfile" />
+            android:parentActivityName=".activities.ClientProfile" />
         <activity
-            android:name=".AddProduct"
+            android:name=".activities.AddProduct"
             android:exported="false"
-            android:parentActivityName=".Seller" />
+            android:parentActivityName=".activities.Seller" />
         <activity
-            android:name=".RegisterClient"
+            android:name=".activities.RegisterClient"
             android:exported="false" />
         <activity
-            android:name=".Client"
+            android:name=".activities.Client"
             android:exported="false"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity
-            android:name=".ClientProfile"
+            android:name=".activities.ClientProfile"
             android:exported="false" />
         <activity
-            android:name=".Seller"
+            android:name=".activities.Seller"
             android:exported="true"
             android:theme="@style/Theme.Material3.Light.NoActionBar">
             <intent-filter>
@@ -66,14 +66,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Register"
+            android:name=".activities.Register"
             android:exported="false"
             android:theme="@style/Theme.Material3.Light.NoActionBar" />
         <activity
-            android:name=".RegisterSeller"
+            android:name=".activities.RegisterSeller"
             android:exported="false" />
         <activity
-            android:name=".Login"
+            android:name=".activities.Login"
             android:exported="true"
             android:theme="@style/Theme.Material3.Light.NoActionBar">
             <intent-filter>
