@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.together.models.ModelOrderShop;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +35,7 @@ public class OrderSummary extends Fragment {
     private ImageButton filteredOrdersBtn;
     private RecyclerView ordersRv;
     private ArrayList<ModelOrderShop> orderShopArrayList;
-    private AdapterOrderShop adapterOrderShop;
+    private com.example.together.AdapterOrderShop adapterOrderShop;
     private FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
     @Override
@@ -78,7 +79,7 @@ public class OrderSummary extends Fragment {
 
                     }
 //                    //setup adapter
-                    adapterOrderShop = new AdapterOrderShop(getContext(), orderShopArrayList);
+                    adapterOrderShop = new com.example.together.AdapterOrderShop(getContext(), orderShopArrayList);
                     Log.d("Debug", "after adapter new, contex:  "+ getContext());
 //                    //set adapter
                     ordersRv.setAdapter(adapterOrderShop);
