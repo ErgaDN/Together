@@ -31,7 +31,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_width="match_parent"
             android:padding="5dp"
-            tools:listitem="@layout/row_cartitem"
+            tools:listitem="@layout/row_cart_item"
             android:layout_height="wrap_content" />
 
         <RelativeLayout

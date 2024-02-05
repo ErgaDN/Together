@@ -62,6 +62,14 @@
     <string name="shop_name">ABC Shop</string>
     <string name="order_final_amount">סכום סופי: 100₪</string>
     <string name="order_in_progress">בתהליך</string>
+    <string name="OrderDetails">פרטי הזמנה</string>
+    <string name="OrderID">מספר הזמנה</string>
+    <string name="ProductTitle">כותרת מוצר</string>
+    <string name="OrderStatus">מצב הזמנה</string>
+    <string name="Items">פריטים</string>
+    <string name="Amount">כמות</string>
+    <string name="OrderedItems">הפריטים שהוזמנו</string>
+    <string name="Remove">הסרה</string>
 
 
 </resources>
