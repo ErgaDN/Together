@@ -41,9 +41,6 @@
             android:exported="false"
             android:parentActivityName=".activities.Seller" />
         <activity
-            android:name=".activities.ClientCart"
-            android:exported="false" />
-        <activity
             android:name=".activities.clientEditProfile"
             android:exported="false"
             android:parentActivityName=".activities.ClientProfile" />
