@@ -57,13 +57,9 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
     public void onBindViewHolder(@NonNull HolderOrderShop holder, int position) {
 //        get data at the position
         ModelOrderShop modelOrderShop = orderShopArrayList.get(position);
-        Log.d("Debug", "orderShopArrayList: " +orderShopArrayList);
-
-//        String orderBy = modelOrderShop.getOrderBy();
         String orderId = modelOrderShop.getOrderId();
-        Log.d("Debug", "orderId: " +orderId);
 
-//        String orderCost = modelOrderShop.getOrderCost();
+        String orderCost = modelOrderShop.getProductPrice();
         String orderStatus = modelOrderShop.getOrderStatus();
 //        String orderTime = modelOrderShop.getOrderTime();
 
@@ -71,20 +67,20 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
         loadUserInfo(modelOrderShop, holder);
 
         //set data
-//        holder.amountTv.setText("סכום: ₪"+ orderCost);
+        holder.amountTv.setText("סכום: ₪"+ orderCost);
         holder.statusTv.setText(orderStatus);
         holder.orderIdTv.setText("order ID: "+orderId);
         //change order status text color
-//        if (orderStatus.equals("בתהליך")) {
-//            holder.statusTv.setTextColor(context.getResources().getColor(R.color.lavender));
-//        } else if (orderStatus.equals("הושלמה")) {
-//            holder.statusTv.setTextColor(context.getResources().getColor(R.color.green));
-//        } else if (orderStatus.equals("בוטלה")) {
-//            holder.statusTv.setTextColor(context.getResources().getColor(R.color.red));
-//        }
+        if (orderStatus.equals("בתהליך")) {
+            holder.statusTv.setTextColor(context.getResources().getColor(R.color.lavender));
+        } else if (orderStatus.equals("הושלמה")) {
+            holder.statusTv.setTextColor(context.getResources().getColor(R.color.green));
+        } else if (orderStatus.equals("בוטלה")) {
+            holder.statusTv.setTextColor(context.getResources().getColor(R.color.red));
+        }
 
         //convert timestamp to proper format
-        Calendar calendar = Calendar.getInstance();
+//        Calendar calendar = Calendar.getInstance();
 //        calendar.setTimeInMillis(Long.parseLong(orderTime));
 
         // Format the Calendar instance to a human-readable date string
@@ -101,35 +97,6 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
         });
     }
 
-//    private void loadUserInfo(ModelOrderShop modelOrderShop, HolderOrderShop holder) {
-//        // To load the client phone
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        String userId = user.getUid();
-//        DocumentReference sellerRef = db.collection("seller").document(userId);
-//
-//        sellerRef.collection("orders")
-//                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        // Retrieve the "Phone Number" field from the document
-//                        String phoneNumber = document.getString("Phone Number");
-//
-//                        // Do something with the phoneNumber, for example, set it in your ViewHolder
-//                        holder.phoneTv.setText(phoneNumber);
-//                    } else {
-//                        // Handle the case where the document doesn't exist
-//                    }
-//                } else {
-//                    // Handle potential errors here
-//                }
-//            }
-//        });
-//    }
 
     private void loadUserInfo(ModelOrderShop modelOrderShop, HolderOrderShop holder) {
         // To load the client phone
