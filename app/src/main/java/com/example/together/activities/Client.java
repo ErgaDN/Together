@@ -26,8 +26,10 @@ import android.widget.Toast;
 import com.example.together.Constants;
 import com.example.together.R;
 import com.example.together.adapters.AdapterCartItem;
+import com.example.together.adapters.AdapterOrderShop;
 import com.example.together.adapters.AdapterProductClient;
 import com.example.together.models.ModelCartItem;
+import com.example.together.models.ModelOrderShop;
 import com.example.together.models.ModelProduct;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -51,7 +53,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+
 public class Client extends AppCompatActivity {
+    public interface AddressCallback {
+        void onAddressLoaded(String address);
+    }
     ImageButton btn_profile, btn_client_cart, btn_logout, filterProductBtn;
     Toolbar toolbar;
     FirebaseFirestore db;
@@ -412,7 +418,7 @@ public class Client extends AppCompatActivity {
     }
 
 
-    protected void submitOrder() {
+    private void submitOrder() {
         // show progress dialog
         progressDialog.setMessage("מבצע הזמנה...");
         progressDialog.show();
@@ -420,67 +426,130 @@ public class Client extends AppCompatActivity {
         // for order id and the order time
         String timestamp = "" + System.currentTimeMillis();
         String cost = sTotalTv.getText().toString().trim().replace("₪", ""); // remove ₪ if contains
+        String[] addressHolder = {"undefined"};
+        Log.d(TAG, " before the method address = " + addressHolder[0]);
 
-        //setup order data
-        HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("orderId", "" + timestamp);
-        hashMap.put("orderTime", "" + timestamp);
-        hashMap.put("orderStatus", "In Progress"); // 3 options: In progress/Completed/Cancelled
-        hashMap.put("orderCost", "" + cost);
-        hashMap.put("orderBy", "" + firebaseAuth.getUid());
-
-
-        // add to db
-        FirebaseFirestore mStore = FirebaseFirestore.getInstance();
-        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        CollectionReference ordersCollectionRef = mStore.collection("clients").document(userID).collection("orders");
-
-        // Add the sample order document to the "orders" collection
-        ordersCollectionRef.add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        loadUserAddress(userId, new AddressCallback() {
             @Override
-            public void onSuccess(DocumentReference documentReference) {
+            public void onAddressLoaded(String loadedAddress) {
+                // Use the loaded address here
+                Log.d(TAG, "Loaded address: " + loadedAddress);
+                // Update the address variable
+                addressHolder[0] = loadedAddress;
 
-                String orderID = documentReference.getId();
-                CollectionReference productCollectionRef = mStore.collection("clients").document(userID).collection("orders")
-                        .document(orderID).collection("products");
+                // Now you can use the 'address' variable and proceed with further operations
+                // For example, update the "address to delivery" field in your Firebase Firestore document.
+                updateAddressInFirestore(addressHolder[0]);
 
-                Toast.makeText(Client.this, "Added to orders!", Toast.LENGTH_SHORT).show();
-                for (int i = 0; i < cartItemList.size(); i++) {
-                    String pId = cartItemList.get(i).getpId();
-                    String id = cartItemList.get(i).getId();
-                    String cost = cartItemList.get(i).getCost();
-                    String name = cartItemList.get(i).getName();
-                    String price = cartItemList.get(i).getPrice();
-                    String quantity = cartItemList.get(i).getQuantity();
+                // Rest of your code dependent on the user's address can go here
+                // ...
 
-                    HashMap<String, String> hproducts = new HashMap<>();
-                    hproducts.put("pId", pId);
-                    hproducts.put("name", name);
-                    hproducts.put("cost", cost);
-                    hproducts.put("price", price);
-                    hproducts.put("quantity", quantity);
+                // Setup order data
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("orderId", "" + timestamp);
+                hashMap.put("orderTime", "" + timestamp);
+                hashMap.put("orderStatus", "In Progress");
+                hashMap.put("orderCost", "" + cost);
+                hashMap.put("orderBy", "" + firebaseAuth.getUid());
+                hashMap.put("address to delivery", "" + addressHolder[0]);
 
-                    productCollectionRef.add(hproducts).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            progressDialog.dismiss();
-                            Toast.makeText(Client.this, "Products added successfully", Toast.LENGTH_SHORT).show();
+                // Add to db
+                FirebaseFirestore mStore = FirebaseFirestore.getInstance();
+                CollectionReference ordersCollectionRef = mStore.collection("clients").document(userId).collection("orders");
 
+                // Add the sample order document to the "orders" collection
+                ordersCollectionRef.add(hashMap).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+
+                        String orderID = documentReference.getId();
+                        CollectionReference productCollectionRef = mStore.collection("clients").document(userId).collection("orders")
+                                .document(orderID).collection("products");
+
+                        Toast.makeText(Client.this, "Added to orders!", Toast.LENGTH_SHORT).show();
+                        for (int i = 0; i < cartItemList.size(); i++) {
+                            String pId = cartItemList.get(i).getpId();
+                            String id = cartItemList.get(i).getId();
+                            String cost = cartItemList.get(i).getCost();
+                            String name = cartItemList.get(i).getName();
+                            String price = cartItemList.get(i).getPrice();
+                            String quantity = cartItemList.get(i).getQuantity();
+
+                            HashMap<String, String> hproducts = new HashMap<>();
+                            hproducts.put("pId", pId);
+                            hproducts.put("name", name);
+                            hproducts.put("cost", cost);
+                            hproducts.put("price", price);
+                            hproducts.put("quantity", quantity);
+
+                            productCollectionRef.add(hproducts).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(Client.this, "Products added successfully", Toast.LENGTH_SHORT).show();
+
+                                }
+                            });
                         }
-                    });
-                }
 
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Toast.makeText(Client.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
-                Toast.makeText(Client.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-        })
-        ;
+        });
     }
+
+    private void updateAddressInFirestore(String address) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference clientRef = db.collection("clients").document(userId);
+
+        // Declare 'address' as final
+        final String finalAddress = address;
+
+        // Update the "Address" field in the client document
+        clientRef.update("Address", finalAddress)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Address updated successfully");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Error updating address", e);
+                    }
+                });
+    }
+
+
+    private void loadUserAddress(String clientId, AddressCallback callback) {
+        String[] address = {""}; // Use an array to make it effectively final
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference clientRef = db.collection("clients").document(userId);
+
+        clientRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        // Retrieve the "Address" field from the document
+                        address[0] = document.getString("Address");
+                    }
+                }
+                // Invoke the callback with the loaded address
+                callback.onAddressLoaded(address[0]);
+            }
+        });
+    }
+
 
 
     private void loadAllProducts() {

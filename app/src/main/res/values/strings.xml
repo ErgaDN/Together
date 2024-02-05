@@ -66,10 +66,11 @@
     <string name="OrderID">מספר הזמנה</string>
     <string name="ProductTitle">כותרת מוצר</string>
     <string name="OrderStatus">מצב הזמנה</string>
-    <string name="Items">פריטים</string>
+    <string name="Items">מוצרים</string>
     <string name="Amount">כמות</string>
     <string name="OrderedItems">הפריטים שהוזמנו</string>
     <string name="Remove">הסרה</string>
+    <string name="cost">סך הכל</string>
 
 
 </resources>

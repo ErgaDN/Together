@@ -11,9 +11,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.appcompat.widget.Toolbar;
-
-
-import com.example.together.OrderSummary;
 import com.example.together.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
