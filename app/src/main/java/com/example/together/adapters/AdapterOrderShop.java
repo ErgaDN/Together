@@ -1,4 +1,4 @@
-package com.example.together;
+package com.example.together.adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.together.R;
 import com.example.together.models.ModelOrderShop;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -85,9 +86,9 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
 
         // Format the Calendar instance to a human-readable date string
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String formattedDate = dateFormat.format(calendar.getTime());
-
-        holder.orderDateTv.setText(formattedDate);
+        //TODO: check if this 2 lines are necessary
+//        String formattedDate = dateFormat.format(calendar.getTime());
+//        holder.orderDateTv.setText(formattedDate);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

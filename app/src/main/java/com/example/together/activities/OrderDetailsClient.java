@@ -1,5 +1,7 @@
 package com.example.together.activities;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -15,15 +18,18 @@ import android.widget.Toast;
 
 import com.example.together.R;
 import com.example.together.adapters.AdapterCartItem;
-import com.example.together.adapters.AdapterOrderShop;
 import com.example.together.adapters.AdapterOrderedItem;
 import com.example.together.models.ModelCartItem;
 import com.example.together.models.ModelOrderClient;
 import com.example.together.models.ModelOrderItem;
 import com.example.together.models.ModelOrderShop;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,7 +43,7 @@ public class OrderDetailsClient extends AppCompatActivity {
     private String orderId; // orderTo;
 
     //ui views
-    private TextView orderIdTv, dateTv, orderStatusTv, totalItemsTv, costTv, addressTv;
+    private TextView orderIdTv, dateTv, orderStatusTv, costTv, addressTv;
     private RecyclerView itemsRv;
     private FirebaseAuth firebaseAuth;
 
@@ -50,7 +56,6 @@ public class OrderDetailsClient extends AppCompatActivity {
         orderIdTv = findViewById(R.id.orderIdTv);
         dateTv = findViewById(R.id.dateTv);
         orderStatusTv = findViewById(R.id.orderStatusTv);
-        totalItemsTv = findViewById(R.id.totalItemsTv);
         costTv = findViewById(R.id.costTv);
         addressTv = findViewById(R.id.addressTv);
         itemsRv = findViewById(R.id.itemsRv);
@@ -64,8 +69,45 @@ public class OrderDetailsClient extends AppCompatActivity {
     }
 
     private void loadOrderDetails() {
-        //load order details
-//        DatabaseReference ref = FirebaseDatabase.getInstance()
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String userID = user.getUid();
+        CollectionReference docRef = db.collection("clients").document(userID).collection("orders");
+
+        docRef.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() { // Change to QuerySnapshot
+                    @Override
+                    public void onSuccess(QuerySnapshot querySnapshot) {
+                        // Check if there are any documents
+                        if (!querySnapshot.isEmpty()) {
+                            // Access the first document
+                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+
+                            // Access specific fields
+                            String orderId = documentSnapshot.getString("orderId");
+                            String orderTime = documentSnapshot.getString("orderTime");
+                            String orderStatus = documentSnapshot.getString("orderStatus");
+                            String addressToDelivery = documentSnapshot.getString("address to delivery");
+                            String orderCost = documentSnapshot.getString("orderCost");
+
+                            // Display the fields
+                            orderIdTv.setText(orderId);
+                            dateTv.setText(orderTime);
+                            orderStatusTv.setText(orderStatus);
+                            addressTv.setText(addressToDelivery);
+                            costTv.setText(orderCost);
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error getting document", e);
+                    }
+                });
     }
 
     ArrayList<ModelOrderItem> orderItemList;
