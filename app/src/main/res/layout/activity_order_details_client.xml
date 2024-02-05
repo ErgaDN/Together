@@ -114,6 +114,30 @@
                 android:gravity="end">
 
                 <TextView
+                    android:id="@+id/addressTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:layoutDirection="rtl"
+                    android:text="הפסגה 3 אריאל"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:text="כתובת למשלוח"
+                    android:textStyle="bold" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end">
+
+                <TextView
                     android:id="@+id/totalItemsTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -138,45 +162,21 @@
                 android:gravity="end">
 
                 <TextView
-                    android:id="@+id/amountTv"
+                    android:id="@+id/costTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:layoutDirection="rtl"
-                    android:text="10"/>
+                    android:text="₪10"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="5dp"
-                    android:text="@string/Amount"
-                    android:textStyle="bold" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="end">
-
-                <TextView
-                    android:id="@+id/addressTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_weight="1"
-                    android:layoutDirection="rtl"
-                    android:text="הפסגה 3 אריאל"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:text="כתובת למשלוח"
+                    android:text="@string/cost"
                     android:textStyle="bold" />
             </TableRow>
 
