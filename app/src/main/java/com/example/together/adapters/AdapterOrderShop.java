@@ -1,6 +1,7 @@
 package com.example.together;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.together.activities.OrderDetailsSeller;
 import com.example.together.models.ModelOrderShop;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -85,14 +87,17 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
 
         // Format the Calendar instance to a human-readable date string
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String formattedDate = dateFormat.format(calendar.getTime());
+//        String formattedDate = dateFormat.format(calendar.getTime());
 
-        holder.orderDateTv.setText(formattedDate);
+//        holder.orderDateTv.setText(formattedDate);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //open order details
+                Intent intent = new Intent(context, OrderDetailsSeller.class);
+                intent.putExtra("orderId", orderId);
+                context.startActivity(intent);
             }
         });
     }
@@ -162,3 +167,6 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
         }
     }
 }
+
+
+// TODO: Add filter orders 29:24 (16)
