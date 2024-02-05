@@ -26,7 +26,7 @@ import android.widget.Toast;
 import com.example.together.Constants;
 import com.example.together.R;
 import com.example.together.adapters.AdapterCartItem;
-import com.example.together.adapters.AdapterOrderShop;
+//import com.example.together.adapters.AdapterOrderShop;
 import com.example.together.adapters.AdapterProductClient;
 import com.example.together.models.ModelCartItem;
 import com.example.together.models.ModelOrderShop;

@@ -15,8 +15,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.together.AdapterOrderShop;
 import com.example.together.R;
-import com.example.together.adapters.AdapterOrderShop;
+//import com.example.together.adapters.AdapterOrderShop;
 import com.example.together.models.ModelOrderShop;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
