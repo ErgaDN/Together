@@ -244,10 +244,8 @@ public class Client extends AppCompatActivity {
                 submitOrder(); //add the order to DB under the orders collection
                 deleteCartData(); //when confirm the order delete the products from the cart
 
-                String timestamp = "" + System.currentTimeMillis();
                 //open order details
-                Intent intent = new Intent(Client.this, OrderDetailsClient.class);
-                intent.putExtra("orderId", timestamp);
+                Intent intent = new Intent(Client.this, Client.class);
                 startActivity(intent);
             }
         });
@@ -334,13 +332,15 @@ public class Client extends AppCompatActivity {
 
                                         // Create a map with the order information
                                         Map<String, Object> orderData = new HashMap<>();
+                                        orderData.put("nameClient", nameClient);
+                                        orderData.put("phoneClient", phoneClient);
                                         orderData.put("productId", productId);
                                         orderData.put("productTitle", productTitle);
                                         orderData.put("productPriceEach", productPriceEach);
-                                        orderData.put("productPrice", productPrice);
                                         orderData.put("productQuantity", productQuantity);
-                                        orderData.put("nameClient", nameClient);
-                                        orderData.put("phoneClient", phoneClient);
+                                        orderData.put("productPrice", productPrice);
+                                        orderData.put("orderStatus", "In Progress"); // TODO:check if this line work!
+
 
                                         // Reference to the seller's "orders" sub-collection
                                         CollectionReference sellerOrdersRef = db.collection("seller").document(sellerId).collection("orders");
@@ -467,11 +467,6 @@ public class Client extends AppCompatActivity {
                         }
                     });
                 }
-                //TODO:here its go to the OrderDeatails and not to client
-//                Intent intent = new Intent(getApplicationContext(), Client.class);
-//                startActivity(intent);
-//                finish();
-
 
             }
         }).addOnFailureListener(new OnFailureListener() {
