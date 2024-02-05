@@ -1,4 +1,4 @@
-package com.example.together;
+package com.example.together.activities;
 
 import static android.content.ContentValues.TAG;
 
@@ -23,6 +23,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.together.Constants;
+import com.example.together.R;
+import com.example.together.adapters.AdapterCartItem;
+import com.example.together.adapters.AdapterProductClient;
+import com.example.together.models.ModelCartItem;
+import com.example.together.models.ModelProduct;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -240,7 +246,7 @@ public class Client extends AppCompatActivity {
 
                 String timestamp = "" + System.currentTimeMillis();
                 //open order details
-                Intent intent = new Intent(Client.this, OrderDeatailsClient.class);
+                Intent intent = new Intent(Client.this, OrderDetailsClient.class);
                 intent.putExtra("orderId", timestamp);
                 startActivity(intent);
             }

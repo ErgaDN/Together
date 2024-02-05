@@ -14,6 +14,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.together.R;
+import com.example.together.adapters.AdapterOrderShop;
+import com.example.together.models.ModelOrderShop;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

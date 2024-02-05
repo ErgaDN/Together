@@ -1,4 +1,4 @@
-package com.example.together;
+package com.example.together.adapters;
 
 import static android.content.ContentValues.TAG;
 
@@ -20,6 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.together.FilterProductClient;
+import com.example.together.R;
+import com.example.together.activities.Client;
+import com.example.together.models.ModelProduct;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;

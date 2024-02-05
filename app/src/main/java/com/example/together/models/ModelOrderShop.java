@@ -1,4 +1,4 @@
-package com.example.together;
+package com.example.together.models;
 
 public class ModelOrderShop {
 
