@@ -320,7 +320,6 @@ public class Client extends AppCompatActivity {
         for (QueryDocumentSnapshot sellerDocument : sellersList) {
             String sellerId = sellerDocument.getId();
 
-            // Access the "products" subcollection inside the seller document
             CollectionReference productsRef = db.collection("seller").document(sellerId).collection("products");
 
             // Check if the product ID exists in the seller's products
@@ -368,7 +367,7 @@ public class Client extends AppCompatActivity {
                 });
     }
 
-    private void submitOrder() {
+//    private void submitOrder() {
     private void deleteCartData() {
         FirebaseFirestore mStore = FirebaseFirestore.getInstance();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();

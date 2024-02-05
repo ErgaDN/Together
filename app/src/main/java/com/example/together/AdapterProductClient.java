@@ -22,17 +22,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-
 public class AdapterProductClient extends RecyclerView.Adapter<AdapterProductClient.HolderProductClient> implements Filterable {
     private Context context;
     public ArrayList<ModelProduct> productsList, filterList;
@@ -174,16 +178,61 @@ public class AdapterProductClient extends RecyclerView.Adapter<AdapterProductCli
                 String quantity = quantityTv.getText().toString().trim();
                 String description = descriptionTv.getText().toString().trim();
 
+                //WORK ON IT
+                String sellerId = getSellerId(productId);
+
                 //add to DB
-                addToCart(context, productId, title, priceEach, price, quantity, description);
+                addToCart(context, productId, title, priceEach, price, quantity, description,sellerId);
                 dialog.dismiss();
             }
         });
     }
 
-    private void addToCart(Context context, String productId, String title, String priceEach, String price, String quantity, String description) {
+    private String getSellerId(String productId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference sellersRef = db.collection("seller");
+        final String[] res = {null};  // Use a final array to store the result
+
+        sellersRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    // Iterate over each seller document
+                    for (QueryDocumentSnapshot sellerDocument : task.getResult()) {
+                        String sellerId = sellerDocument.getId();
+
+                        // Access the "products" subcollection inside the seller document
+                        CollectionReference productsRef = sellersRef.document(sellerId).collection("products");
+                        Query query = productsRef.whereEqualTo("productId", productId);
+
+                        // Execute the query
+                        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> queryTask) {
+                                if (queryTask.isSuccessful()) {
+                                    // Check if there is a result
+                                    if (!queryTask.getResult().isEmpty()) {
+                                        // Get the first document and extract the sellerId field
+                                        res[0] = sellerDocument.getId();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+
+        return res[0];
+    }
+
+
+
+
+    private void addToCart(Context context, String productId, String title, String priceEach, String price, String quantity, String description, String sellerId) {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseFirestore mStore = FirebaseFirestore.getInstance();
+
         //add data to db
         String timestamp = "" + System.currentTimeMillis();
         HashMap<String, Object> productData = new HashMap<>();
@@ -195,6 +244,8 @@ public class AdapterProductClient extends RecyclerView.Adapter<AdapterProductCli
         productData.put("productPriceEach", "" + priceEach);
         productData.put("timestamp", "" + timestamp);
         productData.put("uid", "" + firebaseAuth.getUid());
+        productData.put("sellerId", "" + sellerId);
+
         //add to DB
         String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         CollectionReference productCollectionRef = mStore.collection("clients").document(userID).collection("cart");
