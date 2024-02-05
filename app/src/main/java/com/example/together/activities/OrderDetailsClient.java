@@ -51,6 +51,8 @@ public class OrderDetailsClient extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_details_client);
+        getSupportActionBar().setTitle("היסטוריית הזמנות");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //init views
         orderIdTv = findViewById(R.id.orderIdTv);

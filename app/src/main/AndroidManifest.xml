@@ -22,7 +22,8 @@
             android:exported="false" />
         <activity
             android:name=".activities.HistoryOrdersClient"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".activities.Client"/>
         <activity
             android:name=".activities.sellerEditProfile"
             android:exported="false"
