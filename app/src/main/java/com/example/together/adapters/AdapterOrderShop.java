@@ -1,6 +1,7 @@
-package com.example.together.adapters;
+package com.example.together;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +12,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.together.models.ModelOrderShop;
-import com.example.together.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.ktx.Firebase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +38,7 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
     FirebaseFirestore db;
     private Context context;
     public ArrayList<ModelOrderShop> orderShopArrayList;
+
 
     public AdapterOrderShop(Context context, ArrayList<ModelOrderShop> orderShopArrayList) {
         this.context = context;
@@ -45,11 +57,11 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
     public void onBindViewHolder(@NonNull HolderOrderShop holder, int position) {
 //        get data at the position
         ModelOrderShop modelOrderShop = orderShopArrayList.get(position);
-        String orderBy = modelOrderShop.getOrderBy();
         String orderId = modelOrderShop.getOrderId();
-        String orderCost = modelOrderShop.getOrderCost();
+
+        String orderCost = modelOrderShop.getProductPrice();
         String orderStatus = modelOrderShop.getOrderStatus();
-        String orderTime = modelOrderShop.getOrderTime();
+//        String orderTime = modelOrderShop.getOrderTime();
 
         //load user info
         loadUserInfo(modelOrderShop, holder);
@@ -68,8 +80,8 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
         }
 
         //convert timestamp to proper format
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(Long.parseLong(orderTime));
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(Long.parseLong(orderTime));
 
         // Format the Calendar instance to a human-readable date string
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -85,31 +97,43 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
         });
     }
 
+
     private void loadUserInfo(ModelOrderShop modelOrderShop, HolderOrderShop holder) {
         // To load the client phone
+        String orderId = modelOrderShop.getOrderId();
+        Log.d("Debug", "orderId"+ orderId);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String clientId = modelOrderShop.getOrderBy();
-        DocumentReference clientRef = db.collection("clients").document(clientId);
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userId = user.getUid();
+        DocumentReference sellerRef = db.collection("seller").document(userId);
 
-        clientRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        // Retrieve the "Phone Number" field from the document
-                        String phoneNumber = document.getString("PhoneNumber");
+        sellerRef.collection("orders")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            // Now, the task.getResult() will return a QuerySnapshot
+                            QuerySnapshot querySnapshot = task.getResult();
 
-                        // Do something with the phoneNumber, for example, set it in your ViewHolder
-                        holder.phoneTv.setText(phoneNumber);
-                    } else {
-                        // Handle the case where the document doesn't exist
+                            // Check if the querySnapshot is not null and contains any documents
+                            if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                                // Assuming you want to retrieve the first document
+                                DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+
+                                // Retrieve the "Phone Number" field from the document
+                                String phoneNumber = document.getString("phoneClient");
+
+                                // Do something with the phoneNumber, for example, set it in your ViewHolder
+                                holder.phoneTv.setText(phoneNumber);
+                            } else {
+                                // Handle the case where the query result is empty
+                            }
+                        } else {
+                            // Handle potential errors here
+                        }
                     }
-                } else {
-                    // Handle potential errors here
-                }
-            }
-        });
+                });
     }
 
 

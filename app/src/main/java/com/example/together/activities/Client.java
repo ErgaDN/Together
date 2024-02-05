@@ -346,6 +346,8 @@ public class Client extends AppCompatActivity {
                                         orderData.put("productQuantity", productQuantity);
                                         orderData.put("productPrice", productPrice);
                                         orderData.put("orderStatus", "In Progress"); // TODO:check if this line work!
+                                        String timestamp = "" + System.currentTimeMillis();
+                                        orderData.put("orderId", "" + timestamp);
 
 
                                         // Reference to the seller's "orders" sub-collection
