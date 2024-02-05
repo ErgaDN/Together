@@ -3,15 +3,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.OrderSummary">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".OrderSummary">
 
-    <TextView
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:text="@string/order_summary"-->
+<!--        android:gravity="center"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="40sp"-->
+<!--        />-->
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/order_summary"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="40sp"
-        />
+        android:layout_height="match_parent">
+
+<!--        search or filter-->
+        <TextView
+            android:id="@+id/filteredOrdersTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toStartOf="@+id/filteredOrdersBtn"
+            android:background="@drawable/shape_rect02"
+            android:padding="10dp"
+            android:text="מציג את כל ההזמנות" />
+
+<!--        filterd orders-->
+        <ImageButton
+            android:id="@+id/filteredOrdersBtn"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:background="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_filter"/>
+
+<!--        show orders-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ordersRv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/filteredOrdersTv"
+            tools:listitem="@layout/row_order_seller"
+            android:layout_marginTop="5dp"
+            app:reverseLayout="true"
+            app:stackFromEnd="true"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        <!--  the last line for see the new orders first-->
+
+
+    </RelativeLayout>
 
 </FrameLayout>

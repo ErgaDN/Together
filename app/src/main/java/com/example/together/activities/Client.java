@@ -1,4 +1,4 @@
-package com.example.together.activities;
+package com.example.together;
 
 import static android.content.ContentValues.TAG;
 
@@ -23,17 +23,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.together.Constants;
-import com.example.together.R;
-import com.example.together.adapters.AdapterCartItem;
-import com.example.together.adapters.AdapterProductClient;
-import com.example.together.models.ModelCartItem;
-import com.example.together.models.ModelProduct;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -46,6 +42,7 @@ import com.google.firebase.firestore.WriteBatch;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class Client extends AppCompatActivity {
@@ -236,11 +233,16 @@ public class Client extends AppCompatActivity {
                     // cart list is empty
                     Toast.makeText(Client.this, "No item in cart", Toast.LENGTH_SHORT).show();
                 }
-//                submitOrder();
-                submitOrdersToSellers();
 
+                submitOrdersToSellers();
                 submitOrder(); //add the order to DB under the orders collection
                 deleteCartData(); //when confirm the order delete the products from the cart
+
+                String timestamp = "" + System.currentTimeMillis();
+                //open order details
+                Intent intent = new Intent(Client.this, OrderDeatailsClient.class);
+                intent.putExtra("orderId", timestamp);
+                startActivity(intent);
             }
         });
 
@@ -297,78 +299,69 @@ public class Client extends AppCompatActivity {
     }
 
     private void submitOrdersToSellers() {
-        for (int i = 0; i < cartItemList.size(); i++) {
-            String pId = cartItemList.get(i).getpId(); // getId() method that return the id of the client TODO: FIX IT TO GET THE ID OF THE SELLER
-            String name = cartItemList.get(i).getName();
-            String cost = cartItemList.get(i).getCost();
-            String price = cartItemList.get(i).getPrice();
-            String quantity = cartItemList.get(i).getQuantity();
+        DocumentReference docRef = db.collection("clients").document(userId);
 
-            // Get the seller ID from the product details
+        docRef.collection("cart").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot cartDocument : task.getResult()) {
+                        // Get information from the cart item
+                        String uid = cartDocument.getString("uid");
+                        String productId = cartDocument.getString("productId");
+                        String productTitle = cartDocument.getString("productTitle");
+                        String productPriceEach = cartDocument.getString("productPriceEach");
+                        String productPrice = cartDocument.getString("productPrice");
+                        String productQuantity = cartDocument.getString("productQuantity");
+                        String sellerId = cartDocument.getString("sellerId");
 
-            // i need to get uid
-            String sellerId = getSellerIdForProduct(pId);
+                        // Fetch client information
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> clientTask) {
+                                if (clientTask.isSuccessful()) {
+                                    DocumentSnapshot clientDocument = clientTask.getResult();
+                                    if (clientDocument.exists()) {
+                                        // Get client information
+                                        String nameClient = clientDocument.getString("First Name");
+                                        String phoneClient = clientDocument.getString("Phone Number");
 
-            if (sellerId != null) {
-                // Create an order for the seller's products subcollection
-                addOrderToSellerProducts(sellerId, pId, name, cost, price, quantity);
-            } else {
-                // Handle the case where the seller ID is not found for the product
-                Toast.makeText(this, "Seller ID not found for product: " + name, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
+                                        // Create a map with the order information
+                                        Map<String, Object> orderData = new HashMap<>();
+                                        orderData.put("productId", productId);
+                                        orderData.put("productTitle", productTitle);
+                                        orderData.put("productPriceEach", productPriceEach);
+                                        orderData.put("productPrice", productPrice);
+                                        orderData.put("productQuantity", productQuantity);
+                                        orderData.put("nameClient", nameClient);
+                                        orderData.put("phoneClient", phoneClient);
 
-    private String getSellerIdForProduct(String productId) {
-        // Iterate through sellers to find the seller containing the product
-        for (QueryDocumentSnapshot sellerDocument : sellersList) {
-            String sellerId = sellerDocument.getId();
+                                        // Reference to the seller's "orders" sub-collection
+                                        CollectionReference sellerOrdersRef = db.collection("seller").document(sellerId).collection("orders");
 
-            CollectionReference productsRef = db.collection("seller").document(sellerId).collection("products");
-
-            // Check if the product ID exists in the seller's products
-            Query query = productsRef.whereEqualTo("productId", productId);
-            Task<QuerySnapshot> querySnapshot = query.get();
-
-            // Assuming productId is unique and there will be only one result
-            if (querySnapshot.isSuccessful() && !querySnapshot.getResult().isEmpty()) {
-                // Product found in this seller's products
-                return sellerId;
-            }
-        }
-        return null; // Seller ID not found for the given product
-    }
-    // Helper method to add an order to the seller's products subcollection
-    private void addOrderToSellerProducts(String sellerId, String pId, String name, String cost, String price, String quantity) {
-        FirebaseFirestore mStore = FirebaseFirestore.getInstance();
-        String userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-
-        // Access the "products" subcollection inside the seller document
-        CollectionReference productsRef = mStore.collection("seller").document(sellerId).collection("products");
-
-        // Create a new order document in the seller's products subcollection
-        HashMap<String, String> orderData = new HashMap<>();
-        orderData.put("customerId", userID);
-        orderData.put("productName", name);
-        orderData.put("productCost", cost);
-        orderData.put("productPrice", price);
-        orderData.put("productQuantity", quantity);
-
-        productsRef.add(orderData)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        // Handle the success scenario
-                        Log.d(TAG, "Order added to seller's products: " + documentReference.getId());
+                                        // Add the order to the seller's "orders" sub-collection
+                                        sellerOrdersRef.add(orderData)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        // Order added successfully
+                                                        // You can perform additional actions if needed
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        // Handle failure to add the order
+                                                    }
+                                                });
+                                    }
+                                }
+                            }
+                        });
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Handle the failure scenario
-                        Log.e(TAG, "Error adding order to seller's products", e);
-                    }
-                });
+                }
+            }
+        });
     }
 
 //    private void submitOrder() {
@@ -473,10 +466,7 @@ public class Client extends AppCompatActivity {
 //                startActivity(intent);
 //                finish();
 
-                //open order details
-                Intent intent = new Intent(Client.this, OrderDetailsClient.class);
-                intent.putExtra("orderId", timestamp);
-                startActivity(intent);
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

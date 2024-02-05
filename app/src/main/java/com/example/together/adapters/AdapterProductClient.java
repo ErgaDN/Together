@@ -1,4 +1,4 @@
-package com.example.together.adapters;
+package com.example.together;
 
 import static android.content.ContentValues.TAG;
 
@@ -20,29 +20,29 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.together.activities.Client;
-import com.example.together.FilterProductClient;
-import com.example.together.R;
-import com.example.together.models.ModelProduct;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+interface SellerIdCallback {
+    void onSellerIdReceived(String sellerId);
+}
+
 public class AdapterProductClient extends RecyclerView.Adapter<AdapterProductClient.HolderProductClient> implements Filterable {
     private Context context;
     public ArrayList<ModelProduct> productsList, filterList;
     private FilterProductClient filter;
+
+    AtomicReference<String> sellerID = new AtomicReference<>();
+
 
 
     public AdapterProductClient(Context context, ArrayList<ModelProduct> productsList) {
@@ -118,6 +118,8 @@ public class AdapterProductClient extends RecyclerView.Adapter<AdapterProductCli
         String productId = modelProduct.getProductId();
         String productIcon = modelProduct.getProductIcon();
 
+
+
         cost = Double.parseDouble(productPrice.replaceAll("₪", ""));
         finalCost = Double.parseDouble(productPrice.replaceAll("₪", ""));
 
@@ -181,53 +183,72 @@ public class AdapterProductClient extends RecyclerView.Adapter<AdapterProductCli
                 String description = descriptionTv.getText().toString().trim();
 
                 //WORK ON IT
-                String sellerId = getSellerId(productId);
-
-                //add to DB
-                addToCart(context, productId, title, priceEach, price, quantity, description,sellerId);
+                getSellerId(productId, new SellerIdCallback() {
+                    @Override
+                    public void onSellerIdReceived(String sellerId) {
+                        Log.d("Debug", "sellerID in on click: " + sellerId);
+                        sellerID.set(sellerId);
+                        // The rest of your code that depends on the sellerID value
+                        addToCart(context, productId, title, priceEach, price, quantity, description, sellerID.get());
+                    }
+                });
                 dialog.dismiss();
             }
         });
     }
 
-    private String getSellerId(String productId) {
+
+    private void getSellerId(String productId, SellerIdCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference sellersRef = db.collection("seller");
-        final String[] res = {null};  // Use a final array to store the result
+        // Reference to the "products" collection
+        CollectionReference sellerRef = db.collection("seller");
 
-        sellersRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    // Iterate over each seller document
-                    for (QueryDocumentSnapshot sellerDocument : task.getResult()) {
-                        String sellerId = sellerDocument.getId();
+        sellerRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                int counterSeller = 0;
+                for (QueryDocumentSnapshot sellerDocument : task.getResult()) {
+                    Log.d("Debug", "sellerDocument: " + counterSeller);
+                    counterSeller++;
+                    String sellerId = sellerDocument.getId();
+                    CollectionReference productsRef = sellerRef.document(sellerId).collection("products");
 
-                        // Access the "products" subcollection inside the seller document
-                        CollectionReference productsRef = sellersRef.document(sellerId).collection("products");
-                        Query query = productsRef.whereEqualTo("productId", productId);
+                    productsRef.get().addOnCompleteListener(productTask -> {
+                        if (productTask.isSuccessful()) {
+                            int counter = 0;
+                            for (QueryDocumentSnapshot productDocument : productTask.getResult()) {
+                                Log.d("Debug", "productDocument: " + counter);
+                                counter++;
 
-                        // Execute the query
-                        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> queryTask) {
-                                if (queryTask.isSuccessful()) {
-                                    // Check if there is a result
-                                    if (!queryTask.getResult().isEmpty()) {
-                                        // Get the first document and extract the sellerId field
-                                        res[0] = sellerDocument.getId();
-                                    }
+                                String currProductId = productDocument.getString("productId");
+                                Log.d("Debug", "currProductId: " + currProductId);
+                                Log.d("Debug", "productId: " + productId);
+
+                                if (currProductId.equals(productId)) {
+                                    callback.onSellerIdReceived(productDocument.getString("sellerId"));
+                                    Log.d("Debug", "sellerID: " + productDocument.getString("sellerId"));
+                                    return;
+                                } else {
+                                    Log.d("Debug", "not equal");
                                 }
                             }
-                        });
-                    }
+                        } else {
+                            // Handle errors related to the "products" subcollection
+                            Exception exception = productTask.getException();
+                            if (exception != null) {
+                                exception.printStackTrace();
+                            }
+                        }
+                    });
+                }
+            } else {
+                // Handle errors
+                Exception exception = task.getException();
+                if (exception != null) {
+                    exception.printStackTrace();
                 }
             }
         });
-
-        return res[0];
     }
-
 
 
 
