@@ -1,4 +1,4 @@
-package com.example.together;
+package com.example.together.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -42,6 +42,22 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
     private Context context;
     public ArrayList<ModelOrderShop> orderShopArrayList;
 
+    class HolderOrderShop extends RecyclerView.ViewHolder{
+        //ui views for row_order_selle.xml
+        private TextView orderIdTv,orderDateTv,phoneTv,amountTv,statusTv;
+        private ImageView nextIv;
+        public HolderOrderShop(@NonNull View itemView) {
+            super(itemView);
+
+            //init ui views
+            orderIdTv = itemView.findViewById(R.id.orderIdTv);
+            orderDateTv = itemView.findViewById(R.id.orderDateTv);
+            phoneTv = itemView.findViewById(R.id.phoneTv);
+            amountTv = itemView.findViewById(R.id.amountTv);
+            statusTv = itemView.findViewById(R.id.statusTv);
+            nextIv = itemView.findViewById(R.id.nextIv);
+        }
+    }
 
     public AdapterOrderShop(Context context, ArrayList<ModelOrderShop> orderShopArrayList) {
         this.context = context;
@@ -151,22 +167,7 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
 
     //view holder class for row_order_selle.xml
 
-    class HolderOrderShop extends RecyclerView.ViewHolder{
-        //ui views for row_order_selle.xml
-        private TextView orderIdTv,orderDateTv,phoneTv,amountTv,statusTv;
-        private ImageView nextIv;
-        public HolderOrderShop(@NonNull View itemView) {
-            super(itemView);
 
-            //init ui views
-            orderIdTv = itemView.findViewById(R.id.orderIdTv);
-            orderDateTv = itemView.findViewById(R.id.orderDateTv);
-            phoneTv = itemView.findViewById(R.id.phoneTv);
-            amountTv = itemView.findViewById(R.id.amountTv);
-            statusTv = itemView.findViewById(R.id.statusTv);
-            nextIv = itemView.findViewById(R.id.nextIv);
-        }
-    }
 }
 
 
