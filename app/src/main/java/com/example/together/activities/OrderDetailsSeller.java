@@ -198,6 +198,7 @@ public class OrderDetailsSeller extends AppCompatActivity {
 
                                     // Update order status
                                     updateOrderStatus(docRef, selectedOption);
+//                                    orderStatusTv.invalidate();
                                 } else {
                                     Log.e(TAG, "No document found with matching orderId");
                                 }
@@ -238,54 +239,56 @@ public class OrderDetailsSeller extends AppCompatActivity {
                 });
     }
 
+
     private void loadBuyerInfo() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String userID = user.getUid();
-        DocumentReference docRef = db.collection("seller").document(userID).collection("orders").document(orderId);
 
-        docRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        // Query the collection to find the document with the matching orderId
+        db.collection("seller").document(userID).collection("orders")
+                .whereEqualTo("orderId", orderId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            // DocumentSnapshot data may be null if the document doesn't exist
-                            Log.d(TAG, "DocumentSnapshot data: " + documentSnapshot.getData());
-
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            // There should be only one document with matching orderId
+                            DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
                             // Access specific fields
                             String phoneUser = documentSnapshot.getString("phoneClient");
-
                             // Display the fields
                             phoneTv.setText(phoneUser);
-
                         } else {
-                            Log.d(TAG, "No such document");
+                            Log.d(TAG, "No document found with matching orderId");
                         }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error getting document", e);
+                        Log.e(TAG, "Error retrieving document", e);
                     }
                 });
-
     }
 
+
     private void loadOrderDetails() {
-        //load detail info of this order, based on orderId
+        // Load detailed information of this order based on orderId
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         String userID = user.getUid();
-        DocumentReference docRef = db.collection("seller").document(userID).collection("orders").document(orderId);
 
-        docRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        // Query the collection to find the document with the matching orderId
+        db.collection("seller").document(userID).collection("orders")
+                .whereEqualTo("orderId", orderId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            // DocumentSnapshot data may be null if the document doesn't exist
-                            Log.d(TAG, "DocumentSnapshot data: " + documentSnapshot.getData());
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            // There should be only one document with matching orderId
+                            DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
 
                             // Access specific fields
                             String phoneUser = documentSnapshot.getString("phoneClient");
@@ -298,7 +301,7 @@ public class OrderDetailsSeller extends AppCompatActivity {
                             String productTitle = documentSnapshot.getString("productTitle");
                             String orderId = documentSnapshot.getString("orderId");
 
-                            //change order status text color
+                            // Change order status text color
                             if (orderStatus.equals("בתהליך")) {
                                 orderStatusTv.setTextColor(getResources().getColor(R.color.lavender));
                             } else if (orderStatus.equals("הושלמה")) {
@@ -311,9 +314,6 @@ public class OrderDetailsSeller extends AppCompatActivity {
                             phoneTv.setText(phoneUser);
                             orderIdTv.setText(orderId);
                             orderStatusTv.setText(orderStatus);
-//                            dateTv.setText();
-
-
                         } else {
                             Log.d(TAG, "No such document");
                         }
@@ -326,6 +326,7 @@ public class OrderDetailsSeller extends AppCompatActivity {
                     }
                 });
     }
+
 
     private void loadOrderItems() {
         orderItemArrayList = new ArrayList<>();
