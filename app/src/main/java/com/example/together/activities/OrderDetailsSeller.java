@@ -23,9 +23,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,7 +38,6 @@ public class OrderDetailsSeller extends AppCompatActivity {
     ImageButton backBtn, editBtn;
     TextView orderIdTv, dateTv, orderStatusTv, phoneTv, totalItemsTv, amountTv;
     RecyclerView itemsRv;
-    String newStatus;
 
     private FirebaseAuth firebaseAuth;
     private ArrayList<ModelOrderItem> orderItemArrayList;
@@ -106,73 +102,6 @@ public class OrderDetailsSeller extends AppCompatActivity {
 
     }
 
-//    private void editOrderStatus(String selectedOption) {
-//       // setup data to put in db
-//        HashMap<String, Object> hashMap = new HashMap<>();
-//        hashMap.put("orderStatus", ""+selectedOption);
-//
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        FirebaseUser user = firebaseAuth.getCurrentUser();
-//        String userID = user.getUid();
-//        DocumentReference docRef = db.collection("seller").document(userID).collection("orders").document(orderId);
-//        Log.d("Debug", "!seller orderid doc ref: " + docRef);
-//
-//        docRef.update(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void unused) {
-//                orderStatusTv.setText(selectedOption);
-//                Log.d(TAG, "status update" + userID);
-//                Log.d("Debug", "status update" + userID);
-//
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Log.e(TAG, "status fail" + userID);
-//                Log.d("Debug", "fail status update" + userID);
-//            }
-//        });
-//    }
-
-//    private void editOrderStatus(String selectedOption) {
-//        // setup data to put in db
-//        HashMap<String, Object> hashMap = new HashMap<>();
-//        hashMap.put("orderStatus", selectedOption);
-//
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        FirebaseUser user = firebaseAuth.getCurrentUser();
-//        if (user != null) {
-//            String userID = user.getUid();
-//            if (userID != null && !userID.isEmpty() && orderId != null && !orderId.isEmpty()) {
-//                DocumentReference docRef = db.collection("seller").document(userID).collection("orders").document();
-//                Log.d("Debug", "UserID: " + userID);
-//                Log.d("Debug", "OrderID: " + orderId);
-//                Log.d("Debug", "DocRef: " + docRef.getPath());
-//
-//                docRef.update(hashMap)
-//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                            @Override
-//                            public void onSuccess(Void unused) {
-//                                // Update UI with the new order status
-//                                orderStatusTv.setText(selectedOption);
-//                                Log.d(TAG, "Status update: " + userID);
-//                                Log.d("Debug", "Status update: " + userID);
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Log.e(TAG, "Status update failed: " + userID);
-//                                Log.d("Debug", "Failed status update: " + userID);
-//                            }
-//                        });
-//            } else {
-//                Log.e(TAG, "userID or orderId is null or empty");
-//            }
-//        } else {
-//            Log.e(TAG, "Current user is null");
-//        }
-//    }
 
     //TODO: need to see it on screen
     private void editOrderStatus(String selectedOption) {
@@ -180,7 +109,7 @@ public class OrderDetailsSeller extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             String userID = user.getUid();
-            if (userID != null && !userID.isEmpty() && orderId != null && !orderId.isEmpty()) {
+            if (!userID.isEmpty() && orderId != null && !orderId.isEmpty()) {
                 // Construct a query to find the document with matching orderId
                 db.collection("seller").document(userID).collection("orders")
                         .whereEqualTo("orderId", orderId)
@@ -356,7 +285,7 @@ public class OrderDetailsSeller extends AppCompatActivity {
                                 itemsRv.setAdapter(adapterOrderedItem);
 
                                 //set total items in orders
-                                totalItemsTv.setText("1");//TODO:change it 37:30 (17)
+                                totalItemsTv.setText(String.valueOf(querySnapshot.size()));
                             } else {
                                 // Handle the case where the "orders" collection is empty
                             }
