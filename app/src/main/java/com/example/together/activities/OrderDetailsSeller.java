@@ -106,9 +106,136 @@ public class OrderDetailsSeller extends AppCompatActivity {
 
     }
 
+//    private void editOrderStatus(String selectedOption) {
+//       // setup data to put in db
+//        HashMap<String, Object> hashMap = new HashMap<>();
+//        hashMap.put("orderStatus", ""+selectedOption);
+//
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        FirebaseUser user = firebaseAuth.getCurrentUser();
+//        String userID = user.getUid();
+//        DocumentReference docRef = db.collection("seller").document(userID).collection("orders").document(orderId);
+//        Log.d("Debug", "!seller orderid doc ref: " + docRef);
+//
+//        docRef.update(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void unused) {
+//                orderStatusTv.setText(selectedOption);
+//                Log.d(TAG, "status update" + userID);
+//                Log.d("Debug", "status update" + userID);
+//
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.e(TAG, "status fail" + userID);
+//                Log.d("Debug", "fail status update" + userID);
+//            }
+//        });
+//    }
+
+//    private void editOrderStatus(String selectedOption) {
+//        // setup data to put in db
+//        HashMap<String, Object> hashMap = new HashMap<>();
+//        hashMap.put("orderStatus", selectedOption);
+//
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        FirebaseUser user = firebaseAuth.getCurrentUser();
+//        if (user != null) {
+//            String userID = user.getUid();
+//            if (userID != null && !userID.isEmpty() && orderId != null && !orderId.isEmpty()) {
+//                DocumentReference docRef = db.collection("seller").document(userID).collection("orders").document();
+//                Log.d("Debug", "UserID: " + userID);
+//                Log.d("Debug", "OrderID: " + orderId);
+//                Log.d("Debug", "DocRef: " + docRef.getPath());
+//
+//                docRef.update(hashMap)
+//                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                            @Override
+//                            public void onSuccess(Void unused) {
+//                                // Update UI with the new order status
+//                                orderStatusTv.setText(selectedOption);
+//                                Log.d(TAG, "Status update: " + userID);
+//                                Log.d("Debug", "Status update: " + userID);
+//                            }
+//                        })
+//                        .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.e(TAG, "Status update failed: " + userID);
+//                                Log.d("Debug", "Failed status update: " + userID);
+//                            }
+//                        });
+//            } else {
+//                Log.e(TAG, "userID or orderId is null or empty");
+//            }
+//        } else {
+//            Log.e(TAG, "Current user is null");
+//        }
+//    }
+
+    //TODO: need to see it on screen
     private void editOrderStatus(String selectedOption) {
-//        newStatus =
-        //TODO: countunue to edit status in the end of the 17
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user != null) {
+            String userID = user.getUid();
+            if (userID != null && !userID.isEmpty() && orderId != null && !orderId.isEmpty()) {
+                // Construct a query to find the document with matching orderId
+                db.collection("seller").document(userID).collection("orders")
+                        .whereEqualTo("orderId", orderId)
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    // There should be only one document with matching orderId
+                                    DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                                    DocumentReference docRef = documentSnapshot.getReference();
+                                    Log.d("Debug", "UserID: " + userID);
+                                    Log.d("Debug", "OrderID: " + orderId);
+                                    Log.d("Debug", "DocRef: " + docRef.getPath());
+
+                                    // Update order status
+                                    updateOrderStatus(docRef, selectedOption);
+                                } else {
+                                    Log.e(TAG, "No document found with matching orderId");
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(TAG, "Error retrieving document", e);
+                            }
+                        });
+            } else {
+                Log.e(TAG, "userID or orderId is null or empty");
+            }
+        } else {
+            Log.e(TAG, "Current user is null");
+        }
+    }
+
+    private void updateOrderStatus(DocumentReference docRef, String selectedOption) {
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("orderStatus", selectedOption);
+
+        docRef.update(hashMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        // Update UI with the new order status
+                        orderStatusTv.setText(selectedOption);
+                        Log.d(TAG, "Status update successful");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Status update failed", e);
+                    }
+                });
     }
 
     private void loadBuyerInfo() {

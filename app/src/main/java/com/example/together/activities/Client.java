@@ -345,7 +345,7 @@ public class Client extends AppCompatActivity {
                                         orderData.put("productPriceEach", productPriceEach);
                                         orderData.put("productQuantity", productQuantity);
                                         orderData.put("productPrice", productPrice);
-                                        orderData.put("orderStatus", "In Progress"); // TODO:check if this line work!
+                                        orderData.put("orderStatus", "בתהליך"); // TODO:check if this line work!
                                         String timestamp = "" + System.currentTimeMillis();
                                         orderData.put("orderId", "" + timestamp);
 
@@ -448,7 +448,7 @@ public class Client extends AppCompatActivity {
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("orderId", "" + timestamp);
                 hashMap.put("orderTime", "" + timestamp);
-                hashMap.put("orderStatus", "In Progress");
+                hashMap.put("orderStatus", "בתהליך");
                 hashMap.put("orderCost", "" + cost);
                 hashMap.put("orderBy", "" + firebaseAuth.getUid());
                 hashMap.put("address to delivery", "" + addressHolder[0]);
