@@ -80,15 +80,16 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
 
         String orderCost = modelOrderShop.getProductPrice();
         String orderStatus = modelOrderShop.getOrderStatus();
-//        String orderTime = modelOrderShop.getOrderTime();
+        String orderDate = modelOrderShop.getOrderDate();
 
-        //load user info
+//        load user info
         loadUserInfo(modelOrderShop, holder);
 
         //set data
         holder.amountTv.setText("סכום: ₪"+ orderCost);
-        holder.statusTv.setText(orderStatus);
         holder.orderIdTv.setText("order ID: "+orderId);
+        holder.statusTv.setText(orderStatus);
+        holder.orderDateTv.setText(orderDate);
         //change order status text color
         if (orderStatus.equals("בתהליך")) {
             holder.statusTv.setTextColor(context.getResources().getColor(R.color.lavender));

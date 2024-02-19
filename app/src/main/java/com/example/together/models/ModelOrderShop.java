@@ -9,9 +9,9 @@ public class ModelOrderShop {
     String productPrice;
     String productPriceEach;
     String productQuantity;
-    String productTitle, orderId;
+    String productTitle, orderId, orderDate, clientId;
 
-    public ModelOrderShop(String orderId, String nameClient, String orderStatus, String phoneClient, String productId, String productPrice, String productPriceEach, String productQuantity, String productTitle) {
+    public ModelOrderShop(String orderId, String nameClient, String orderStatus, String phoneClient, String productId, String productPrice, String productPriceEach, String productQuantity, String productTitle , String orderDate, String clientId) {
         this.orderId = orderId;
         this.nameClient = nameClient;
         this.orderStatus = orderStatus;
@@ -21,6 +21,24 @@ public class ModelOrderShop {
         this.productPriceEach = productPriceEach;
         this.productQuantity = productQuantity;
         this.productTitle = productTitle;
+        this.orderDate = orderDate;
+        this.clientId = clientId;
+    }
+
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
     }
 
     public String getOrderId() {
@@ -100,6 +118,8 @@ public class ModelOrderShop {
     public void setProductTitle(String productTitle) {
         this.productTitle = productTitle;
     }
+
+
 }
 
 
