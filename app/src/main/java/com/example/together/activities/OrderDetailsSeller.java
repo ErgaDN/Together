@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -105,15 +106,60 @@ public class OrderDetailsSeller extends AppCompatActivity {
     }
 
 
-    //TODO: need to see it on screen
-    private void editOrderStatus(String selectedOption) {
+//    private void editOrderStatus(String selectedOption) {
+//
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        FirebaseUser user = firebaseAuth.getCurrentUser();
+//        if (user != null) {
+//            String userID = user.getUid();
+//            if (!userID.isEmpty() && orderId != null && !orderId.isEmpty()) {
+//                // Construct a query to find the document with matching orderId
+//                db.collection("seller").document(userID).collection("orders")
+//                        .whereEqualTo("orderId", orderId)
+//                        .get()
+//                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                            @Override
+//                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                                if (!queryDocumentSnapshots.isEmpty()) {
+//                                    // There should be only one document with matching orderId
+//                                    DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+//                                    DocumentReference docRef = documentSnapshot.getReference();
+//                                    Log.d("Debug", "UserID: " + userID);
+//                                    Log.d("Debug", "OrderID: " + orderId);
+//                                    Log.d("Debug", "DocRef: " + docRef.getPath());
+//
+//                                    if (Objects.equals(selectedOption, "הושלמה")) {
+//                                        updateProductsQuantity();
+//                                    }
+//
+//                                    // Update order status
+//                                    updateOrderStatus(docRef, selectedOption);
+//                                } else {
+//                                    Log.e(TAG, "No document found with matching orderId");
+//                                }
+//                            }
+//                        })
+//                        .addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.e(TAG, "Error retrieving document", e);
+//                            }
+//                        });
+//            } else {
+//                Log.e(TAG, "userID or orderId is null or empty");
+//            }
+//        } else {
+//            Log.e(TAG, "Current user is null");
+//        }
+//    }
 
+    private void editOrderStatus(String selectedOption) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             String userID = user.getUid();
             if (!userID.isEmpty() && orderId != null && !orderId.isEmpty()) {
-                // Construct a query to find the document with matching orderId
+                // Construct a query to find the document with matching orderId in the seller's collection
                 db.collection("seller").document(userID).collection("orders")
                         .whereEqualTo("orderId", orderId)
                         .get()
@@ -124,17 +170,46 @@ public class OrderDetailsSeller extends AppCompatActivity {
                                     // There should be only one document with matching orderId
                                     DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
                                     DocumentReference docRef = documentSnapshot.getReference();
-                                    Log.d("Debug", "UserID: " + userID);
-                                    Log.d("Debug", "OrderID: " + orderId);
-                                    Log.d("Debug", "DocRef: " + docRef.getPath());
 
                                     if (Objects.equals(selectedOption, "הושלמה")) {
                                         updateProductsQuantity();
                                     }
 
-                                    // Update order status
+                                    // Update order status in the seller
                                     updateOrderStatus(docRef, selectedOption);
-//                                    orderStatusTv.invalidate();
+
+                                    // Extract clientId and orderId from the seller's order document
+                                    String clientId = documentSnapshot.getString("clientId");
+                                    String orderId = documentSnapshot.getString("orderId");
+
+                                    // Construct a query to find the client's order document
+                                    Query clientOrderQuery = db.collection("clients")
+                                            .document(clientId)
+                                            .collection("orders")
+                                            .whereEqualTo("orderId", orderId);
+
+                                    // Execute the query to find the client's order document
+                                    clientOrderQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                            if (!queryDocumentSnapshots.isEmpty()) {
+                                                // There should be only one document with matching orderId
+                                                DocumentSnapshot clientOrderDocument = queryDocumentSnapshots.getDocuments().get(0);
+                                                DocumentReference clientOrderRef = clientOrderDocument.getReference();
+
+                                                // Update order status in the client's collection
+                                                updateOrderStatus(clientOrderRef, selectedOption);
+                                            } else {
+                                                Log.e(TAG, "No document found in the client's collection with matching orderId");
+                                            }
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.e(TAG, "Error querying client's collection", e);
+                                        }
+                                    });
+
                                 } else {
                                     Log.e(TAG, "No document found with matching orderId");
                                 }
@@ -235,11 +310,11 @@ public class OrderDetailsSeller extends AppCompatActivity {
                             String phoneUser = documentSnapshot.getString("phoneClient");
                             String nameClient = documentSnapshot.getString("nameClient");
                             String orderStatus = documentSnapshot.getString("orderStatus");
-                            String productId = documentSnapshot.getString("productId");
-                            String productPrice = documentSnapshot.getString("productPrice");
+//                            String productId = documentSnapshot.getString("productId");
+//                            String productPrice = documentSnapshot.getString("productPrice");
                             String productPriceEach = documentSnapshot.getString("productPriceEach");
-                            String productQuantity = documentSnapshot.getString("productQuantity");
-                            String productTitle = documentSnapshot.getString("productTitle");
+//                            String productQuantity = documentSnapshot.getString("productQuantity");
+//                            String productTitle = documentSnapshot.getString("productTitle");
                             String orderId = documentSnapshot.getString("orderId");
                             String orderDate = documentSnapshot.getString("orderDate");
 
