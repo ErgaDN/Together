@@ -307,7 +307,6 @@ public class Client extends AppCompatActivity {
         });
 
     }
-
     private void submitOrdersToSellers() {
         DocumentReference docRef = db.collection("clients").document(userId);
 
@@ -315,68 +314,91 @@ public class Client extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot cartDocument : task.getResult()) {
-                        // Get information from the cart item
-                        String uid = cartDocument.getString("uid");
-                        String productId = cartDocument.getString("productId");
-                        String productTitle = cartDocument.getString("productTitle");
-                        String productPriceEach = cartDocument.getString("productPriceEach");
-                        String productPrice = cartDocument.getString("productPrice");
-                        String productQuantity = cartDocument.getString("productQuantity");
-                        String sellerId = cartDocument.getString("sellerId");
+                    // Fetch client information only once
+                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> clientTask) {
+                            if (clientTask.isSuccessful()) {
+                                DocumentSnapshot clientDocument = clientTask.getResult();
+                                if (clientDocument.exists()) {
+                                    // Get client information
+                                    String nameClient = clientDocument.getString("First Name");
+                                    String phoneClient = clientDocument.getString("Phone Number");
 
-                        // Fetch client information
-                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> clientTask) {
-                                if (clientTask.isSuccessful()) {
-                                    DocumentSnapshot clientDocument = clientTask.getResult();
-                                    if (clientDocument.exists()) {
-                                        // Get client information
-                                        String nameClient = clientDocument.getString("First Name");
-                                        String phoneClient = clientDocument.getString("Phone Number");
 
-                                        // Create a map with the order information
-                                        Map<String, Object> orderData = new HashMap<>();
-                                        orderData.put("nameClient", nameClient);
-                                        orderData.put("phoneClient", phoneClient);
-                                        orderData.put("productId", productId);
-                                        orderData.put("productTitle", productTitle);
-                                        orderData.put("productPriceEach", productPriceEach);
-                                        orderData.put("productQuantity", productQuantity);
-                                        orderData.put("productPrice", productPrice);
-                                        orderData.put("orderStatus", "בתהליך"); // TODO:check if this line work!
-                                        String timestamp = "" + System.currentTimeMillis();
-                                        orderData.put("orderId", "" + timestamp);
+                                    // Create a map with the order information
+                                    Map<String, Object> orderData = new HashMap<>();
+                                    orderData.put("nameClient", nameClient);
+                                    orderData.put("phoneClient", phoneClient);
+                                    orderData.put("orderStatus", "בתהליך"); // TODO: check if this line works!
+                                    String timestamp = "" + System.currentTimeMillis();
+                                    orderData.put("orderId", "" + timestamp);
+                                    orderData.put("clientId", "" + userId);
 
+                                    for (QueryDocumentSnapshot cartDocument : task.getResult()) {
+                                        // Get information from the cart item
+                                        String productId = cartDocument.getString("productId");
+                                        String productTitle = cartDocument.getString("productTitle");
+                                        String productPriceEach = cartDocument.getString("productPriceEach");
+                                        String productPrice = cartDocument.getString("productPrice");
+                                        String productQuantity = cartDocument.getString("productQuantity");
+                                        String sellerId = cartDocument.getString("sellerId");
 
                                         // Reference to the seller's "orders" sub-collection
-                                        CollectionReference sellerOrdersRef = db.collection("seller").document(sellerId).collection("orders");
 
-                                        // Add the order to the seller's "orders" sub-collection
-                                        sellerOrdersRef.add(orderData)
-                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        DocumentReference sellerOrdersRef = db.collection("seller").document(sellerId)
+                                                .collection("orders").document(timestamp);
+
+                                        // Add the order data to the order sub-collection
+//                                        DocumentReference orderRef = sellerOrdersRef.document();
+                                        sellerOrdersRef.set(orderData)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
-                                                    public void onSuccess(DocumentReference documentReference) {
-                                                        // Order added successfully
-                                                        // You can perform additional actions if needed
+                                                    public void onSuccess(Void aVoid) {
+                                                        // Order data added successfully
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
-                                                        // Handle failure to add the order
+                                                        // Handle failure to add order data
+                                                    }
+                                                });
+
+                                        // Create a map with product information
+                                        Map<String, Object> productData = new HashMap<>();
+                                        productData.put("productId", productId);
+                                        productData.put("productTitle", productTitle);
+                                        productData.put("productPriceEach", productPriceEach);
+                                        productData.put("productQuantity", productQuantity);
+                                        productData.put("productPrice", productPrice);
+
+                                        // Add the product data to the order sub-collection
+                                        sellerOrdersRef.collection("productsOrder").document(productId).set(productData)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        // Product data added successfully
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        // Handle failure to add product data
                                                     }
                                                 });
                                     }
                                 }
                             }
-                        });
-                    }
+                        }
+                    });
                 }
             }
         });
     }
+
+
+
 
 //    private void submitOrder() {
     private void deleteCartData() {
@@ -437,12 +459,8 @@ public class Client extends AppCompatActivity {
                 // Update the address variable
                 addressHolder[0] = loadedAddress;
 
-                // Now you can use the 'address' variable and proceed with further operations
-                // For example, update the "address to delivery" field in your Firebase Firestore document.
                 updateAddressInFirestore(addressHolder[0]);
 
-                // Rest of your code dependent on the user's address can go here
-                // ...
 
                 // Setup order data
                 HashMap<String, String> hashMap = new HashMap<>();

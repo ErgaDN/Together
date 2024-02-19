@@ -31,6 +31,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class OrderDetailsSeller extends AppCompatActivity {
 
@@ -96,6 +97,7 @@ public class OrderDetailsSeller extends AppCompatActivity {
                 //handle items click
                 String selectedOption = option[which];
                 editOrderStatus(selectedOption);
+
             }
 
         }).show();
@@ -105,6 +107,7 @@ public class OrderDetailsSeller extends AppCompatActivity {
 
     //TODO: need to see it on screen
     private void editOrderStatus(String selectedOption) {
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
@@ -124,6 +127,10 @@ public class OrderDetailsSeller extends AppCompatActivity {
                                     Log.d("Debug", "UserID: " + userID);
                                     Log.d("Debug", "OrderID: " + orderId);
                                     Log.d("Debug", "DocRef: " + docRef.getPath());
+
+                                    if (Objects.equals(selectedOption, "הושלמה")) {
+                                        updateProductsQuantity();
+                                    }
 
                                     // Update order status
                                     updateOrderStatus(docRef, selectedOption);
@@ -145,6 +152,11 @@ public class OrderDetailsSeller extends AppCompatActivity {
         } else {
             Log.e(TAG, "Current user is null");
         }
+    }
+
+    private void updateProductsQuantity() {
+        //TODO
+
     }
 
     private void updateOrderStatus(DocumentReference docRef, String selectedOption) {
