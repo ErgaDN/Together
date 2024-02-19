@@ -241,6 +241,7 @@ public class OrderDetailsSeller extends AppCompatActivity {
                             String productQuantity = documentSnapshot.getString("productQuantity");
                             String productTitle = documentSnapshot.getString("productTitle");
                             String orderId = documentSnapshot.getString("orderId");
+                            String orderDate = documentSnapshot.getString("orderDate");
 
                             // Change order status text color
                             if (orderStatus.equals("בתהליך")) {
@@ -255,6 +256,7 @@ public class OrderDetailsSeller extends AppCompatActivity {
                             phoneTv.setText(phoneUser);
                             orderIdTv.setText(orderId);
                             orderStatusTv.setText(orderStatus);
+                            dateTv.setText(orderDate);
                         } else {
                             Log.d(TAG, "No such document");
                         }

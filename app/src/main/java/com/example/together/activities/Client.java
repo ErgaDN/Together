@@ -47,9 +47,13 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -330,10 +334,14 @@ public class Client extends AppCompatActivity {
                                     Map<String, Object> orderData = new HashMap<>();
                                     orderData.put("nameClient", nameClient);
                                     orderData.put("phoneClient", phoneClient);
-                                    orderData.put("orderStatus", "בתהליך"); // TODO: check if this line works!
+                                    orderData.put("orderStatus", "בתהליך");
                                     String timestamp = "" + System.currentTimeMillis();
                                     orderData.put("orderId", "" + timestamp);
                                     orderData.put("clientId", "" + userId);
+                                    Date orderDate = new Date(Long.parseLong(timestamp));
+                                    DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US); // Using US locale for ASCII digits
+                                    String formattedDate = dateFormat.format(orderDate);
+                                    orderData.put("orderDate", formattedDate);
 
                                     for (QueryDocumentSnapshot cartDocument : task.getResult()) {
                                         // Get information from the cart item
