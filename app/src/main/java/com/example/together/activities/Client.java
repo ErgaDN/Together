@@ -191,6 +191,7 @@ public class Client extends AppCompatActivity {
     public Button checkoutBtn;
 
     String myAddress , myNumber;
+    String timestamp = "" + System.currentTimeMillis();
 
     //need to access these views in adapter so making public
     private void showCartDialog() {
@@ -335,7 +336,6 @@ public class Client extends AppCompatActivity {
                                     orderData.put("nameClient", nameClient);
                                     orderData.put("phoneClient", phoneClient);
                                     orderData.put("orderStatus", "בתהליך");
-                                    String timestamp = "" + System.currentTimeMillis();
                                     orderData.put("orderId", "" + timestamp);
                                     orderData.put("clientId", "" + userId);
                                     Date orderDate = new Date(Long.parseLong(timestamp));
@@ -453,8 +453,6 @@ public class Client extends AppCompatActivity {
         progressDialog.setMessage("מבצע הזמנה...");
         progressDialog.show();
 
-        // for order id and the order time
-        String timestamp = "" + System.currentTimeMillis();
         String cost = sTotalTv.getText().toString().trim().replace("₪", ""); // remove ₪ if contains
         String[] addressHolder = {"undefined"};
         Log.d(TAG, " before the method address = " + addressHolder[0]);
