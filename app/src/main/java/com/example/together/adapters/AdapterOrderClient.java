@@ -62,16 +62,16 @@ public class AdapterOrderClient extends RecyclerView.Adapter<AdapterOrderClient.
         } else if (orderStatus.equals("בוטלה")) {
             holder.statusTv.setTextColor(context.getResources().getColor(R.color.red));
         }
-
+        //TODO: need to convert timestamp to proper format. this code fail the running whene the client enter into HistoryOrders
         //convert timestamp to proper format
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(Long.parseLong(orderTime));
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(Long.parseLong(orderTime));
 
         // Format the Calendar instance to a human-readable date string
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String formattedDate = dateFormat.format(calendar.getTime());
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+//        String formattedDate = dateFormat.format(calendar.getTime());
 
-        holder.dateTv.setText(formattedDate);
+//        holder.dateTv.setText(formattedDate);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

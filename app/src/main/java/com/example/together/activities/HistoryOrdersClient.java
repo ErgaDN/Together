@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.together.R;
 import com.example.together.adapters.AdapterOrderClient;
@@ -55,8 +56,11 @@ public class HistoryOrdersClient extends AppCompatActivity {
         ordersRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Log.d("Debug", "after 'onComplete' ");
                 if (task.isSuccessful()) {
+                    Log.d("Debug", "after 'task.isSuccessful()' ");
                     for (QueryDocumentSnapshot orderDocument : task.getResult()) {
+                        Log.d("Debug", " in the for! ");
                         String orderId = orderDocument.getId();
 
                         CollectionReference productRef = ordersRef.document(orderId).collection("products");
@@ -64,8 +68,12 @@ public class HistoryOrdersClient extends AppCompatActivity {
                                         orderList.add(modelOrderClient);
 
                     }
+                    Log.d("Debug", " after the for ");
                     adapterOrderClient = new AdapterOrderClient(HistoryOrdersClient.this, orderList);
+                    Log.d("Debug", " after 'adapterOrderClient = new AdapterOrderClient(HistoryOrdersClient.this, orderList);' ");
                     orderRv.setAdapter(adapterOrderClient);
+                    Log.d("Debug", " after 'orderRv.setAdapter(adapterOrderClient) ");
+
                 }
             }
         });
