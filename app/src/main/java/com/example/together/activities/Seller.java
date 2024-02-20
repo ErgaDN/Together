@@ -15,6 +15,7 @@ import com.example.together.R;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
+
 public class Seller extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
