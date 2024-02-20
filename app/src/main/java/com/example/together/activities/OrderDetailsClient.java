@@ -67,9 +67,6 @@ public class OrderDetailsClient extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
 
-
-
-
         Intent intent = getIntent();
 //        orderTo = intent.getStringExtra("orderTo");
         orderId = intent.getStringExtra("orderId");
@@ -125,8 +122,8 @@ public class OrderDetailsClient extends AppCompatActivity {
 
     private ArrayList<ModelOrderItem> orderItemList;
     private AdapterOrderedItem adapterOrderedItem;
+
     private void loadOrderItem() {
-        Log.d("Debug", "start loadOrderItem() ");
         orderItemList = new ArrayList<>();
 
         DocumentReference clientRef = db.collection("clients").document(userId);
@@ -137,21 +134,16 @@ public class OrderDetailsClient extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        Log.d("Debug", "start onComplete() ");
                         orderItemList.clear();
                         if (task.isSuccessful()) {
-                            Log.d("Debug", "start if 'orders' find");
                             for (QueryDocumentSnapshot orderDocument : task.getResult()) {
-                                Log.d("Debug", "start each document in 'order' ");
 
                                 // Now, within the filtered order document, query the "products" sub-collection
                                 orderDocument.getReference().collection("products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<QuerySnapshot> productsTask) {
                                         if (productsTask.isSuccessful()) {
-                                            Log.d("Debug", "start if 'products' find");
                                             for (QueryDocumentSnapshot productDocument : productsTask.getResult()) {
-                                                Log.d("Debug", "start each document in 'products' ");
                                                 //get information from the product document
                                                 String pId = productDocument.getString("pId");
                                                 String name = productDocument.getString("name");
@@ -168,13 +160,10 @@ public class OrderDetailsClient extends AppCompatActivity {
                                                         quantity);
                                                 orderItemList.add(modelOrderItem);
                                             }
-                                            Log.d("Debug", "after for() ");
                                             // Setup adapter
                                             adapterOrderedItem = new AdapterOrderedItem(OrderDetailsClient.this, orderItemList);
-                                            Log.d("Debug", "after Setup adapter ");
                                             // Set adapter
                                             itemsRv.setAdapter(adapterOrderedItem);
-                                            Log.d("Debug", "after Set adapter");
                                         } else {
                                             Log.d("Debug", "Error getting products: ", productsTask.getException());
                                         }
@@ -188,126 +177,4 @@ public class OrderDetailsClient extends AppCompatActivity {
                 });
 
     }
-
-
-
-
-//    private void showCartDialog() {
-//        //init list
-//        orderItemList = new ArrayList<>();
-//
-//        //inflate cart layout
-//        View view = LayoutInflater.from(this).inflate(R.layout.dialog_cart, null);
-//        cardItemRv = view.findViewById(R.id.cardItemRv);
-//        sTotalTv = view.findViewById(R.id.sTotalTv);
-//        checkoutBtn = view.findViewById(R.id.checkoutBtn);
-//
-//        DocumentReference userDocument = db.collection("clients").document(userId);
-//
-//        userDocument.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//
-//                    if (document.exists()) {
-//                        // Check if the "Address" field exists in the document
-//                        if (document.contains("Address")) {
-//                            // Retrieve the "Address" field as a String
-//                            myAddress = document.getString("Address");
-//                        }
-//                        if (document.contains("Phone Number")) {
-//                            myNumber = document.getString("Phone Number");
-//                        }
-//
-//                    }
-//                }
-//            }
-//        });
-//
-//
-//        //dialog
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        //set view to dialog
-//        builder.setView(view);
-//
-//
-//        checkoutBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // first validate delivery address
-//                if (myAddress.equals("") || myAddress.equals("null")) {
-//                    Toast.makeText(Client.this, "Please enter your address in your profile before placing order", Toast.LENGTH_SHORT).show();
-//                    return; // don't proceed further
-//                }
-//                if (myNumber.equals("") || myNumber.equals("null")) {
-//                    Toast.makeText(Client.this, "Please enter your phone in your profile before placing order", Toast.LENGTH_SHORT).show();
-//                    return; // don't proceed further
-//                }
-//                if (orderItemList.size() == 0) {
-//                    // cart list is empty
-//                    Toast.makeText(Client.this, "No item in cart", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                submitOrdersToSellers();
-//                submitOrder(); //add the order to DB under the orders collection
-//                deleteCartData(); //when confirm the order delete the products from the cart
-//
-//                //open order details
-//                Intent intent = new Intent(Client.this, Client.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        DocumentReference docRef = db.collection("clients").document(userId);
-//
-//        docRef.collection("cart").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                orderItemList.clear();
-//                if (task.isSuccessful()) {
-//                    for (QueryDocumentSnapshot cartDocument : task.getResult()) {
-//                        //get information
-//                        String idProduct = cartDocument.getString("uid");
-//                        String pIdProduct = cartDocument.getString("productId");
-//                        String nameProduct = cartDocument.getString("productTitle");
-//                        String priceProduct = cartDocument.getString("productPriceEach");
-//                        String costProduct = cartDocument.getString("productPrice");
-//                        String quantityProduct = cartDocument.getString("productQuantity");
-//
-//                        //update allTotalPrice
-//                        allTotalPrice += Double.parseDouble(costProduct);
-//
-//                        // Use toObject to convert the document snapshot to a ModelProduct object
-//                        ModelCartItem modelCartItem = new ModelCartItem(
-//                                ""+idProduct,
-//                                ""+pIdProduct,
-//                                ""+nameProduct,
-//                                ""+priceProduct,
-//                                ""+costProduct,
-//                                ""+quantityProduct);
-//
-//                        orderItemList.add(modelCartItem);
-//
-//                    }
-//                    //setup adapter
-//                    adapterCartItem = new AdapterCartItem(Client.this, orderItemList);
-//                    //set adapter
-//                    cardItemRv.setAdapter(adapterCartItem);
-//                    sTotalTv.setText("₪" + allTotalPrice);
-//                }
-//            }
-//        });
-//        AlertDialog dialog = builder.create();
-//        dialog.show();
-//
-//        //reset total price on dialog dismiss
-//        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//            @Override
-//            public void onCancel(DialogInterface dialog) {
-//                allTotalPrice = 0.0;
-//            }
-//        });
-//
-//    }
 }
