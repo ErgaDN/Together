@@ -352,6 +352,8 @@ public class Client extends AppCompatActivity {
                                         String productQuantity = cartDocument.getString("productQuantity");
                                         String sellerId = cartDocument.getString("sellerId");
 
+
+
                                         // Reference to the seller's "orders" sub-collection
 
                                         DocumentReference sellerOrdersRef = db.collection("seller").document(sellerId)
@@ -379,7 +381,7 @@ public class Client extends AppCompatActivity {
                                         productData.put("productTitle", productTitle);
                                         productData.put("productPriceEach", productPriceEach);
                                         productData.put("productQuantity", productQuantity);
-                                        productData.put("productPrice", productPrice);
+
 
                                         // Add the product data to the order sub-collection
                                         sellerOrdersRef.collection("productsOrder").document(productId).set(productData)
@@ -605,8 +607,21 @@ public class Client extends AppCompatActivity {
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot productDocument : task.getResult()) {
-                                        ModelProduct modelProduct = productDocument.toObject(ModelProduct.class);
-                                        productList.add(modelProduct);
+                                        try {
+                                            // Use toObject to convert the document snapshot to a ModelProduct object
+                                            ModelProduct modelProduct = productDocument.toObject(ModelProduct.class);
+                                            productList.add(modelProduct);
+                                            Log.d("Debug", "all good with modelProduct");
+                                            Log.d("Debug", "VVVVVVVVV");
+
+
+                                        } catch (RuntimeException e) {
+
+                                            Log.d("Debug", "problem with modelProduct");
+                                            Log.d("Debug", "problem with: "+productDocument);
+                                            Log.e("Firestore", "Error converting document to ModelProduct: " + e.getMessage());
+
+                                        }
                                     }
                                     adapterProductClient = new AdapterProductClient(Client.this, productList);
                                     productsRv.setAdapter(adapterProductClient);

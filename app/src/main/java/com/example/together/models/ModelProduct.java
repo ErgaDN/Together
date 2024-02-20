@@ -2,10 +2,13 @@ package com.example.together.models;
 
 public class ModelProduct {
     private String productId, productTitle, productDescription,
-            productCategory, productQuantity, productPrice, timestamp, uid, productIcon, sellerId;
+            productCategory, productPrice, timestamp, uid, productIcon, sellerId;
+
+    private Long productQuantity;
 
 
-    public ModelProduct(String productId, String productTitle, String productDescription, String productCategory, String productQuantity, String productPrice, String timestamp, String uid) {
+
+    public ModelProduct(String productId, String productTitle, String productDescription, String productCategory, Long productQuantity, String productPrice, String timestamp, String uid) {
         this.productId = productId;
         this.productTitle = productTitle;
         this.productDescription = productDescription;
@@ -59,11 +62,11 @@ public class ModelProduct {
     }
 
     public String getProductQuantity() {
-        return productQuantity;
+        return String.valueOf(productQuantity);
     }
 
     public void setProductQuantity(String productQuantity) {
-        this.productQuantity = productQuantity;
+        this.productQuantity = Long.valueOf(productQuantity);
     }
 
     public String getProductPrice() {

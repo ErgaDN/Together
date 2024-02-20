@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,9 +157,17 @@ private void loadFilteredProducts(String selected) {
         productList.clear();
         if (task.isSuccessful()) {
           for (QueryDocumentSnapshot productDocument : task.getResult()) {
-            // Use toObject to convert the document snapshot to a ModelProduct object
-            ModelProduct modelProduct = productDocument.toObject(ModelProduct.class);
-            productList.add(modelProduct);
+            try {
+              // Use toObject to convert the document snapshot to a ModelProduct object
+              ModelProduct modelProduct = productDocument.toObject(ModelProduct.class);
+              productList.add(modelProduct);
+              Log.d("Debug", "all good with modelProduct");
+
+            } catch (Exception e) {
+              Log.d("Debug", "problem with modelProduct");
+              e.printStackTrace(); // For logging the exception stack trace
+
+            }
 
             }
           //setup adapter
