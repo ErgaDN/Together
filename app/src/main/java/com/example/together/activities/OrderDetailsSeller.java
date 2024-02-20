@@ -29,9 +29,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class OrderDetailsSeller extends AppCompatActivity {
@@ -172,7 +174,7 @@ public class OrderDetailsSeller extends AppCompatActivity {
                                     DocumentReference docRef = documentSnapshot.getReference();
 
                                     if (Objects.equals(selectedOption, "הושלמה")) {
-                                        updateProductsQuantity();
+                                        updateProductsQuantity(docRef,userID);
                                     }
 
                                     // Update order status in the seller
@@ -229,8 +231,72 @@ public class OrderDetailsSeller extends AppCompatActivity {
         }
     }
 
-    private void updateProductsQuantity() {
+    private void updateProductsQuantity(DocumentReference orderDocRef, String sellerID) {
         //TODO
+        Log.d("Debug", "in the updateProductsQuantity ");
+        orderDocRef.collection("productsOrder").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    WriteBatch batch = db.batch();
+
+                    for (DocumentSnapshot productSnapshot : task.getResult()) {
+                        String productId = productSnapshot.getString("productId");
+                        String quantityString = productSnapshot.getString("productQuantity");
+                        Log.d("Debug", "productId: " + productId);
+                        Log.d("Debug", "quantityString: " + quantityString);
+
+                        if (productId != null && quantityString != null) {
+                            int quantityOrdered = Integer.parseInt(quantityString);
+                            Log.d("Debug", "quantityOrdered: " + quantityOrdered);
+                            // Update product quantity in the seller's collection
+                            Query productQuery = db.collection("seller")
+                                    .document(sellerID)
+                                    .collection("products")
+                                    .whereEqualTo("productId", productId);
+
+                            productQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (DocumentSnapshot document : task.getResult()) {
+                                            DocumentReference productRef = document.getReference();
+                                            int currentQuantity = Integer.parseInt(document.getString("productQuantity"));
+                                            String updatedQuantity = String.valueOf(currentQuantity - quantityOrdered);
+                                            Log.d("Debug", "currentQuantity: " + currentQuantity);
+                                            Log.d("Debug", "updatedQuantity: " + updatedQuantity);
+
+                                            Map<String, Object> updatedQuantityValue = new HashMap<>();
+                                            updatedQuantityValue.put("productQuantity", updatedQuantity);
+
+                                            // Update the quantity in the batch
+                                            batch.update(productRef, updatedQuantityValue);
+                                        }
+                                        // Commit the batched write
+                                        batch.commit().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "Batch write successful");
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.e(TAG, "Error committing batch write", e);
+                                            }
+                                        });
+                                    } else {
+                                        Log.e(TAG, "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
 
     }
 
