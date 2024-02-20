@@ -37,6 +37,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class OrderDetailsClient extends AppCompatActivity {
 
@@ -46,6 +47,8 @@ public class OrderDetailsClient extends AppCompatActivity {
     private TextView orderIdTv, dateTv, orderStatusTv, costTv, addressTv;
     private RecyclerView itemsRv;
     private FirebaseAuth firebaseAuth;
+    FirebaseFirestore db;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +64,21 @@ public class OrderDetailsClient extends AppCompatActivity {
         costTv = findViewById(R.id.costTv);
         addressTv = findViewById(R.id.addressTv);
         itemsRv = findViewById(R.id.itemsRv);
+        db = FirebaseFirestore.getInstance();
+
+
+
+
 
         Intent intent = getIntent();
 //        orderTo = intent.getStringExtra("orderTo");
         orderId = intent.getStringExtra("orderId");
 
         firebaseAuth = FirebaseAuth.getInstance();
+        userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+
         loadOrderDetails();
+        loadOrderItem();
     }
 
     private void loadOrderDetails() {
@@ -112,7 +123,73 @@ public class OrderDetailsClient extends AppCompatActivity {
                 });
     }
 
-    ArrayList<ModelOrderItem> orderItemList;
+    private ArrayList<ModelOrderItem> orderItemList;
+    private AdapterOrderedItem adapterOrderedItem;
+    private void loadOrderItem() {
+        Log.d("Debug", "start loadOrderItem() ");
+        orderItemList = new ArrayList<>();
+
+        DocumentReference clientRef = db.collection("clients").document(userId);
+
+        clientRef.collection("orders")
+                .whereEqualTo("orderId", orderId) // Filter orders by orderId
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        Log.d("Debug", "start onComplete() ");
+                        orderItemList.clear();
+                        if (task.isSuccessful()) {
+                            Log.d("Debug", "start if 'orders' find");
+                            for (QueryDocumentSnapshot orderDocument : task.getResult()) {
+                                Log.d("Debug", "start each document in 'order' ");
+
+                                // Now, within the filtered order document, query the "products" sub-collection
+                                orderDocument.getReference().collection("products").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> productsTask) {
+                                        if (productsTask.isSuccessful()) {
+                                            Log.d("Debug", "start if 'products' find");
+                                            for (QueryDocumentSnapshot productDocument : productsTask.getResult()) {
+                                                Log.d("Debug", "start each document in 'products' ");
+                                                //get information from the product document
+                                                String pId = productDocument.getString("pId");
+                                                String name = productDocument.getString("name");
+                                                String cost = productDocument.getString("cost");
+                                                String price = productDocument.getString("price");
+                                                String quantity = productDocument.getString("quantity");
+
+                                                // Create ModelOrderItem object
+                                                ModelOrderItem modelOrderItem = new ModelOrderItem(
+                                                        pId,
+                                                        name,
+                                                        cost,
+                                                        price,
+                                                        quantity);
+                                                orderItemList.add(modelOrderItem);
+                                            }
+                                            Log.d("Debug", "after for() ");
+                                            // Setup adapter
+                                            adapterOrderedItem = new AdapterOrderedItem(OrderDetailsClient.this, orderItemList);
+                                            Log.d("Debug", "after Setup adapter ");
+                                            // Set adapter
+                                            itemsRv.setAdapter(adapterOrderedItem);
+                                            Log.d("Debug", "after Set adapter");
+                                        } else {
+                                            Log.d("Debug", "Error getting products: ", productsTask.getException());
+                                        }
+                                    }
+                                });
+                            }
+                        } else {
+                            Log.d("Debug", "Error getting orders: ", task.getException());
+                        }
+                    }
+                });
+
+    }
+
+
 
 
 //    private void showCartDialog() {

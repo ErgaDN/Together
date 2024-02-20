@@ -36,7 +36,6 @@ public class AdapterOrderedItem extends RecyclerView.Adapter<AdapterOrderedItem.
     @Override
     public void onBindViewHolder(@NonNull HolderOrderedItem holder, int position) {
         //get data at position
-        //TODO: 22:51 in 13
         ModelOrderItem modelOrderItem = orderItemArrayList.get(position);
         String getpId = modelOrderItem.getpId();
         String name = modelOrderItem.getName();
