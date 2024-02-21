@@ -87,7 +87,7 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
 
         //set data
         holder.amountTv.setText("סכום: ₪"+ orderTotalCost);
-        holder.orderIdTv.setText(orderId);
+        holder.orderIdTv.setText("מספר הזמנה: " + orderId);
         holder.statusTv.setText(orderStatus);
         holder.orderDateTv.setText(orderDate);
         //change order status text color
@@ -148,7 +148,7 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
                                 String phoneNumber = document.getString("phoneClient");
 
                                 // Do something with the phoneNumber, for example, set it in your ViewHolder
-                                holder.phoneTv.setText(phoneNumber);
+                                holder.phoneTv.setText("מספר טלפון: " + phoneNumber);
                             } else {
                                 // Handle the case where the query result is empty
                             }
