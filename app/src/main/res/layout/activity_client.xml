@@ -15,22 +15,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Add a horizontal LinearLayout inside the Toolbar -->
+        <!-- Updated LinearLayout -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="end">
 
-            <!-- Add your ImageButtons inside the LinearLayout -->
+            <!-- btn_logout on the left -->
+            <ImageButton
+                android:id="@+id/btn_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_logout" />
+
+            <!-- Spacer to push other views to the right -->
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <!-- btn_profile -->
+            <ImageButton
+                android:id="@+id/btn_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_person" />
+
+            <!-- btn_client_cart -->
             <ImageButton
                 android:id="@+id/btn_client_cart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_shopping_cart_24"
-                android:layout_marginTop="8dp"
-                />
+                android:layout_marginStart="16dp" />
 
+            <!-- Optional: To add a badge count next to the cart icon -->
             <TextView
                 android:id="@+id/cartCountTv"
                 android:layout_width="20dp"
@@ -41,21 +61,6 @@
                 android:text="10"
                 android:textColor="@color/black"
                 android:textSize="8sp" />
-
-            <ImageButton
-                android:id="@+id/btn_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:src="@drawable/ic_person"/>
-
-            <ImageButton
-                android:id="@+id/btn_logout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_logout"
-                android:layout_marginStart="16dp" />
-
 
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
