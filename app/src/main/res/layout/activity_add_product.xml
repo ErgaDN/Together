@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:padding = "10dp"
+        android:padding="10dp"
         tools:ignore="UselessParent">
 
         <TextView
@@ -18,14 +18,42 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
             android:gravity="center"
-            android:text="@string/editing_products"
+            android:text="@string/addNewProduct"
             android:textSize="25sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/addImage"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" >
+
+        <ImageView
+            android:id="@+id/productIconIv"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_add_shopping_primary" />
+
+        <Button
+            android:id="@+id/btn_choose_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/chooseImage"
+            android:layout_below="@id/productIconIv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/titleEt"
@@ -39,7 +67,8 @@
             android:drawablePadding="10dp"
             android:hint="@string/product_name"
             android:inputType="text"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:layout_below="@+id/addImage"/>
 
         <EditText
             android:id="@+id/descriptionEt"
@@ -105,16 +134,7 @@
             android:layout_height="wrap_content"
             android:text="Add Product"
             android:layout_marginTop="5dp"
-            android:layout_below="@id/price"
-
-            />
-
-
+            android:layout_below="@id/price" />
 
     </RelativeLayout>
-
-
-
-    <!--    TODO: 21:04-->
-
 </LinearLayout>

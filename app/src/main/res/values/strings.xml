@@ -72,6 +72,8 @@
     <string name="Remove">הסרה</string>
     <string name="cost">סך הכל</string>
     <string name="add_product_2">הוספת מוצר</string>
+    <string name="chooseImage">בחר תמונה</string>
+    <string name="addNewProduct">העלת מוצר חדש</string>
 
 
 </resources>

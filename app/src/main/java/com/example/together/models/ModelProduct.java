@@ -18,7 +18,7 @@ public class ModelProduct {
         this.timestamp = timestamp;
         this.uid = uid;
         this.productIcon = productIcon;
-        this.sellerId = null;
+        this.sellerId = uid;
     }
 
     public String getProductId() {
