@@ -71,9 +71,9 @@
     <string name="OrderedItems">הפריטים שהוזמנו</string>
     <string name="Remove">הסרה</string>
     <string name="cost">סך הכל</string>
-    <string name="add_product_2">הוספת מוצר</string>
     <string name="chooseImage">בחר תמונה</string>
-    <string name="addNewProduct">העלת מוצר חדש</string>
+    <string name="addNewProductTitle">העלאת מוצר חדש</string>
+    <string name="addNewProduct">הוספת מוצר</string>
 
 
 </resources>

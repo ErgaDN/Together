@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
             android:gravity="center"
-            android:text="@string/addNewProduct"
+            android:text="@string/addNewProductTitle"
             android:textSize="25sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -132,7 +132,7 @@
             android:id="@+id/btn_addproduct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add Product"
+            android:text="@string/addNewProduct"
             android:layout_marginTop="5dp"
             android:layout_below="@id/price" />
 
