@@ -78,7 +78,7 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
         ModelOrderShop modelOrderShop = orderShopArrayList.get(position);
         String orderId = modelOrderShop.getOrderId();
 
-        String orderCost = modelOrderShop.getProductPrice();
+        String orderTotalCost = modelOrderShop.getTotalPrice();
         String orderStatus = modelOrderShop.getOrderStatus();
         String orderDate = modelOrderShop.getOrderDate();
 
@@ -86,8 +86,8 @@ public class AdapterOrderShop extends RecyclerView.Adapter<AdapterOrderShop.Hold
         loadUserInfo(modelOrderShop, holder);
 
         //set data
-        holder.amountTv.setText("סכום: ₪"+ orderCost);
-        holder.orderIdTv.setText("order ID: "+orderId);
+        holder.amountTv.setText("סכום: ₪"+ orderTotalCost);
+        holder.orderIdTv.setText(orderId);
         holder.statusTv.setText(orderStatus);
         holder.orderDateTv.setText(orderDate);
         //change order status text color

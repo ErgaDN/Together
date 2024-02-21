@@ -160,8 +160,6 @@ private void loadFilteredProducts(String selected) {
             try {
               // Use toObject to convert the document snapshot to a ModelProduct object
               ModelProduct modelProduct = productDocument.toObject(ModelProduct.class);
-              Log.d("Debug", "title: " + modelProduct.getProductTitle() + " productIcon: " + modelProduct.getProductIcon());
-
               productList.add(modelProduct);
 
             } catch (Exception e) {

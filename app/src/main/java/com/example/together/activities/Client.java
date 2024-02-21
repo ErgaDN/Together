@@ -326,6 +326,7 @@ public class Client extends AppCompatActivity {
                                     String nameClient = clientDocument.getString("First Name");
                                     String phoneClient = clientDocument.getString("Phone Number");
 
+                                    double totalPrice = 0.0;
 
                                     // Create a map with the order information
                                     Map<String, Object> orderData = new HashMap<>();
@@ -344,9 +345,19 @@ public class Client extends AppCompatActivity {
                                         String productId = cartDocument.getString("productId");
                                         String productTitle = cartDocument.getString("productTitle");
                                         String productPriceEach = cartDocument.getString("productPriceEach");
-                                        String productPrice = cartDocument.getString("productPrice");
                                         String productQuantity = cartDocument.getString("productQuantity");
                                         String sellerId = cartDocument.getString("sellerId");
+
+                                        // Get the total price
+                                        try {
+                                            double price = Double.parseDouble(productPriceEach);
+                                            double quantity = Double.parseDouble(productQuantity);
+                                            double subtotal = price * quantity;
+                                            totalPrice += subtotal;
+                                            orderData.put("totalPrice", String.valueOf(totalPrice));
+                                        } catch (NumberFormatException e) {
+                                            Log.e("Error", "Failed to parse price or quantity: " + e.getMessage());
+                                        }
 
 
 

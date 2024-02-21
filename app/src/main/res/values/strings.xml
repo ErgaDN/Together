@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Together</string>
-    <string name="login">Login</string>
+    <string name="login">התחברות</string>
     <string name="email">מייל</string>
     <string name="password">סיסמא</string>
     <string name="register">התחברות</string>
     <string name="click_to_login">לחץ להרשמה</string>
-    <string name="click_to_register">click to register</string>
+    <string name="click_to_register">לחץ כדי להירשם</string>
     <string name="logout">logout</string>
     <string name="first_name">שם פרטי</string>
     <string name="last_name">שם משפחה</string>
@@ -31,7 +31,7 @@
     <string name="Phone_Number">Phone Number</string>
     <string name="Address">Address</string>
     <string name="username">username</string>
-    <string name="forgot_password">Forgot Password?</string>
+    <string name="forgot_password">שכחת את הסיסמא?</string>
     <string name="recover_password">Recover Password</string>
     <string name="recover">Recover</string>
     <string name="navigate_back">Navigate Back</string>

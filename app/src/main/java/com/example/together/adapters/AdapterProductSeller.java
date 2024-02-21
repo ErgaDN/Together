@@ -102,7 +102,6 @@ public class AdapterProductSeller extends RecyclerView.Adapter<AdapterProductSel
                     // There should be only one document with matching productId
                     DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
                     String productIcon = documentSnapshot.getString("productIcon");
-                    Log.d("DEBUG", "productIcon of " + productId +  " is " + productIcon);
 
                     // Assuming you have a method to load image from Base64 string into an ImageView
                     loadImageUsingBase64(productIcon, imageView);
