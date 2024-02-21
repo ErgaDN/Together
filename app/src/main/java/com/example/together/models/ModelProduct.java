@@ -8,7 +8,7 @@ public class ModelProduct {
 
 
 
-    public ModelProduct(String productId, String productTitle, String productDescription, String productCategory, Long productQuantity, String productPrice, String timestamp, String uid) {
+    public ModelProduct(String productId, String productTitle, String productDescription, String productCategory, Long productQuantity,String productIcon, String productPrice, String timestamp, String uid) {
         this.productId = productId;
         this.productTitle = productTitle;
         this.productDescription = productDescription;

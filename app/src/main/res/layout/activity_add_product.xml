@@ -18,10 +18,28 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
             android:gravity="center"
-            android:text="@string/editing_products"
+            android:text="@string/add_product_2"
             android:textSize="25sp"
             android:textStyle="bold" />
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/productIconIv"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="5dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_add_shopping_primary" />
+
+    <Button
+        android:id="@+id/btn_add_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Photo"
+        android:layout_below="@id/productIconIv"
+        android:layout_marginTop="8dp"
+        android:layout_centerHorizontal="true" /> />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -75,14 +93,16 @@
             android:id="@+id/quantity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:hint="@string/quantity"
+            android:layout_below="@+id/category"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
             android:drawableStart="@drawable/ic_add_shopping_primary"
             android:drawablePadding="10dp"
+            android:hint="@string/quantity"
             android:inputType="textCapWords"
-            android:padding="10dp"
-            android:layout_below="@+id/category"
-            />
+            android:padding="10dp" />
 
         <EditText
             android:id="@+id/price"
