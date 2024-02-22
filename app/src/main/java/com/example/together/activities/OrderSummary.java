@@ -1,9 +1,11 @@
 package com.example.together.activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.together.Constants;
 import com.example.together.adapters.AdapterOrderSeller;
 import com.example.together.R;
 import com.example.together.models.ModelOrderSeller;
@@ -31,7 +34,7 @@ public class OrderSummary extends Fragment {
     private TextView filteredOrdersTv;
     private ImageButton filteredOrdersBtn;
     private RecyclerView ordersRv;
-    private ArrayList<ModelOrderSeller> orderShopArrayList;
+    private ArrayList<ModelOrderSeller> orderSellerArrayList;
     private AdapterOrderSeller adapterOrderSeller;
     private FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
@@ -47,6 +50,32 @@ public class OrderSummary extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
+        filteredOrdersBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //options to display in dialog
+                String[] options = {"הכל", "בתהליך", "הושלמה", "בוטלה"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("בחר סטטוס:")
+                        .setItems(options, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //handle item clicks
+                                if (which == 0) {
+                                    //All clicked
+                                    filteredOrdersTv.setText("כל ההזמנות");
+                                    adapterOrderSeller.getFilter().filter(""); //show all orders
+                                } else {
+                                    String optionClicked = options[which];
+                                    filteredOrdersTv.setText("סטטוס הזמנות: " + optionClicked);
+                                    adapterOrderSeller.getFilter().filter(optionClicked);
+                                }
+                            }
+                        })
+                        .show();
+            }
+        });
+
         loadAllOrders();
 
         return view;
@@ -54,7 +83,7 @@ public class OrderSummary extends Fragment {
 
     private void loadAllOrders() {
         //init array list
-        orderShopArrayList =  new ArrayList<>();
+        orderSellerArrayList =  new ArrayList<>();
 
         //load orders
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -65,18 +94,18 @@ public class OrderSummary extends Fragment {
         docRef.collection("orders").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                orderShopArrayList.clear();
+                orderSellerArrayList.clear();
                 if (task.isSuccessful()) {
                     Log.d("Debug", "is succses " );
                     for (QueryDocumentSnapshot productDocument : task.getResult()) {
                         Log.d("Debug", "in the for ");
                         // Use toObject to convert the document snapshot to a ModelProduct object
                         ModelOrderSeller modelOrderSeller = productDocument.toObject(ModelOrderSeller.class);
-                        orderShopArrayList.add(modelOrderSeller);
+                        orderSellerArrayList.add(modelOrderSeller);
 
                     }
 //                    //setup adapter
-                    adapterOrderSeller = new AdapterOrderSeller(getContext(), orderShopArrayList);
+                    adapterOrderSeller = new AdapterOrderSeller(getContext(), orderSellerArrayList);
                     Log.d("Debug", "after adapter new, contex:  "+ getContext());
 //                    //set adapter
                     ordersRv.setAdapter(adapterOrderSeller);

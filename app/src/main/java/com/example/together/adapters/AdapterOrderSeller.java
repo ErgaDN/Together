@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.together.FilterOrderSeller;
 import com.example.together.activities.OrderDetailsSeller;
 import com.example.together.R;
 import com.example.together.models.ModelOrderSeller;
@@ -18,10 +21,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-public class AdapterOrderSeller extends RecyclerView.Adapter<AdapterOrderSeller.HolderOrderShop> {
+public class AdapterOrderSeller extends RecyclerView.Adapter<AdapterOrderSeller.HolderOrderShop> implements Filterable {
     FirebaseFirestore db;
     private Context context;
-    public ArrayList<ModelOrderSeller> orderShopArrayList;
+    public ArrayList<ModelOrderSeller> orderSellerArrayList, filterList;
+    private FilterOrderSeller filter;
+
+    @Override
+    public Filter getFilter() {
+        if (filter == null) {
+            filter = new FilterOrderSeller(this, filterList);
+        }
+        return filter;
+    }
 
     class HolderOrderShop extends RecyclerView.ViewHolder{
         //ui views for row_order_selle.xml
@@ -39,9 +51,10 @@ public class AdapterOrderSeller extends RecyclerView.Adapter<AdapterOrderSeller.
         }
     }
 
-    public AdapterOrderSeller(Context context, ArrayList<ModelOrderSeller> orderShopArrayList) {
+    public AdapterOrderSeller(Context context, ArrayList<ModelOrderSeller> orderSellerArrayList) {
         this.context = context;
-        this.orderShopArrayList = orderShopArrayList;
+        this.orderSellerArrayList = orderSellerArrayList;
+        this.filterList = orderSellerArrayList;
     }
 
     @NonNull
@@ -55,7 +68,7 @@ public class AdapterOrderSeller extends RecyclerView.Adapter<AdapterOrderSeller.
     @Override
     public void onBindViewHolder(@NonNull HolderOrderShop holder, int position) {
 //        get data at the position
-        ModelOrderSeller modelOrderSeller = orderShopArrayList.get(position);
+        ModelOrderSeller modelOrderSeller = orderSellerArrayList.get(position);
         String orderId = modelOrderSeller.getOrderId();
 
         String orderTotalCost = modelOrderSeller.getTotalPrice();
@@ -147,7 +160,7 @@ public class AdapterOrderSeller extends RecyclerView.Adapter<AdapterOrderSeller.
 
     @Override
     public int getItemCount() {
-        return orderShopArrayList.size();
+        return orderSellerArrayList.size();
     }
 
     //view holder class for row_order_selle.xml
