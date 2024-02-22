@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/filteredOrdersTv"
-            tools:listitem="@layout/row_order_seller"
+            tools:listitem="@layout/row_order"
             android:layout_marginTop="5dp"
             app:reverseLayout="true"
             app:stackFromEnd="true"

@@ -40,12 +40,14 @@ public class OrderDetailsSeller extends AppCompatActivity {
 
     String orderId;
     ImageButton backBtn, editBtn;
-    TextView orderIdTv, dateTv, orderStatusTv, phoneTv, totalItemsTv, amountTv;
+    TextView orderIdTv, dateTv, orderStatusTv, nameClientTv, addressTv ,phoneTv, amountTv;
     RecyclerView itemsRv;
 
     private FirebaseAuth firebaseAuth;
     private ArrayList<ModelOrderItem> orderItemArrayList;
     private AdapterOrderedItem adapterOrderedItem;
+    FirebaseFirestore db;
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,30 +57,32 @@ public class OrderDetailsSeller extends AppCompatActivity {
         //get data from intent
         orderId = getIntent().getStringExtra("orderId");
 
-        backBtn = findViewById(R.id.backBtn);
+//        backBtn = findViewById(R.id.backBtn);
         editBtn = findViewById(R.id.editBtn);
         orderIdTv = findViewById(R.id.orderIdTv);
         dateTv = findViewById(R.id.dateTv);
         orderStatusTv = findViewById(R.id.orderStatusTv);
+        nameClientTv = findViewById(R.id.nameClientTv);
         phoneTv = findViewById(R.id.phoneTv);
-        totalItemsTv = findViewById(R.id.totalItemsTv);
+        addressTv = findViewById(R.id.addressTv);
         amountTv = findViewById(R.id.amountTv);
         itemsRv = findViewById(R.id.itemsRv);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        userID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
         loadBuyerInfo();
         loadOrderDetails();
         loadOrderItems();
 
 
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //go back
-                onBackPressed();
-            }
-        });
+//        backBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //go back
+//                onBackPressed();
+//            }
+//        });
 
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,76 +94,51 @@ public class OrderDetailsSeller extends AppCompatActivity {
 
     }
 
+
     private void editOrderStatusDialog() {
-        //options to display in dialog
-            String[] option = {"בתהליך", "בוטלה", "הושלמה"};
+        // Options to display in dialog
+        final String[] options = {"בתהליך", "בוטלה", "הושלמה"};
+
+        // Build the AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("עריכת סטטוס הזמנה").setItems(option, new DialogInterface.OnClickListener() {
+        builder.setTitle("עריכת סטטוס הזמנה").setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //handle items click
-                String selectedOption = option[which];
+                // Handle items click
+                String selectedOption = options[which];
+
+                // Update order status text and color
+                updateColorStatus(selectedOption);
+
+                // Call method to further process the selected option
                 editOrderStatus(selectedOption);
-
             }
-
         }).show();
-
     }
 
+    private void updateColorStatus(String selectedOption) {
+        // Change order status text and color
+        orderStatusTv.setText(selectedOption);
 
-//    private void editOrderStatus(String selectedOption) {
-//
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        FirebaseUser user = firebaseAuth.getCurrentUser();
-//        if (user != null) {
-//            String userID = user.getUid();
-//            if (!userID.isEmpty() && orderId != null && !orderId.isEmpty()) {
-//                // Construct a query to find the document with matching orderId
-//                db.collection("seller").document(userID).collection("orders")
-//                        .whereEqualTo("orderId", orderId)
-//                        .get()
-//                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                            @Override
-//                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                                if (!queryDocumentSnapshots.isEmpty()) {
-//                                    // There should be only one document with matching orderId
-//                                    DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
-//                                    DocumentReference docRef = documentSnapshot.getReference();
-//                                    Log.d("Debug", "UserID: " + userID);
-//                                    Log.d("Debug", "OrderID: " + orderId);
-//                                    Log.d("Debug", "DocRef: " + docRef.getPath());
-//
-//                                    if (Objects.equals(selectedOption, "הושלמה")) {
-//                                        updateProductsQuantity();
-//                                    }
-//
-//                                    // Update order status
-//                                    updateOrderStatus(docRef, selectedOption);
-//                                } else {
-//                                    Log.e(TAG, "No document found with matching orderId");
-//                                }
-//                            }
-//                        })
-//                        .addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Log.e(TAG, "Error retrieving document", e);
-//                            }
-//                        });
-//            } else {
-//                Log.e(TAG, "userID or orderId is null or empty");
-//            }
-//        } else {
-//            Log.e(TAG, "Current user is null");
-//        }
-//    }
+        // Change order status text color
+        switch (selectedOption) {
+            case "בתהליך":
+                orderStatusTv.setTextColor(getResources().getColor(R.color.lavender));
+                break;
+            case "הושלמה":
+                orderStatusTv.setTextColor(getResources().getColor(R.color.green));
+                break;
+            case "בוטלה":
+                orderStatusTv.setTextColor(getResources().getColor(R.color.red));
+                break;
+        }
+    }
 
     private void editOrderStatus(String selectedOption) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
-            String userID = user.getUid();
+//            String userID = user.getUid();
             if (!userID.isEmpty() && orderId != null && !orderId.isEmpty()) {
                 // Construct a query to find the document with matching orderId in the seller's collection
                 db.collection("seller").document(userID).collection("orders")
@@ -178,13 +157,14 @@ public class OrderDetailsSeller extends AppCompatActivity {
                                     }
 
                                     // Update order status in the seller
-                                    updateOrderStatus(docRef, selectedOption);
+                                    updateColorStatus(docRef, selectedOption);
 
                                     // Extract clientId and orderId from the seller's order document
                                     String clientId = documentSnapshot.getString("clientId");
                                     String orderId = documentSnapshot.getString("orderId");
 
                                     // Construct a query to find the client's order document
+                                    assert clientId != null;
                                     Query clientOrderQuery = db.collection("clients")
                                             .document(clientId)
                                             .collection("orders")
@@ -200,7 +180,7 @@ public class OrderDetailsSeller extends AppCompatActivity {
                                                 DocumentReference clientOrderRef = clientOrderDocument.getReference();
 
                                                 // Update order status in the client's collection
-                                                updateOrderStatus(clientOrderRef, selectedOption);
+                                                updateColorStatus(clientOrderRef, selectedOption);
                                             } else {
                                                 Log.e(TAG, "No document found in the client's collection with matching orderId");
                                             }
@@ -300,7 +280,7 @@ public class OrderDetailsSeller extends AppCompatActivity {
 
     }
 
-    private void updateOrderStatus(DocumentReference docRef, String selectedOption) {
+    private void updateColorStatus(DocumentReference docRef, String selectedOption) {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("orderStatus", selectedOption);
 
@@ -321,11 +301,10 @@ public class OrderDetailsSeller extends AppCompatActivity {
                 });
     }
 
-
     private void loadBuyerInfo() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        String userID = user.getUid();
+//        String userID = user.getUid();
 
         // Query the collection to find the document with the matching orderId
         db.collection("seller").document(userID).collection("orders")
@@ -357,9 +336,9 @@ public class OrderDetailsSeller extends AppCompatActivity {
 
     private void loadOrderDetails() {
         // Load detailed information of this order based on orderId
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        String userID = user.getUid();
+//        String userID = user.getUid();
 
         // Query the collection to find the document with the matching orderId
         db.collection("seller").document(userID).collection("orders")
@@ -373,31 +352,25 @@ public class OrderDetailsSeller extends AppCompatActivity {
                             DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
 
                             // Access specific fields
-                            String phoneUser = documentSnapshot.getString("phoneClient");
-                            String nameClient = documentSnapshot.getString("nameClient");
-                            String orderStatus = documentSnapshot.getString("orderStatus");
-//                            String productId = documentSnapshot.getString("productId");
-//                            String productPrice = documentSnapshot.getString("productPrice");
-                            String productPriceEach = documentSnapshot.getString("productPriceEach");
-//                            String productQuantity = documentSnapshot.getString("productQuantity");
-//                            String productTitle = documentSnapshot.getString("productTitle");
                             String orderId = documentSnapshot.getString("orderId");
                             String orderDate = documentSnapshot.getString("orderDate");
+                            String orderStatus = documentSnapshot.getString("orderStatus");
+                            String nameClient = documentSnapshot.getString("nameClient");
+                            String orderAddress = documentSnapshot.getString("addressClient");
+                            String phoneClient = documentSnapshot.getString("phoneClient");
+                            String totalPrice = documentSnapshot.getString("totalPrice");
 
                             // Change order status text color
-                            if (orderStatus.equals("בתהליך")) {
-                                orderStatusTv.setTextColor(getResources().getColor(R.color.lavender));
-                            } else if (orderStatus.equals("הושלמה")) {
-                                orderStatusTv.setTextColor(getResources().getColor(R.color.green));
-                            } else if (orderStatus.equals("בוטלה")) {
-                                orderStatusTv.setTextColor(getResources().getColor(R.color.red));
-                            }
+                            updateColorStatus(orderStatus);
 
                             // Display the fields
-                            phoneTv.setText(phoneUser);
                             orderIdTv.setText(orderId);
-                            orderStatusTv.setText(orderStatus);
                             dateTv.setText(orderDate);
+                            orderStatusTv.setText(orderStatus);
+                            nameClientTv.setText(nameClient);
+                            addressTv.setText(orderAddress);
+                            phoneTv.setText(phoneClient);
+                            amountTv.setText(totalPrice);
                         } else {
                             Log.d(TAG, "No such document");
                         }
@@ -414,45 +387,100 @@ public class OrderDetailsSeller extends AppCompatActivity {
 
     private void loadOrderItems() {
         orderItemArrayList = new ArrayList<>();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = mAuth.getCurrentUser();
 
+        DocumentReference clientRef = db.collection("seller").document(userID);
 
-        String userId = user.getUid();
-        DocumentReference sellerRef = db.collection("seller").document(userId);
-
-        sellerRef.collection("orders")
+        clientRef.collection("orders")
+                .whereEqualTo("orderId", orderId) // Filter orders by orderId
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        orderItemArrayList.clear();
                         if (task.isSuccessful()) {
-                            QuerySnapshot querySnapshot = task.getResult();
+                            for (QueryDocumentSnapshot orderDocument : task.getResult()) {
 
-                            if (querySnapshot != null && !querySnapshot.isEmpty()) {
-                                // Iterate over each document in the "orders" collection
-                                for (QueryDocumentSnapshot document : querySnapshot) {
-                                    ModelOrderItem modelOrderItem = document.toObject(ModelOrderItem.class);
-                                    orderItemArrayList.add(modelOrderItem);
-                                }
-                                adapterOrderedItem = new AdapterOrderedItem(OrderDetailsSeller.this, orderItemArrayList);
-                                itemsRv.setAdapter(adapterOrderedItem);
+                                // Now, within the filtered order document, query the "products" sub-collection
+                                orderDocument.getReference().collection("productsOrder").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> productsTask) {
+                                        if (productsTask.isSuccessful()) {
+                                            for (QueryDocumentSnapshot productDocument : productsTask.getResult()) {
+                                                //get information from the product document
+                                                String productId = productDocument.getString("productId");
+                                                String productTitle = productDocument.getString("productTitle");
+                                                String productPriceEach = productDocument.getString("productPriceEach");
+                                                String productPrice = productDocument.getString("productPrice");
+                                                String productQuantity = productDocument.getString("productQuantity");
 
-                                //set total items in orders
-                                totalItemsTv.setText(String.valueOf(querySnapshot.size()));
-                            } else {
-                                // Handle the case where the "orders" collection is empty
+                                                // Create ModelOrderItem object
+                                                ModelOrderItem modelOrderItem = new ModelOrderItem(
+                                                        productId,
+                                                        productTitle,
+                                                        productPrice,
+                                                        productPriceEach,
+                                                        productQuantity);
+                                                orderItemArrayList.add(modelOrderItem);
+                                            }
+                                            // Setup adapter
+                                            adapterOrderedItem = new AdapterOrderedItem(OrderDetailsSeller.this, orderItemArrayList);
+                                            // Set adapter
+                                            itemsRv.setAdapter(adapterOrderedItem);
+                                        } else {
+                                            Log.d("Debug", "Error getting products: ", productsTask.getException());
+                                        }
+                                    }
+                                });
                             }
                         } else {
-                            // Handle potential errors here
-                            Exception exception = task.getException();
-                            if (exception != null) {
-                                // Log or handle the exception
-                            }
+                            Log.d("Debug", "Error getting orders: ", task.getException());
                         }
                     }
                 });
 
     }
+//
+//    {
+//        orderItemArrayList = new ArrayList<>();
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//        FirebaseUser user = mAuth.getCurrentUser();
+//
+//
+//        String userId = user.getUid();
+//        DocumentReference sellerRef = db.collection("seller").document(userId);
+//
+//        sellerRef.collection("orders")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            QuerySnapshot querySnapshot = task.getResult();
+//
+//                            if (querySnapshot != null && !querySnapshot.isEmpty()) {
+//                                // Iterate over each document in the "orders" collection
+//                                for (QueryDocumentSnapshot document : querySnapshot) {
+//                                    ModelOrderItem modelOrderItem = document.toObject(ModelOrderItem.class);
+//                                    orderItemArrayList.add(modelOrderItem);
+//                                }
+//                                adapterOrderedItem = new AdapterOrderedItem(OrderDetailsSeller.this, orderItemArrayList);
+//                                itemsRv.setAdapter(adapterOrderedItem);
+//
+//                                //set total items in orders
+//                                nameClientTv.setText(String.valueOf(querySnapshot.size()));
+//                            } else {
+//                                // Handle the case where the "orders" collection is empty
+//                            }
+//                        } else {
+//                            // Handle potential errors here
+//                            Exception exception = task.getException();
+//                            if (exception != null) {
+//                                // Log or handle the exception
+//                            }
+//                        }
+//                    }
+//                });
+//
+//    }
 }

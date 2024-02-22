@@ -3,26 +3,17 @@ package com.example.together.activities;
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.together.R;
-import com.example.together.adapters.AdapterCartItem;
 import com.example.together.adapters.AdapterOrderedItem;
-import com.example.together.models.ModelCartItem;
-import com.example.together.models.ModelOrderClient;
 import com.example.together.models.ModelOrderItem;
-import com.example.together.models.ModelOrderShop;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -81,8 +72,8 @@ public class OrderDetailsClient extends AppCompatActivity {
     private void loadOrderDetails() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        String userID = user.getUid();
-        CollectionReference docRef = db.collection("clients").document(userID).collection("orders");
+//        String userId = user.getUid();
+        CollectionReference docRef = db.collection("clients").document(userId).collection("orders");
 
         docRef.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() { // Change to QuerySnapshot
@@ -95,15 +86,18 @@ public class OrderDetailsClient extends AppCompatActivity {
 
                             // Access specific fields
                             String orderId = documentSnapshot.getString("orderId");
-                            String orderTime = documentSnapshot.getString("orderTime");
+                            String orderDate = documentSnapshot.getString("orderDate");
                             String orderStatus = documentSnapshot.getString("orderStatus");
                             String addressToDelivery = documentSnapshot.getString("address to delivery");
                             String orderCost = documentSnapshot.getString("orderCost");
 
+                            // Change order status text color
+                            updateColorStatus(orderStatus);
+
                             // Display the fields
                             orderIdTv.setText(orderId);
-                            dateTv.setText(orderTime);
-                            orderStatusTv.setText(orderStatus);
+                            dateTv.setText(orderDate);
+//                            orderStatusTv.setText(orderStatus);
                             addressTv.setText(addressToDelivery);
                             costTv.setText(orderCost);
 
@@ -118,6 +112,24 @@ public class OrderDetailsClient extends AppCompatActivity {
                         Log.w(TAG, "Error getting document", e);
                     }
                 });
+    }
+
+    private void updateColorStatus(String selectedOption) {
+        // Change order status text and color
+        orderStatusTv.setText(selectedOption);
+
+        // Change order status text color
+        switch (selectedOption) {
+            case "בתהליך":
+                orderStatusTv.setTextColor(getResources().getColor(R.color.lavender));
+                break;
+            case "הושלמה":
+                orderStatusTv.setTextColor(getResources().getColor(R.color.green));
+                break;
+            case "בוטלה":
+                orderStatusTv.setTextColor(getResources().getColor(R.color.red));
+                break;
+        }
     }
 
     private ArrayList<ModelOrderItem> orderItemList;

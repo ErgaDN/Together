@@ -182,7 +182,7 @@ public class clientEditProfile extends AppCompatActivity {
         DocumentReference documentReference = mStore.collection("clients").document(userID);
 
         Map<String, Object> update = new HashMap<>();
-        update.put("Addressr", address);
+        update.put("Address", address);
         documentReference.update(update).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {

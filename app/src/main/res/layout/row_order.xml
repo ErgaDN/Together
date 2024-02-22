@@ -34,21 +34,11 @@
             android:textSize="19sp"/>
 
         <TextView
-            android:id="@+id/phoneTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/phone_number"
-            android:layout_below="@+id/orderIdTv"
-            android:textColor="@color/grey"
-            android:layout_alignParentEnd="true"
-            android:textSize="16sp"/>
-
-        <TextView
             android:id="@+id/amountTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="סכום סופי: 32₪"
-            android:layout_below="@+id/phoneTv"
+            android:text="סכום: 10 ₪"
+            android:layout_below="@+id/orderIdTv"
             android:textColor="@color/grey"
             android:layout_alignParentEnd="true"
             android:textSize="16sp"/>
@@ -57,7 +47,7 @@
             android:id="@+id/statusTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/phoneTv"
+            android:layout_below="@+id/orderIdTv"
             android:layout_gravity="start"
             android:layout_marginTop="3dp"
             android:layout_marginLeft="50dp"

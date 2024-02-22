@@ -63,17 +63,11 @@ public class ClientProfile extends AppCompatActivity {
         historyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openHistoryOrderClient();
-
-
-
+                Intent intent = new Intent(ClientProfile.this, HistoryOrdersClient.class);
+                startActivity(intent);
             }
         });
 
-    }
-    private void openHistoryOrderClient() {
-        Intent intent = new Intent(ClientProfile.this, HistoryOrdersClient.class);
-        startActivity(intent);
     }
 
     public void showUserData(){

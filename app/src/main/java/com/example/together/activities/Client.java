@@ -26,29 +26,24 @@ import android.widget.Toast;
 import com.example.together.Constants;
 import com.example.together.R;
 import com.example.together.adapters.AdapterCartItem;
-//import com.example.together.adapters.AdapterOrderShop;
+//import com.example.together.adapters.AdapterOrderSeller;
 import com.example.together.adapters.AdapterProductClient;
 import com.example.together.models.ModelCartItem;
-import com.example.together.models.ModelOrderShop;
 import com.example.together.models.ModelProduct;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -323,8 +318,11 @@ public class Client extends AppCompatActivity {
                                 DocumentSnapshot clientDocument = clientTask.getResult();
                                 if (clientDocument.exists()) {
                                     // Get client information
-                                    String nameClient = clientDocument.getString("First Name");
+                                    String FirstNameClient = clientDocument.getString("First Name");
+                                    String LastNameClient = clientDocument.getString("Last Name");
+                                    String nameClient = FirstNameClient + " " + LastNameClient;
                                     String phoneClient = clientDocument.getString("Phone Number");
+                                    String addressClient = clientDocument.getString("Address");
 
                                     double totalPrice = 0.0;
 
@@ -332,6 +330,7 @@ public class Client extends AppCompatActivity {
                                     Map<String, Object> orderData = new HashMap<>();
                                     orderData.put("nameClient", nameClient);
                                     orderData.put("phoneClient", phoneClient);
+                                    orderData.put("addressClient", addressClient);
                                     orderData.put("orderStatus", "בתהליך");
                                     orderData.put("orderId", "" + timestamp);
                                     orderData.put("clientId", "" + userId);
@@ -480,7 +479,12 @@ public class Client extends AppCompatActivity {
                 // Setup order data
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("orderId", "" + timestamp);
-                hashMap.put("orderTime", "" + timestamp);
+
+                Date orderDate = new Date(Long.parseLong(timestamp));
+                DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, Locale.US); // Using US locale for ASCII digits
+                String formattedDate = dateFormat.format(orderDate);
+                hashMap.put("orderDate", formattedDate);
+//                hashMap.put("orderTime", "" + timestamp);
                 hashMap.put("orderStatus", "בתהליך");
                 hashMap.put("orderCost", "" + cost);
                 hashMap.put("orderBy", "" + firebaseAuth.getUid());

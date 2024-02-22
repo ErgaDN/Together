@@ -3,8 +3,8 @@
     <string name="login">התחברות</string>
     <string name="email">מייל</string>
     <string name="password">סיסמא</string>
-    <string name="register">התחברות</string>
-    <string name="click_to_login">לחץ להרשמה</string>
+    <string name="register">הרשמה</string>
+    <string name="click_to_login">לחץ להתחברות</string>
     <string name="click_to_register">לחץ כדי להירשם</string>
     <string name="logout">logout</string>
     <string name="first_name">שם פרטי</string>
@@ -15,8 +15,8 @@
     <string name="order_summary">סיכום הזמנות</string>
     <string name="adding_products">הוספת מוצר חדש</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="client">Client</string>
-    <string name="register_as">בחר פרופיל התחברות</string>
+    <string name="client">לקוח חדש</string>
+    <string name="register_as">בחר פרופיל הרשמה</string>
     <string name="add_product">לחץ להוספת מוצר חדש</string>
     <string name="product_name">שם מוצר</string>
     <string name="description">תיאור מוצר</string>
@@ -43,7 +43,7 @@
     <string name="client_screen">Client Screen</string>
     <string name="profile">אזור אישי</string>
     <string name="client_cart">הסל שלי</string>
-    <string name="seller">seller</string>
+    <string name="seller">מוכר חדש</string>
     <string name="open_galery">הוסף תמונה</string>
     <string name="addProduct">הוסף מוצר</string>
     <string name="choose_update_product">בחירת מוצר לעריכה</string>

@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-import java.text.SimpleDateFormat;
 
 
 import androidx.annotation.NonNull;
@@ -17,12 +17,30 @@ import com.example.together.R;
 import com.example.together.models.ModelOrderClient;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
 
 public class AdapterOrderClient extends RecyclerView.Adapter<AdapterOrderClient.HolderOrderClient> {
     private Context context;
     private ArrayList<ModelOrderClient> orderClientList;
+
+    // view holder class
+    class HolderOrderClient extends RecyclerView.ViewHolder {
+
+
+        //views of layout
+        private final TextView orderIdTv, orderDateTv, amountTv, statusTv;
+        private ImageView nextIv;
+
+        public HolderOrderClient(@NonNull View itemView) {
+            super(itemView);
+
+            //init ui views
+            orderIdTv = itemView.findViewById(R.id.orderIdTv);
+            orderDateTv = itemView.findViewById(R.id.orderDateTv);
+            amountTv = itemView.findViewById(R.id.amountTv);
+            statusTv = itemView.findViewById(R.id.statusTv);
+            nextIv = itemView.findViewById(R.id.nextIv);
+        }
+    }
 
     public AdapterOrderClient(Context context, ArrayList<ModelOrderClient> orderClientList) {
         this.context = context;
@@ -33,7 +51,7 @@ public class AdapterOrderClient extends RecyclerView.Adapter<AdapterOrderClient.
     @Override
     public HolderOrderClient onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //inflate layout
-        View view = LayoutInflater.from(context).inflate(R.layout.row_order_client, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.row_order, parent, false);
         return new HolderOrderClient(view);
 
     }
@@ -43,29 +61,32 @@ public class AdapterOrderClient extends RecyclerView.Adapter<AdapterOrderClient.
         //get data
         ModelOrderClient modelOrderClient = orderClientList.get(position);
         String orderId = modelOrderClient.getOrderId();
-        String orderBy = modelOrderClient.getOrderBy();
-        String orderCost = modelOrderClient.getOrderCost();
+
+        String orderTotalCost = modelOrderClient.getOrderCost();
         String orderStatus = modelOrderClient.getOrderStatus();
-        String orderTime = modelOrderClient.getOrderTime();
+        String orderDate = modelOrderClient.getOrderDate();
 
-
-        // set data
-        holder.amountTv.setText("סכום ₪:" + orderCost);
+        //set data
+        holder.amountTv.setText("סכום: ₪"+ orderTotalCost);
+        holder.orderIdTv.setText("מספר הזמנה: " + orderId);
+        holder.orderDateTv.setText(orderDate);
         holder.statusTv.setText(orderStatus);
-        holder.orderIdTv.setText("OrderID: "+ orderId);
-
         //change order status text color
-        if (orderStatus.equals("בתהליך")) {
-            holder.statusTv.setTextColor(context.getResources().getColor(R.color.lavender));
-        } else if (orderStatus.equals("הושלמה")) {
-            holder.statusTv.setTextColor(context.getResources().getColor(R.color.green));
-        } else if (orderStatus.equals("בוטלה")) {
-            holder.statusTv.setTextColor(context.getResources().getColor(R.color.red));
+        switch (orderStatus) {
+            case "בתהליך":
+                holder.statusTv.setTextColor(context.getResources().getColor(R.color.lavender));
+                break;
+            case "הושלמה":
+                holder.statusTv.setTextColor(context.getResources().getColor(R.color.green));
+                break;
+            case "בוטלה":
+                holder.statusTv.setTextColor(context.getResources().getColor(R.color.red));
+                break;
         }
         //TODO: need to convert timestamp to proper format. this code fail the running whene the client enter into HistoryOrders
         //convert timestamp to proper format
 //        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(Long.parseLong(orderTime));
+//        calendar.setTimeInMillis(Long.parseLong(orderDate));
 
         // Format the Calendar instance to a human-readable date string
 //        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -91,22 +112,4 @@ public class AdapterOrderClient extends RecyclerView.Adapter<AdapterOrderClient.
         return orderClientList.size();
     }
 
-
-    // view holder class
-    class HolderOrderClient extends RecyclerView.ViewHolder {
-
-
-        //views of layout
-        private TextView orderIdTv, dateTv, shopNameTv, amountTv, statusTv;
-
-        public HolderOrderClient(@NonNull View itemView) {
-            super(itemView);
-            // init views of layout
-            orderIdTv = itemView.findViewById(R.id.orderIdTv);
-            dateTv = itemView.findViewById(R.id.dateTv);
-            shopNameTv = itemView.findViewById(R.id.shopNameTv);
-            amountTv = itemView.findViewById(R.id.amountTv);
-            statusTv = itemView.findViewById(R.id.statusTv);
-        }
-    }
 }

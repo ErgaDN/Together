@@ -1,29 +1,24 @@
 package com.example.together.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.together.adapters.AdapterOrderShop;
+import com.example.together.adapters.AdapterOrderSeller;
 import com.example.together.R;
-import com.example.together.models.ModelOrderShop;
+import com.example.together.models.ModelOrderSeller;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -36,8 +31,8 @@ public class OrderSummary extends Fragment {
     private TextView filteredOrdersTv;
     private ImageButton filteredOrdersBtn;
     private RecyclerView ordersRv;
-    private ArrayList<ModelOrderShop> orderShopArrayList;
-    private AdapterOrderShop adapterOrderShop;
+    private ArrayList<ModelOrderSeller> orderShopArrayList;
+    private AdapterOrderSeller adapterOrderSeller;
     private FirebaseAuth firebaseAuth;
     FirebaseFirestore db;
     @Override
@@ -76,15 +71,15 @@ public class OrderSummary extends Fragment {
                     for (QueryDocumentSnapshot productDocument : task.getResult()) {
                         Log.d("Debug", "in the for ");
                         // Use toObject to convert the document snapshot to a ModelProduct object
-                        ModelOrderShop modelOrderShop = productDocument.toObject(ModelOrderShop.class);
-                        orderShopArrayList.add(modelOrderShop);
+                        ModelOrderSeller modelOrderSeller = productDocument.toObject(ModelOrderSeller.class);
+                        orderShopArrayList.add(modelOrderSeller);
 
                     }
 //                    //setup adapter
-                    adapterOrderShop = new AdapterOrderShop(getContext(), orderShopArrayList);
+                    adapterOrderSeller = new AdapterOrderSeller(getContext(), orderShopArrayList);
                     Log.d("Debug", "after adapter new, contex:  "+ getContext());
 //                    //set adapter
-                    ordersRv.setAdapter(adapterOrderShop);
+                    ordersRv.setAdapter(adapterOrderSeller);
                     Log.d("Debug", "after ordersRv");
 
                 }

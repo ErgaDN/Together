@@ -1,6 +1,6 @@
 package com.example.together.models;
 
-public class ModelOrderShop {
+public class ModelOrderSeller {
 
     String nameClient;
     String orderStatus;
@@ -15,7 +15,7 @@ public class ModelOrderShop {
 
 
 
-    public ModelOrderShop(String orderId, String nameClient, String orderStatus, String phoneClient, String productId, String productPrice, String productPriceEach, String productQuantity, String productTitle , String orderDate, String clientId, String totalPrice) {
+    public ModelOrderSeller(String orderId, String nameClient, String orderStatus, String phoneClient, String productId, String productPrice, String productPriceEach, String productQuantity, String productTitle , String orderDate, String clientId, String totalPrice) {
         this.orderId = orderId;
         this.nameClient = nameClient;
         this.orderStatus = orderStatus;
@@ -61,7 +61,7 @@ public class ModelOrderShop {
         this.orderId = orderId;
     }
 
-    public ModelOrderShop() {
+    public ModelOrderSeller() {
         // Default constructor required for Firestore
     }
 
@@ -139,14 +139,14 @@ public class ModelOrderShop {
 
 
 
-//public class ModelOrderShop {
+//public class ModelOrderSeller {
 //
 //    String orderId, orderTime, orderStatus, orderCost, orderBy;
 //
-//    public ModelOrderShop() {
+//    public ModelOrderSeller() {
 //    }
 //
-//    public ModelOrderShop(String orderId, String orderTime, String orderStatus, String orderCost, String orderBy) {
+//    public ModelOrderSeller(String orderId, String orderTime, String orderStatus, String orderCost, String orderBy) {
 //        this.orderId = orderId;
 //        this.orderTime = orderTime;
 //        this.orderStatus = orderStatus;

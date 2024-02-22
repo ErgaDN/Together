@@ -2,14 +2,14 @@ package com.example.together.models;
 
 public class ModelOrderClient {
 
-    String orderId,orderTime,orderStatus,orderCost,orderBy;
+    String orderId, orderDate,orderStatus,orderCost,orderBy;
 
     public ModelOrderClient() {
     }
 
-    public ModelOrderClient(String orderId, String orderTime, String orderStatus, String orderCost, String orderBy) {
+    public ModelOrderClient(String orderId, String orderDate, String orderStatus, String orderCost, String orderBy) {
         this.orderId = orderId;
-        this.orderTime = orderTime;
+        this.orderDate = orderDate;
         this.orderStatus = orderStatus;
         this.orderCost = orderCost;
         this.orderBy = orderBy;
@@ -23,12 +23,12 @@ public class ModelOrderClient {
         this.orderId = orderId;
     }
 
-    public String getOrderTime() {
-        return orderTime;
+    public String getOrderDate() {
+        return orderDate;
     }
 
-    public void setOrderTime(String orderTime) {
-        this.orderTime = orderTime;
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
     }
 
     public String getOrderStatus() {
