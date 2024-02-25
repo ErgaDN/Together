@@ -66,10 +66,14 @@ public class AdapterProductSeller extends RecyclerView.Adapter<AdapterProductSel
         String productPrice = modelProduct.getProductPrice();
         String title = modelProduct.getProductTitle();
         String sellerId = modelProduct.getSellerId();
+        String quantity = modelProduct.getProductQuantity();
+        String description = modelProduct.getProductDescription();
 
         // Set data
         holder.titleTv.setText(title);
         holder.priceTv.setText("₪" + productPrice);
+        holder.quantityTv.setText("כמות:" + quantity);
+        holder.descriptionTv.setText(description);
 
 
         // TODO
@@ -154,13 +158,15 @@ public class AdapterProductSeller extends RecyclerView.Adapter<AdapterProductSel
 
         //holds views of recyclerview
         private ImageView productIconIv;
-        private TextView titleTv, priceTv;
+        private TextView titleTv, priceTv, quantityTv, descriptionTv;
         public HolderProductSeller(@NonNull View itemView) {
             super(itemView);
 
             productIconIv = itemView.findViewById(R.id.productIconIv);
             titleTv = itemView.findViewById(R.id.titleTv);
             priceTv = itemView.findViewById(R.id.priceTv);
+            quantityTv = itemView.findViewById(R.id.quantityTv);
+            descriptionTv = itemView.findViewById(R.id.descriptionTv);
         }
     }
 }

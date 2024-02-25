@@ -10,7 +10,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-<!--TODO: Add quantity-->
 
         <ImageView
             android:id="@+id/productIconIv"
@@ -47,18 +46,23 @@
                 android:textColor="@color/grey"
                 android:layout_marginTop="5dp"/>
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/quantityTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="כמות: "
+                android:textColor="@color/black"
+                android:layout_marginTop="5dp"/>
 
-<!--        <ImageView-->
-<!--            android:id="@+id/nextIv"-->
-<!--            android:layout_alignParentEnd="true"-->
-<!--            android:adjustViewBounds="true"-->
-<!--            android:scaleType="fitCenter"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginEnd="5dp"-->
-<!--            android:src="@drawable/ic_next_grey"/>-->
+            <TextView
+                android:id="@+id/descriptionTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="תיאור"
+                android:textColor="@color/black"
+                android:layout_marginTop="5dp"/>
+
+        </LinearLayout>
 
 
     </RelativeLayout>
