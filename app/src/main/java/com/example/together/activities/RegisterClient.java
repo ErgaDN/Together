@@ -114,8 +114,6 @@ public class RegisterClient extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressBar.setVisibility(View.GONE);
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(RegisterClient.this, "Account created.",
-                                            Toast.LENGTH_SHORT).show();
                                     userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
                                     DocumentReference documentReference = mStore.collection("clients").document(userID);
                                     Map<String, Object> user = new HashMap<>();

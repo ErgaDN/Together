@@ -669,7 +669,6 @@ public class Client extends AppCompatActivity {
                     }
                     cartCountTv.setVisibility(View.VISIBLE);
                     cartCountTv.setText(String.valueOf(count));
-                    Toast.makeText(Client.this, "quntity"+count, Toast.LENGTH_SHORT).show();
                 }else {
                     cartCountTv.setVisibility(View.GONE);
                 }

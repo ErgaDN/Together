@@ -410,8 +410,18 @@ public class OrderDetailsSeller extends AppCompatActivity {
                                                 String productId = productDocument.getString("productId");
                                                 String productTitle = productDocument.getString("productTitle");
                                                 String productPriceEach = productDocument.getString("productPriceEach");
-                                                String productPrice = productDocument.getString("productPrice");
+//                                                String productPrice = productDocument.getString("totalPrice");
                                                 String productQuantity = productDocument.getString("productQuantity");
+
+                                                // Convert the input strings to integers
+                                                int num1 = Integer.parseInt(productPriceEach);
+                                                int num2 = Integer.parseInt(productQuantity);
+
+                                                // Multiply the numbers
+                                                int multiplicationResult = num1 * num2;
+
+                                                // Convert the result back to a string
+                                                String productPrice = String.valueOf(multiplicationResult);
 
                                                 // Create ModelOrderItem object
                                                 ModelOrderItem modelOrderItem = new ModelOrderItem(
