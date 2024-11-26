@@ -45,8 +45,7 @@ The app addresses a growing need for small businesses that lack a unified platfo
 
 ## **Demo**
 
-📹 **Client Perspective**: [Watch the demo video here](https://youtu.be/shKNMg_wi_Y)  
-📹 **Seller Perspective**: [Watch the demo video here](https://youtu.be/hvj5QJntV3U)
+📹 [Watch the demo video here](https://youtu.be/I5ch37E6J9k)  
 
 ---
 
